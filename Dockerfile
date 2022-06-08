@@ -9,9 +9,8 @@ RUN apt-get update && apt-get install -y python python-pip
 RUN pip install python-language-server
 RUN apt-get -y install ruby ruby-dev zlib1g-dev
 RUN apt-get -y install git
-RUN gem update --system
-RUN gem install nokogiri
-RUN sudo gem install solargraph
+RUN gem install nokogiri --platform amd64
+RUN sudo gem install solargraph --platform amd64
 RUN mkdir -p /home/project && mkdir -p /home/theia
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/pub.git
