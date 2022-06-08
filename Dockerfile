@@ -8,9 +8,9 @@ RUN sudo apt update && sudo apt install yarn
 RUN apt-get update && apt-get install -y python python-pip
 RUN pip install python-language-server
 RUN apt-get -y install ruby ruby-dev zlib1g-dev
-RUN gem update --system 
-RUN gem install nokogiri
-RUN gem install solargraph 
+#RUN gem update --system 
+#RUN gem install nokogiri
+#RUN gem install solargraph 
 RUN mkdir -p /home/project && mkdir -p /home/theia
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/pub.git
