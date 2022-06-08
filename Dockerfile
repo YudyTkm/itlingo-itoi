@@ -8,10 +8,12 @@ RUN sudo apt update && sudo apt install yarn
 RUN apt-get update && apt-get install -y python python-pip
 RUN pip install python-language-server
 RUN apt-get -y install ruby ruby-dev zlib1g-dev
+RUN apt-get -y install git
 RUN gem install solargraph
 RUN mkdir -p /home/project && mkdir -p /home/theia
 WORKDIR /home/theia
-ADD package.json ./package.json
+RUN git clone https://github.com/genlike/pub.git
 RUN sudo yarn --cache-folder ./ycache && sudo rm -rf ./ycache
-RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
+WORKDIR /home/theia/pub/browser-app
+RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn start --hostname 0.0.0.0 --port $PORT
 EXPOSE $PORT
