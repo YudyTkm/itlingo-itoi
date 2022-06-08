@@ -1,7 +1,7 @@
 {
     "name": "Theia IDE on Heroku",
     "description": "An install of Theia IDE",
-    "repository": "https://github.com/imasimali/theia",
+    "repository": "https://github.com/genlike/itlingo-itoi",
     "keywords": ["node", "theia"],
     "website": "https://theia-ide.org/",
     "stack": "container"
