@@ -7,9 +7,9 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/so
 RUN sudo apt update && sudo apt install yarn
 RUN apt-get update 
 RUN apt-get -y install ruby ruby-dev zlib1g-dev
-RUN gem update --system 
-RUN gem install nokogiri
-RUN gem install solargraph 
+#RUN gem update --system 
+#RUN gem install nokogiri
+#RUN gem install solargraph 
 RUN mkdir -p /home/project && mkdir -p /home/theia
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/pub.git
