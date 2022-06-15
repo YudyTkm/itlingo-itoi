@@ -11,7 +11,7 @@ RUN apt-get -y install ruby ruby-dev zlib1g-dev
 RUN sudo apt-get -y install software-properties-common
 RUN sudo add-apt-repository ppa:linuxuprising/java
 RUN sudo apt update
-RUN echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+RUN echo "oracle-java11-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
 RUN sudo apt -y install oracle-java11-set-default-local
 RUN apt-get update 
 #RUN gem update --system 
