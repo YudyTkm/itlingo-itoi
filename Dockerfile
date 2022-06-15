@@ -65,8 +65,8 @@ RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/pub.git
+WORKDIR /home/theia/pub
 RUN sudo yarn --cache-folder ./ycache && sudo rm -rf ./ycache
-
 RUN yarn --scripts-prepend-node-path
 RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
 EXPOSE $PORT
