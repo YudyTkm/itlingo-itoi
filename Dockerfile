@@ -7,8 +7,9 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/so
 RUN sudo apt update && sudo apt install yarn
 RUN sudo apt-get -y install libsecret-1-dev
 RUN apt-get -y install ruby ruby-dev zlib1g-dev
-RUN sudo add-apt-repository ppa:linuxuprising/java
+RUN sudo apt-get -y install software-properties-common
 RUN sudo apt update
+RUN sudo add-apt-repository ppa:linuxuprising/java
 RUN sudo apt -y install oracle-java11-set-default
 RUN apt-get update 
 #RUN gem update --system 
