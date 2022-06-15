@@ -10,7 +10,7 @@ RUN apt-get -y install ruby ruby-dev zlib1g-dev
 RUN sudo apt-get -y install software-properties-common
 RUN sudo apt update
 RUN sudo add-apt-repository ppa:linuxuprising/java
-RUN sudo apt -y install oracle-java11-set-default
+RUN sudo apt -y install oracle-java11-set-default-local
 RUN apt-get update 
 #RUN gem update --system 
 #RUN gem install nokogiri
