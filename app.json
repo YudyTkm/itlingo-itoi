@@ -1,8 +1,7 @@
 {
-    "name": "Theia IDE on Heroku",
+    "name": "ACE IDE on Heroku",
     "description": "An install of Theia IDE",
     "repository": "https://github.com/genlike/itlingo-itoi",
-    "keywords": ["node", "theia"],
-    "website": "https://theia-ide.org/",
+    "keywords": ["node", "ace"],
     "stack": "container"
 }
