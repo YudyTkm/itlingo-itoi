@@ -5,5 +5,5 @@ RUN git clone https://github.com/genlike/workspace-orchestrator.git
 WORKDIR /home/workspace-orchestrator
 RUN npm install
 
-#EXPOSE $PORT
-EXPOSE 3000/tcp
+EXPOSE $PORT
+#EXPOSE 3000/tcp
