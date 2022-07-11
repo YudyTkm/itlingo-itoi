@@ -1,5 +1,12 @@
-FROM node:current
+FROM ubuntu:18.04
 RUN apt-get update && apt-get -y install curl xz-utils wget git sudo build-essential
+RUN curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+RUN sudo apt-get install -y nodejs
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+RUN sudo apt update && sudo apt install yarn
+RUN sudo apt-get -y install libsecret-1-dev
+RUN apt-get -y install ruby ruby-dev zlib1g-dev
 ################################### JAVA
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
@@ -51,12 +58,22 @@ ENV JAVA_HOME=/opt/java/openjdk \
 CMD ["jshell"]
 RUN apt-get update 
 ################################ END JAVA
+RUN gem update --system 
+RUN gem install nokogiri
+RUN gem install solargraph 
+RUN mkdir -p /home/project && mkdir -p /home/theia
+RUN apt-get update 
+WORKDIR /home/theia
+RUN pwd
+RUN git clone https://github.com/genlike/pub.git
+WORKDIR /home/theia/pub
 
 
-WORKDIR /home
-RUN git clone https://github.com/genlike/workspace-orchestrator.git
-WORKDIR /home/workspace-orchestrator
+RUN rm -R /home/theia/pub/theia-example-extension/node_modules
+#WORKDIR /home/theia/pub/theia-example-extension/
 RUN npm install
-
+RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
+RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
+RUN sudo yarn theia build
 EXPOSE $PORT
 #EXPOSE 3000/tcp
