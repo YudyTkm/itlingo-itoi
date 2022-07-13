@@ -1,0 +1,16 @@
+Fechar a sincronizacao de pastas X
+	Voltar a colocar a funcao de rever pastas X
+
+Fazer cliente base de dados connectar X
+
+Fazer funcao de add - 
+
+Fazer funcao de update
+
+Fazer funcao de delete
+
+Fazer funcao para rename
+
+Fazer autenticação com o endpoint extra
+
+/home/theia/workspaces/tmp/WS-b8c0ad56-9de6-4c84-b1f7-99fb0a2a4e52/Workspace
