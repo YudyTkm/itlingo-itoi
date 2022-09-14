@@ -1,0 +1,30 @@
+prioridade 1
+	GET projecto, user, organization.
+	adicionar chave para os dois ambientes
+	manter comunicacao  (hmac sha-256) assinar mensagens
+
+
+	Fazer pull das permissoes quando é aberto o documento.
+	E manter cache das permissoes.
+	Fazer trigger do cliente para o servidor.
+
+prioridade 2 
+	Language Server RSL.
+
+prioridade 2
+	Definir ITOI em RSL.
+
+
+prioridade 3
+	Language Server ASL.
+
+prioridade 4
+	Custom Actions para gerar ficheiros de outros formatos 
+		com base dos ficheiros originais em RSL e ASL.
+
+prioridade 5
+	Adicionar pipeline actions para version control systems.
+
+
+prioridade 6
+	Transformar num kubernets service.

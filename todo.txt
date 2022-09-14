@@ -13,4 +13,12 @@ Fazer funcao para rename
 
 Fazer autenticação com o endpoint extra
 
-/home/theia/workspaces/tmp/WS-b8c0ad56-9de6-4c84-b1f7-99fb0a2a4e52/Workspace
+- Workspace com ID unico (uuid?) / itlingocloud
+	limpar texto
+- Adicionar informacao do user para itoi
+- Adicinar perfis de utilização (read ou read/write) 
+	/  Manter global para todas as pastas
+	/  Quando se puxa os ficheiros fazer chmod para 
+	ter so permissoes de leitura e ou escrita
+
+Corrigir substring 77 para ter em conta o params
