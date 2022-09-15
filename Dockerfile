@@ -64,17 +64,20 @@ RUN apt-get update
 RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
 WORKDIR /home/theia
-RUN pwd
 RUN git clone https://github.com/genlike/pub.git
 WORKDIR /home/theia/pub
 
 
-#RUN rm -R /home/theia/pub/theia-example-extension/node_modules
-#WORKDIR /home/theia/pub/theia-example-extension/
-RUN npm install
+# #RUN rm -R /home/theia/pub/theia-example-extension/node_modules
+# #WORKDIR /home/theia/pub/theia-example-extension/
+# RUN npm install -g npm@8.19.2
+# RUN npm install -g socket.io filenamify webpack cross-env
+# RUN npm install
+
 RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
 RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
-RUN sudo yarn theia build
 EXPOSE $PORT
+
+# RUN sudo yarn theia build
 # EXPOSE 3000/tcp
 # EXPOSE 5432
