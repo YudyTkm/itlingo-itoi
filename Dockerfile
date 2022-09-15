@@ -81,7 +81,7 @@ RUN cd .. && rm -R ./rsl-vscode-extension
 
 #Compile ASL extension
 RUN git clone https://github.com/genlike/asl-vscode-extension.git
-RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.rsl.ide-1.0.0-SNAPSHOT-ls.jar
+RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
 WORKDIR /home/theia/asl-vscode-extension
