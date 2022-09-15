@@ -64,6 +64,8 @@ RUN apt-get update
 RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
 
+WORKDIR /home/theia
+RUN git clone https://github.com/genlike/pub.git
 
 
 #Compile RSL extension
@@ -96,8 +98,6 @@ RUN cd .. && rm -R ./asl-vscode-extension
 
 
 
-WORKDIR /home/theia
-RUN git clone https://github.com/genlike/pub.git
 WORKDIR /home/theia/pub
 
 
