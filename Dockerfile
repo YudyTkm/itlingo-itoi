@@ -65,6 +65,8 @@ RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/pub.git
+
+#Compile RSL extension
 RUN git clone https://github.com/genlike/rsl-vscode-extension.git
 RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.rsl.ide-1.0.0-SNAPSHOT-ls.jar
 RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo
@@ -73,7 +75,23 @@ RUN npm install -g vsce
 WORKDIR /home/theia/rsl-vscode-extension
 RUN yarn
 RUN vsce package
-RUN cp vscode-xtext-sprotty-example-0.0.5.vsix /home/theia/pub/plugins
+RUN mv vscode-xtext-sprotty-example-0.0.5.vsix rsl-vscode-plugin.vsix
+RUN cp rsl-vscode-plugin.vsix /home/theia/pub/plugins
+RUN cd .. && rm -R ./rsl-vscode-extension
+
+#Compile ASL extension
+RUN git clone https://github.com/genlike/asl-vscode-extension.git
+RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.rsl.ide-1.0.0-SNAPSHOT-ls.jar
+RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo
+RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
+WORKDIR /home/theia/asl-vscode-extension
+RUN yarn
+RUN vsce package
+RUN mv vscode-xtext-sprotty-example-0.0.5.vsix asl-vscode-plugin.vsix
+RUN cp asl-vscode-plugin.vsix /home/theia/pub/plugins
+RUN cd .. && rm -R ./asl-vscode-extension
+
+
 WORKDIR /home/theia/pub
 
 
