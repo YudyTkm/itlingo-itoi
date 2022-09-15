@@ -65,19 +65,28 @@ RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/pub.git
+RUN git clone https://github.com/genlike/rsl-vscode-extension.git
+RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.rsl.ide-1.0.0-SNAPSHOT-ls.jar
+RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo
+RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
+RUN npm install -g vsce
+WORKDIR /home/theia/rsl-vscode-extension
+RUN yarn
+RUN vsce package
+RUN cp vscode-xtext-sprotty-example-0.0.5.vsix /home/theia/pub/plugins
 WORKDIR /home/theia/pub
 
 
 # #RUN rm -R /home/theia/pub/theia-example-extension/node_modules
 # #WORKDIR /home/theia/pub/theia-example-extension/
 # RUN npm install -g npm@8.19.2
-# RUN npm install -g socket.io filenamify webpack cross-env
+RUN npm install -g socket.io filenamify webpack msgpackr ws
 # RUN npm install
 
 RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
 RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
 EXPOSE $PORT
-
+# RUN sudo yarn
 # RUN sudo yarn theia build
 # EXPOSE 3000/tcp
 # EXPOSE 5432
