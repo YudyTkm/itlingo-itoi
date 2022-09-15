@@ -78,7 +78,7 @@ RUN npm install -g vsce
 WORKDIR /home/theia/rsl-vscode-extension
 RUN yarn
 RUN vsce package
-RUN cp rsl-vscode-xtext-0.0.5.vsix /home/theia/pub/plugins
+RUN cp rsl-vscode-xtext-0.0.5.vsix /home/theia/pub/plugins/
 RUN cd /home/theia && rm -R ./rsl-vscode-extension
 
 #Compile ASL extension
@@ -90,7 +90,7 @@ RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.
 WORKDIR /home/theia/asl-vscode-extension
 RUN yarn
 RUN vsce package
-RUN cp asl-vscode-xtext-0.0.5.vsix /home/theia/pub/plugins
+RUN cp asl-vscode-xtext-0.0.5.vsix /home/theia/pub/plugins/
 RUN cd .. && rm -R ./asl-vscode-extension
 
 
