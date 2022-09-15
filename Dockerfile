@@ -63,10 +63,11 @@ RUN apt-get update
 # RUN gem install solargraph 
 RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
-WORKDIR /home/theia
-RUN git clone https://github.com/genlike/pub.git
+
+
 
 #Compile RSL extension
+WORKDIR /home/theia
 RUN git clone https://github.com/genlike/rsl-vscode-extension.git
 RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.rsl.ide-1.0.0-SNAPSHOT-ls.jar
 RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo
@@ -93,6 +94,10 @@ RUN cp asl-vscode-plugin.vsix /home/theia/pub/plugins
 RUN cd .. && rm -R ./asl-vscode-extension
 
 
+
+
+WORKDIR /home/theia
+RUN git clone https://github.com/genlike/pub.git
 WORKDIR /home/theia/pub
 
 
