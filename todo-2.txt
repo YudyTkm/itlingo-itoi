@@ -1,30 +1,33 @@
+Proxima quarta 18:00!!
+
 prioridade 1
-	GET projecto, user, organization.
-	adicionar chave para os dois ambientes
-	manter comunicacao  (hmac sha-256) assinar mensagens
+	- Definir ITOI em RSL.
+	- Passar Goals para RSL no heroku.
+	- Preparar documento para actualizar os plugins no Heroku, 
+	passos para gerar o jar, eu fico com a 
+	responsabilidade actualizar no heroku.
 
-
-	Fazer pull das permissoes quando é aberto o documento.
-	E manter cache das permissoes.
-	Fazer trigger do cliente para o servidor.
-
-prioridade 2 
-	Language Server RSL.
 
 prioridade 2
-	Definir ITOI em RSL.
+	- Adicionar opção, actualizar a informação para repositorio 
+	especificado pelo utilizador.
 
-
-prioridade 3
-	Language Server ASL.
 
 prioridade 4
-	Custom Actions para gerar ficheiros de outros formatos 
+	- Custom Actions para gerar ficheiros de outros formatos 
 		com base dos ficheiros originais em RSL e ASL.
+	- Rever forma de gerar DomainModels view.
 
 prioridade 5
-	Adicionar pipeline actions para version control systems.
+	- Adicionar pipeline actions para version control systems.
 
 
 prioridade 6
-	Transformar num kubernets service.
+	- Transformar num kubernets service.
+
+
+
+--Gerador ASL
+	É necessário possivel passar um target machine
+	Correr o generate model
+	E passar para dentro do git

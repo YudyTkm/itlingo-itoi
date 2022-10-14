@@ -102,13 +102,14 @@ WORKDIR /home/theia/pub
 # #RUN rm -R /home/theia/pub/theia-example-extension/node_modules
 # #WORKDIR /home/theia/pub/theia-example-extension/
 # RUN npm install -g npm@8.19.2
-RUN npm install -g socket.io filenamify webpack msgpackr ws
+# RUN npm install -g socket.io filenamify webpack msgpackr ws
 # RUN npm install
 
 RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
 RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
 EXPOSE $PORT
-# RUN sudo yarn
-# RUN sudo yarn theia build
-# EXPOSE 3000/tcp
-# EXPOSE 5432
+
+#RUN sudo yarn
+#RUN sudo yarn theia build
+#EXPOSE 3000/tcp
+#EXPOSE 5432
