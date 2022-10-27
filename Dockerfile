@@ -87,6 +87,8 @@ RUN git clone https://github.com/genlike/asl-vscode-extension.git
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
+RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/generator.sh
+RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/generator.jar
 WORKDIR /home/theia/asl-vscode-extension
 RUN yarn
 RUN vsce package
