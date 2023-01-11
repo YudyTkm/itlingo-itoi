@@ -71,7 +71,6 @@ RUN git clone https://github.com/genlike/pub.git
 #Compile RSL extension
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/rsl-vscode-extension.git
-RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.rsl.ide-1.0.0-SNAPSHOT-ls.jar
 RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo
 RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
 RUN npm install -g vsce
@@ -84,7 +83,6 @@ RUN cd /home/theia && rm -R ./rsl-vscode-extension
 #Compile ASL extension
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/asl-vscode-extension.git
-RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
 RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/generator.sh
@@ -107,11 +105,12 @@ WORKDIR /home/theia/pub
 # RUN npm install -g socket.io filenamify webpack msgpackr ws
 # RUN npm install
 
-RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
-RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
-EXPOSE $PORT
+# RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
+# RUN NODE_OPTIONS="--max_old_space_size=8192" sudo yarn theia build
+# EXPOSE $PORT
 
-#RUN sudo yarn
-#RUN sudo yarn theia build
-#EXPOSE 3000/tcp
-#EXPOSE 5432
+RUN sudo yarn
+RUN sudo yarn theia build
+EXPOSE 3000/tcp
+EXPOSE 5432
+EXPOSE 8000
