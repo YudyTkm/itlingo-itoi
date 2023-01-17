@@ -1,0 +1,1 @@
+docker run --name itlingo-local --env DATABASE_URL=postgres://postgres:rootroot@172.23.112.1:5432/itlingo -it -p 3000:3000 -p 3000:3000/udp -p 5432:5432 -p 5432:5432/udp -p 8000:8000 -p 8000:8000/udp -v C:\Users\ricar\Documents\Projectos:/home/theia/projectos itlingo-local bash

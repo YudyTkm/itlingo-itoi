@@ -5,7 +5,7 @@ create_date TIMESTAMP not null default now(),
 change_date TIMESTAMP,
 file bytea );
 
-export DATABASE_URL=postgres://postgres:postgres@172.25.64.1:5432/itlingo
+export DATABASE_URL=postgres://itlingo:itlingo@172.25.80.1:5432/itlingo
 
 
 
@@ -27,9 +27,9 @@ rm -R /tmp/vscode-unpacked/asl-vscode-xtext-0.0.5.vsix
 rm /home/theia/pub/plugins/asl-vscode-xtext-0.0.5.vsix
 cd /home/theia
 git clone https://github.com/genlike/asl-vscode-extension.git
-chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar
+chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/generator.sh
+chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/importer.sh
 chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo
-mv /home/theia/asl-vscode-extension/server/mydsl/bin/generator.sh /home/theia/asl-vscode-extension/server/mydsl/bin/generator1.sh
 chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
 cd /home/theia/asl-vscode-extension
 yarn
@@ -46,9 +46,7 @@ rm -R /tmp/vscode-unpacked/rsl-vscode-xtext-0.0.5.vsix
 rm /home/theia/pub/plugins/rsl-vscode-xtext-0.0.5.vsix
 cd /home/theia
 git clone https://github.com/genlike/rsl-vscode-extension.git
-chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/org.xtext.itlingo.rsl.ide-1.0.0-SNAPSHOT-ls.jar
 chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo
-mv /home/theia/rsl-vscode-extension/server/mydsl/bin/generator.sh /home/theia/rsl-vscode-extension/server/mydsl/bin/generator1.sh
 chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
 cd /home/theia/rsl-vscode-extension
 yarn
