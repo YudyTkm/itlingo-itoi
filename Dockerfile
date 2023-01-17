@@ -107,6 +107,11 @@ WORKDIR /home/theia/pub
 RUN export NODE_OPTIONS="--max_old_space_size=8192"
 RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
 RUN sudo yarn theia build
+WORKDIR /home/theia/pub/itlingo-itoi
+RUN yarn
+WORKDIR /home/theia/pub/browser-app
+RUN yarn
+WORKDIR /home/theia/pub
 EXPOSE $PORT
 
 # #RUN sudo yarn theia build
