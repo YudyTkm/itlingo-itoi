@@ -67,6 +67,7 @@ RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
 
 WORKDIR /home/theia
+RUN echo pwd
 RUN git clone https://github.com/genlike/pub.git
 
 
