@@ -1,5 +1,8 @@
 FROM ubuntu:latest
-RUN apt-get update && apt-get -y install curl xz-utils wget git sudo build-essential nodejs
+
+RUN apt-get update && apt-get -y install curl xz-utils wget git sudo build-essential 
+RUN curl -sL https://deb.nodesource.com/setup_16.x | sudo bash -
+RUN sudo apt -y install nodejs
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 RUN sudo apt update && sudo apt install -y yarn 
