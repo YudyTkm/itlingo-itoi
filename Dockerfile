@@ -1,16 +1,10 @@
 FROM ubuntu:latest
-RUN apt-get update && apt-get -y install curl xz-utils wget git sudo build-essential
+RUN apt-get update && apt-get -y install curl xz-utils wget git sudo build-essential nodejs
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 RUN sudo apt update && sudo apt install -y yarn 
 RUN sudo apt-get install -y g++ gcc make python2.7 pkg-config libx11-dev libxkbfile-dev libsecret-1-dev
 RUN apt-get -y install ruby ruby-dev zlib1g-dev npm
-RUN apt-get install -y git-core curl build-essential openssl libssl-dev \
- && git clone https://github.com/nodejs/node.git \
- && cd node \
- && ./configure \
- && make \
- && sudo make install
 
 # ################################### JAVA
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
