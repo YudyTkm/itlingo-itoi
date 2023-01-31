@@ -108,11 +108,11 @@ RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf
 RUN sudo yarn theia build
 WORKDIR /home/theia/pub/itlingo-itoi
 RUN yarn
-WORKDIR /home/theia/pub
-RUN yarn
-#EXPOSE $PORT
+WORKDIR /home/theia/pub/browser-app
+RUN yarn; exit 0
+EXPOSE $PORT
 
 # #RUN sudo yarn theia build
-EXPOSE 3000/tcp
-EXPOSE 5432
-EXPOSE 8000
+#EXPOSE 3000/tcp
+#EXPOSE 5432
+#EXPOSE 8000
