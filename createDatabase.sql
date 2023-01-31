@@ -55,7 +55,6 @@ yarn
 cd ..
 vsce package
 cp rsl-vscode-xtext-0.0.5.vsix /home/theia/pub/plugins/
-cd .. && rm -R ./rsl-vscode-extension
 cd /home/theia/pub/browser-app
 yarn theia start  --plugins=local-dir:../plugins  --hostname 0.0.0.0 --port 3000
 
