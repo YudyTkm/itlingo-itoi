@@ -102,8 +102,8 @@ WORKDIR /home/theia/pub
 #WORKDIR /home/theia/pub/theia-example-extension/
 # RUN npm install -g npm@8.19.2
 # RUN npm install -g socket.io filenamify webpack msgpackr ws
-RUN export NODE_OPTIONS="--max_old_space_size=8192"
-RUN export ITOI_PROD="PROD"
+ENV ITOI_PROD="PROD"
+ENV NODE_OPTIONS="--max_old_space_size=8192"
 RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
 RUN sudo yarn theia build
 WORKDIR /home/theia/pub/itlingo-itoi
