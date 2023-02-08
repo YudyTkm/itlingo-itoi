@@ -66,14 +66,19 @@ RUN mkdir -p /home/project && mkdir -p /home/theia
 RUN apt-get update 
 
 WORKDIR /home/theia
+COPY startup.sh .
 RUN git clone https://github.com/genlike/pub.git
 
+
+#Setup language servers folder
+RUN mkdir /home/theia/ls
 
 #Compile RSL extension
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/rsl-vscode-extension.git
-RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo
-RUN chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
+RUN chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo
+RUN chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo.bat
+RUN mv /home/theia/rsl-vscode-extension/server/rsl /home/theia/ls
 RUN npm install -g @vscode/vsce
 WORKDIR /home/theia/rsl-vscode-extension
 RUN yarn
@@ -84,9 +89,10 @@ RUN cd /home/theia && rm -R ./rsl-vscode-extension
 #Compile ASL extension
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/asl-vscode-extension.git
-RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo
-RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
-RUN chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/generator.sh
+RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo
+RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo.bat
+RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/generator.sh
+RUN mv /home/theia/asl-vscode-extension/server/asl /home/theia/ls
 WORKDIR /home/theia/asl-vscode-extension
 RUN yarn
 RUN vsce package
@@ -113,6 +119,6 @@ RUN yarn; exit 0
 EXPOSE $PORT
 
 # #RUN sudo yarn theia build
-#EXPOSE 3000/tcp
-#EXPOSE 5432
-#EXPOSE 8000
+# EXPOSE 3000/tcp
+# EXPOSE 5432
+# EXPOSE 8000

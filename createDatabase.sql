@@ -5,7 +5,7 @@ create_date TIMESTAMP not null default now(),
 change_date TIMESTAMP,
 file bytea );
 
-export DATABASE_URL=postgres://itlingo:itlingo@172.25.80.1:5432/itlingo
+export DATABASE_URL=postgres://itlingo:itlingo@172.21.240.1:5432/itlingo
 
 
 
