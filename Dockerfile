@@ -67,6 +67,7 @@ RUN apt-get update
 
 WORKDIR /home/theia
 COPY startup.sh .
+RUN chmod +x startup.sh
 RUN git clone https://github.com/genlike/pub.git
 
 
