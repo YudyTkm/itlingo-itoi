@@ -109,7 +109,8 @@ WORKDIR /home/theia/pub
 #WORKDIR /home/theia/pub/theia-example-extension/
 # RUN npm install -g npm@8.19.2
 # RUN npm install -g socket.io filenamify webpack msgpackr ws
-ENV ITOI_PROD="PROD"
+# ENV ITOI_PROD="PROD"
+
 ENV NODE_OPTIONS="$NODE_OPTIONS --max-old-space-size=1049"
 RUN sudo yarn --scripts-prepend-node-path --cache-folder ./ycache && sudo rm -rf ./ycache
 RUN sudo yarn theia build
@@ -120,6 +121,7 @@ RUN yarn; exit 0
 EXPOSE $PORT
 
 # #RUN sudo yarn theia build
-# EXPOSE 3000/tcp
-# EXPOSE 5432
-# EXPOSE 8000
+#ENV PORT=3000
+#EXPOSE 3000/tcp
+#EXPOSE 5432
+#EXPOSE 8000
