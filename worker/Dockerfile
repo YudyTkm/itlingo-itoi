@@ -62,7 +62,7 @@ RUN git clone https://github.com/genlike/rsl-vscode-extension.git
 RUN chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo
 RUN chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo.bat
 RUN mv /home/theia/rsl-vscode-extension/server/rsl /home/theia/ls
-RUN cd /home/theia && rm -R ./rsl-vscode-extension
+RUN cd /home/theia && rm -R /home/theia/rsl-vscode-extension
 
 #Compile ASL extension
 WORKDIR /home/theia
@@ -70,4 +70,4 @@ RUN git clone https://github.com/genlike/asl-vscode-extension.git
 RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo
 RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo.bat
 RUN mv /home/theia/asl-vscode-extension/server/asl /home/theia/ls
-RUN cd .. && rm -R ./asl-vscode-extension
+RUN cd /home/theia && rm -R /home/theia/asl-vscode-extension
