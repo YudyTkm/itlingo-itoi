@@ -60,6 +60,8 @@ ENV JAVA_HOME=/opt/java/openjdk \
 CMD ["jshell"]
 RUN apt-get update 
 # ################################ END JAVA
+
+
 RUN gem install nokogiri
 RUN gem install solargraph 
 RUN mkdir -p /home/project && mkdir -p /home/theia
