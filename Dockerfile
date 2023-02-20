@@ -15,7 +15,7 @@ WORKDIR /home/theia
 # COPY --from=0 --chown=theia:theia /home/theia /home/theia
 
 # RUN sudo apt-get install -y g++ gcc make python2.7 pkg-config libx11-dev libxkbfile-dev libsecret-1-dev
-RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev nano
+RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev nano net-tools
 
 # ADD $version.package.json ./package.json
 # ARG GITHUB_TOKEN
