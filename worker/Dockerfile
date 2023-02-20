@@ -54,7 +54,7 @@ RUN apt-get update
 
 RUN apt install -y inetutils-ping nano
 #Setup language servers folder
-RUN mkdir /home/theia/ls
+RUN mkdir -p /home/theia/ls
 
 #Compile RSL extension
 WORKDIR /home/theia
