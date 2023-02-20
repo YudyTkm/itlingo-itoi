@@ -52,7 +52,7 @@ RUN apt-get update
 # ################################ END JAVA
 
 
-RUN apt install inetutils-ping nano
+RUN apt install -y inetutils-ping nano
 #Setup language servers folder
 RUN mkdir /home/theia/ls
 
