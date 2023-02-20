@@ -1,5 +1,7 @@
 build:
   docker:
     web: Dockerfile
+    worker: worker/Dockerfile
 run:
-  web: trap '' SIGTERM;cd /home/theia/pub/browser-app &&  yarn theia start --no-cluster  --plugins=local-dir:../plugins --hostname 0.0.0.0 --port $PORT & /home/theia/ls/rsl/bin/start-ls-itlingo --port 6008 & /home/theia/ls/asl/bin/start-asl-ls-itlingo --port 6009  & wait -n; kill -SIGTERM -$$; wait
+  web: cd /home/theia/pub/browser-app &&  yarn theia start --no-cluster  --plugins=local-dir:../plugins --hostname 0.0.0.0 --port $PORT
+  worker: /home/theia/ls/rsl/bin/start-ls-itlingo --port 6008 & /home/theia/ls/asl/bin/start-asl-ls-itlingo --port 6009
