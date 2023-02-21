@@ -57,7 +57,7 @@ RUN cd .. && rm -R ./asl-vscode-extension
 
 WORKDIR /home/theia/pub
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NODE_OPTIONS="--max-old-space-size=460"
 RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
 RUN yarn theia build
 WORKDIR /home/theia/pub/itlingo-itoi
