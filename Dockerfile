@@ -57,15 +57,15 @@ RUN cd .. && rm -R ./asl-vscode-extension
 
 WORKDIR /home/theia/pub
 
-ENV NODE_OPTIONS="--max-old-space-size=460"
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
 RUN yarn theia build
 WORKDIR /home/theia/pub/itlingo-itoi
 RUN yarn
 WORKDIR /home/theia/pub/browser-app
 RUN yarn; exit 0
-
 RUN apk add openjdk11-jre
+ENV NODE_OPTIONS="--max-old-space-size=460"
 
 EXPOSE $PORT
 
