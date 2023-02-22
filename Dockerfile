@@ -67,8 +67,18 @@ RUN yarn; exit 0
 RUN apk add openjdk11-jre
 ENV NODE_OPTIONS="--max-old-space-size=460"
 
-EXPOSE $PORT
+#EXPOSE $PORT
+EXPOSE 3000
+
+RUN addgroup theia && \
+    adduser -G theia -s /bin/sh -D theia;
+RUN chmod g+rw /home && \
+    mkdir -p /home/project && \
+    chown -R theia:theia /home/theia && \
+    chown -R theia:theia /home/project;
 
 ENV SHELL=/bin/bash \
     THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/pub/plugins
 ENV USE_LOCAL_GIT true
+
+USER theia

@@ -27,10 +27,10 @@ rm -R /tmp/vscode-unpacked/asl-vscode-xtext-0.0.5.vsix
 rm /home/theia/pub/plugins/asl-vscode-xtext-0.0.5.vsix
 cd /home/theia
 git clone https://github.com/genlike/asl-vscode-extension.git
-chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/generator.sh
-chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/importer.sh
-chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo
-chmod +x /home/theia/asl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
+chmod +x /home/theia/asl-vscode-extension/server/asl/bin/generator.sh
+chmod +x /home/theia/asl-vscode-extension/server/asl/bin/importer.sh
+chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo
+chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo.bat
 cd /home/theia/asl-vscode-extension
 yarn
 vsce package
@@ -46,8 +46,8 @@ rm -R /tmp/vscode-unpacked/rsl-vscode-xtext-0.0.5.vsix
 rm /home/theia/pub/plugins/rsl-vscode-xtext-0.0.5.vsix
 cd /home/theia
 git clone https://github.com/genlike/rsl-vscode-extension.git
-chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo
-chmod +x /home/theia/rsl-vscode-extension/server/mydsl/bin/start-ls-itlingo.bat
+chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo
+chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo.bat
 cd /home/theia/rsl-vscode-extension
 yarn
 cd webview
