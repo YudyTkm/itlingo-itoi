@@ -31,7 +31,7 @@ WORKDIR /home/theia
 RUN git clone https://github.com/genlike/rsl-vscode-extension.git
 RUN chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo
 RUN chmod +x /home/theia/rsl-vscode-extension/server/rsl/bin/start-ls-itlingo.bat
-RUN mv /home/theia/rsl-vscode-extension/server/rsl /home/theia/ls
+RUN cp /home/theia/rsl-vscode-extension/server/rsl /home/theia/ls
 RUN npm install -g @vscode/vsce
 WORKDIR /home/theia/rsl-vscode-extension
 RUN yarn
@@ -45,7 +45,7 @@ RUN git clone https://github.com/genlike/asl-vscode-extension.git
 RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo
 RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo.bat
 RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/generator.sh
-RUN mv /home/theia/asl-vscode-extension/server/asl /home/theia/ls
+RUN cp /home/theia/asl-vscode-extension/server/asl /home/theia/ls
 WORKDIR /home/theia/asl-vscode-extension
 RUN yarn
 RUN vsce package
@@ -65,7 +65,8 @@ RUN yarn
 WORKDIR /home/theia/pub/browser-app
 RUN yarn; exit 0
 RUN apk add openjdk11-jre
-ENV NODE_OPTIONS="--max-old-space-size=460"
+
+
 
 #EXPOSE $PORT
 EXPOSE 3000
