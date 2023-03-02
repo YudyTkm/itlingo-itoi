@@ -7,7 +7,7 @@
 <br>
 
 
-# Theia IDE on Heroku
+# Itoi Theia IDE on Heroku
 
 This repositorty includes image to run a single theia instance, and a docker-compose that couples it to a database.
 
@@ -30,7 +30,6 @@ This should build and run the containers, you can confirm this through the Docke
 docker container ls
 ```
 
+You can now access Theia through:
 
-
-
-
+[http://127.0.0.1:3000/](http://127.0.0.1:3000/)
