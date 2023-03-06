@@ -37,6 +37,16 @@ RUN cp asl-langium-0.0.1.vsix /home/theia/pub/plugins
 RUN cd .. && rm -rf asl-vscode-extension
 
 
+#Compile RSL extension
+WORKDIR /home/theia
+RUN git clone https://github.com/genlike/rsl-vscode-extension.git
+RUN npm install -g @vscode/vsce
+WORKDIR /home/theia/rsl-vscode-extension
+RUN yarn
+RUN vsce package
+RUN cp rsl-vscode-extension-0.0.1.vsix /home/theia/pub/plugins
+RUN cd .. && rm -rf rsl-vscode-extension
+
 WORKDIR /home/theia/pub
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
