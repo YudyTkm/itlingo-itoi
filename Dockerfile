@@ -16,7 +16,7 @@ WORKDIR /home/theia
 
 # RUN sudo apt-get install -y g++ gcc make python2.7 pkg-config libx11-dev libxkbfile-dev libsecret-1-dev
 RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev libsecret-dev nano
-
+RUN apk add openjdk11-jre
 # ADD $version.package.json ./package.json
 # ARG GITHUB_TOKEN
 RUN git clone https://github.com/genlike/pub.git
@@ -29,11 +29,13 @@ RUN mkdir /home/theia/ls
 #Compile ASL extension
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/asl-vscode-extension.git
+RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/generator.sh
+RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/importer.sh
 RUN npm install -g @vscode/vsce
 WORKDIR /home/theia/asl-vscode-extension
 RUN yarn
 RUN vsce package
-RUN cp asl-langium-0.0.1.vsix /home/theia/pub/plugins
+RUN cp asl-vscode-extension-0.0.1.vsix /home/theia/pub/plugins
 RUN cd .. && rm -rf asl-vscode-extension
 
 

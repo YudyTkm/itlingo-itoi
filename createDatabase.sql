@@ -23,8 +23,9 @@ cd /home/theia && rm -R ./rsl-vscode-extension
 
 
 
-rm -R /tmp/vscode-unpacked/asl-vscode-xtext-0.0.5.vsix
-rm /home/theia/pub/plugins/asl-vscode-xtext-0.0.5.vsix
+rm -R /tmp/vscode-unpacked/asl-vscode-extension-0.0.1.vsix
+rm -R /home/theia/asl-vscode-extension/
+rm /home/theia/pub/plugins/asl-vscode-extension-0.0.1.vsix
 cd /home/theia
 git clone https://github.com/genlike/asl-vscode-extension.git
 chmod +x /home/theia/asl-vscode-extension/server/asl/bin/generator.sh
@@ -34,8 +35,7 @@ chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo.ba
 cd /home/theia/asl-vscode-extension
 yarn
 vsce package
-cp asl-vscode-xtext-0.0.5.vsix /home/theia/pub/plugins/
-cd .. && rm -R ./asl-vscode-extension
+cp asl-vscode-extension-0.0.1.vsix /home/theia/pub/plugins/
 cd /home/theia/pub/browser-app
 yarn theia start  --plugins=local-dir:../plugins  --hostname 0.0.0.0 --port 3000
 
