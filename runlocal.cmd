@@ -1,1 +1,1 @@
-docker run --name itoi -it -p 3000:3000 -p 3000:3000/udp -p 8000:8000 -p 8000:8000/udp -v C:\Users\ricar\Documents\Projectos:/home/theia/projectos itoi bash
+docker run --name  itoi -it -p 3000:3000 -p 3000:3000/udp -p 8000:8000 -p 8000:8000/udp -v C:\Users\ricar\Documents\Projectos:/home/theia/projectos itoi bash

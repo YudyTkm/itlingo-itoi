@@ -1,4 +1,4 @@
-ARG NODE_VERSION=14.21.3
+ARG NODE_VERSION=16.16.0
 # FROM node:${NODE_VERSION}-alpine
 # RUN apk add --no-cache make pkgconfig gcc g++ python libx11-dev libxkbfile-dev libsecret-dev
 # ARG version=latest
@@ -25,24 +25,23 @@ RUN git clone https://github.com/genlike/pub.git
 
 #Setup language servers folder
 RUN mkdir /home/theia/ls
+RUN npm install -g @vscode/vsce
 
 #Compile ASL extension
 WORKDIR /home/theia
-RUN git clone https://github.com/genlike/asl-vscode-extension.git
-RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/generator.sh
-RUN chmod +x /home/theia/asl-vscode-extension/server/asl/bin/importer.sh
-RUN npm install -g @vscode/vsce
-WORKDIR /home/theia/asl-vscode-extension
+RUN git clone https://github.com/genlike/asl-langium.git
+RUN chmod +x /home/theia/asl-langium/server/asl/bin/generator.sh
+RUN chmod +x /home/theia/asl-langium/server/asl/bin/importer.sh
+WORKDIR /home/theia/asl-langium
 RUN yarn
 RUN vsce package
-RUN cp asl-vscode-extension-0.0.1.vsix /home/theia/pub/plugins
-RUN cd .. && rm -rf asl-vscode-extension
+RUN cp asl-langium-0.0.1.vsix /home/theia/pub/plugins
+RUN cd .. && rm -rf asl-langium
 
 
 #Compile RSL extension
 WORKDIR /home/theia
 RUN git clone https://github.com/genlike/rsl-vscode-extension.git
-RUN npm install -g @vscode/vsce
 WORKDIR /home/theia/rsl-vscode-extension
 RUN yarn
 RUN vsce package
@@ -55,14 +54,14 @@ ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
 RUN yarn theia build
 WORKDIR /home/theia/pub/itlingo-itoi
-RUN yarn
+# RUN yarn
 WORKDIR /home/theia/pub/browser-app
 RUN yarn; exit 0
 
 
 
 EXPOSE $PORT
-#EXPOSE 3000
+# EXPOSE 3000
 
 RUN addgroup theia && \
    adduser -G theia -s /bin/sh -D theia;

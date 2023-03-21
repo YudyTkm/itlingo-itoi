@@ -27,17 +27,32 @@ rm -R /tmp/vscode-unpacked/asl-vscode-extension-0.0.1.vsix
 rm -R /home/theia/asl-vscode-extension/
 rm /home/theia/pub/plugins/asl-vscode-extension-0.0.1.vsix
 cd /home/theia
-git clone https://github.com/genlike/asl-vscode-extension.git
-chmod +x /home/theia/asl-vscode-extension/server/asl/bin/generator.sh
-chmod +x /home/theia/asl-vscode-extension/server/asl/bin/importer.sh
-chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo
-chmod +x /home/theia/asl-vscode-extension/server/asl/bin/start-asl-ls-itlingo.bat
-cd /home/theia/asl-vscode-extension
+git clone https://github.com/genlike/asl-langium.git
+chmod +x /home/theia/asl-langium/server/asl/bin/generator.sh
+chmod +x /home/theia/asl-langium/server/asl/bin/importer.sh
+chmod +x /home/theia/asl-langium/server/asl/bin/start-asl-ls-itlingo
+chmod +x /home/theia/asl-langium/server/asl/bin/start-asl-ls-itlingo.bat
+cd /home/theia/asl-langium
 yarn
 vsce package
-cp asl-vscode-extension-0.0.1.vsix /home/theia/pub/plugins/
+cp asl-langium-0.0.1.vsix /home/theia/pub/plugins/
 cd /home/theia/pub/browser-app
-yarn theia start  --plugins=local-dir:../plugins  --hostname 0.0.0.0 --port 3000
+yarn theia start  --plugins=local-dir:../plugins  --hostname 0.0.0.0 --port 3000 --no-cluster
+
+
+
+rm -R /tmp/vscode-unpacked/rsl-vscode-extension-0.0.1.vsix
+rm -R /home/theia/rsl-vscode-extension/
+rm /home/theia/pub/plugins/rsl-vscode-extension-0.0.1.vsix
+cd /home/theia
+git clone https://github.com/genlike/rsl-vscode-extension.git
+cd /home/theia/rsl-vscode-extension
+yarn
+vsce package
+cp rsl-vscode-extension-0.0.1.vsix /home/theia/pub/plugins/
+cd /home/theia/pub/browser-app
+yarn theia start  --plugins=local-dir:../plugins  --hostname 0.0.0.0 --port 3000 --no-cluster
+
 
 
 
