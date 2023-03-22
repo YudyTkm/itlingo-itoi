@@ -51,13 +51,13 @@ RUN cd .. && rm -rf rsl-vscode-extension
 
 WORKDIR /home/theia/ide
 
-RUN export NODE_OPTIONS="--max-old-space-size=4096"
-RUN yarn --cache-folder ./ycache && rm -rf ./ycache
-RUN yarn theia build
-WORKDIR /home/theia/ide/itlingo-itoi
-RUN yarn
-WORKDIR /home/theia/ide/browser-app
-RUN yarn
+ENV NODE_OPTIONS "--max-old-space-size=4096"
+# RUN yarn --cache-folder ./ycache && rm -rf ./ycache
+# RUN yarn theia build
+# WORKDIR /home/theia/ide/itlingo-itoi
+# RUN yarn
+# WORKDIR /home/theia/ide/browser-app
+# RUN yarn
 
 
 

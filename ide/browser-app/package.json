@@ -6,15 +6,22 @@
     "@theia/core": "latest",
     "@theia/editor": "latest",
     "@theia/filesystem": "latest",
+    "@theia/git": "latest",
+    "@theia/scm": "latest",
+    "@theia/scm-extra": "latest",
     "@theia/markers": "latest",
     "@theia/messages": "latest",
     "@theia/monaco": "latest",
     "@theia/navigator": "latest",
     "@theia/preferences": "latest",
     "@theia/process": "latest",
+    "@theia/keymaps": "latest",
     "@theia/terminal": "latest",
     "@theia/workspace": "latest",
-    "itlingo-itoi": "0.0.0"
+    "itlingo-itoi": "0.0.0",
+    "@theia/plugin-dev": "latest",
+    "@theia/plugin-ext": "latest",
+    "@theia/plugin-ext-vscode": "latest"
   },
   "devDependencies": {
     "@theia/cli": "latest"

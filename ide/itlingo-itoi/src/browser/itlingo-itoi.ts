@@ -32,19 +32,17 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
     protected readonly shell: ApplicationShell;
     @inject(FrontendApplicationStateService)
     protected readonly stateService: FrontendApplicationStateService;
-
+    @inject(WorkspaceService) private readonly workspaceService: WorkspaceService;
+    // @inject(MonacoEditorService) private readonly monacoEditorService: MonacoEditorService,
+    //@inject(MonacoWorkspace) private readonly monacoWorkspace: MonacoWorkspace,
+    @inject(MessageService) private readonly messageService: MessageService;
+    // @inject(WorkspaceCommandContribution) private readonly workspaceCommandContribution: WorkspaceCommandContribution,
+    // @inject(CommandService) private readonly commandService: CommandService,
+    //@inject(CommandService) private readonly commandService: CommandService,
+    @inject(ILogger) protected readonly logger: ILogger;
+    
     constructor(
-        @inject(WorkspaceService) private readonly workspaceService: WorkspaceService,
-        // @inject(MonacoEditorService) private readonly monacoEditorService: MonacoEditorService,
-        //@inject(MonacoWorkspace) private readonly monacoWorkspace: MonacoWorkspace,
-        @inject(MessageService) private readonly messageService: MessageService,
-
-       
         
-        // @inject(WorkspaceCommandContribution) private readonly workspaceCommandContribution: WorkspaceCommandContribution,
-        // @inject(CommandService) private readonly commandService: CommandService,
-        //@inject(CommandService) private readonly commandService: CommandService,
-        @inject(ILogger) protected readonly logger: ILogger
     ) { 
         super({
             widgetId: GettingStartedWidget.ID,
