@@ -1,4 +1,4 @@
-ARG NODE_VERSION=16.16.0
+ARG NODE_VERSION=14.21.0
 # FROM node:${NODE_VERSION}-alpine
 # RUN apk add --no-cache make pkgconfig gcc g++ python libx11-dev libxkbfile-dev libsecret-dev
 # ARG version=latest
@@ -19,7 +19,7 @@ RUN apk add --no-cache make pkgconfig gcc g++ python3 libx11-dev libxkbfile-dev 
 RUN apk add openjdk11-jre
 # ADD $version.package.json ./package.json
 # ARG GITHUB_TOKEN
-RUN git clone https://github.com/genlike/pub.git
+COPY ide /home/theia/ide
 #COPY startup.sh .
 #RUN chmod +x startup.sh
 
@@ -29,50 +29,51 @@ RUN npm install -g @vscode/vsce
 
 #Compile ASL extension
 WORKDIR /home/theia
-RUN git clone https://github.com/genlike/asl-langium.git
+COPY plugins/asl-langium /home/theia/asl-langium
+RUN echo ls -l
 RUN chmod +x /home/theia/asl-langium/server/asl/bin/generator.sh
 RUN chmod +x /home/theia/asl-langium/server/asl/bin/importer.sh
 WORKDIR /home/theia/asl-langium
 RUN yarn
 RUN vsce package
-RUN cp asl-langium-0.0.1.vsix /home/theia/pub/plugins
+RUN cp asl-langium-0.0.1.vsix /home/theia/ide/plugins
 RUN cd .. && rm -rf asl-langium
 
 
 #Compile RSL extension
 WORKDIR /home/theia
-RUN git clone https://github.com/genlike/rsl-vscode-extension.git
+COPY plugins/rsl-vscode-extension /home/theia/rsl-vscode-extension
 WORKDIR /home/theia/rsl-vscode-extension
 RUN yarn
 RUN vsce package
-RUN cp rsl-vscode-extension-0.0.1.vsix /home/theia/pub/plugins
+RUN cp rsl-vscode-extension-0.0.1.vsix /home/theia/ide/plugins
 RUN cd .. && rm -rf rsl-vscode-extension
 
-WORKDIR /home/theia/pub
+WORKDIR /home/theia/ide
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
+RUN export NODE_OPTIONS="--max-old-space-size=4096"
+RUN yarn --cache-folder ./ycache && rm -rf ./ycache
 RUN yarn theia build
-WORKDIR /home/theia/pub/itlingo-itoi
-# RUN yarn
-WORKDIR /home/theia/pub/browser-app
-RUN yarn; exit 0
+WORKDIR /home/theia/ide/itlingo-itoi
+RUN yarn
+WORKDIR /home/theia/ide/browser-app
+RUN yarn
 
 
 
-EXPOSE $PORT
-# EXPOSE 3000
+# EXPOSE $PORT
+EXPOSE 3000
 
-RUN addgroup theia && \
-   adduser -G theia -s /bin/sh -D theia;
-RUN chmod g+rw /home && \
-   mkdir -p /home/project && \
-   chown -R theia:theia /home/theia && \
-   chown -R theia:theia /home/project;
+# RUN addgroup theia && \
+#    adduser -G theia -s /bin/sh -D theia;
+# RUN chmod g+rw /home && \
+#    mkdir -p /home/project && \
+#    chown -R theia:theia /home/theia && \
+#    chown -R theia:theia /home/project;
 
-ENV SHELL=/bin/bash \
-   THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/pub/plugins
-ENV USE_LOCAL_GIT true
+# ENV SHELL=/bin/bash \
+#    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/pub/plugins
+# ENV USE_LOCAL_GIT true
 
-USER theia
+# USER theia
 

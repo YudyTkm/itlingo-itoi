@@ -23,9 +23,9 @@ cd /home/theia && rm -R ./rsl-vscode-extension
 
 
 
-rm -R /tmp/vscode-unpacked/asl-vscode-extension-0.0.1.vsix
-rm -R /home/theia/asl-vscode-extension/
-rm /home/theia/pub/plugins/asl-vscode-extension-0.0.1.vsix
+rm -R /tmp/vscode-unpacked/asl-langium-0.0.1.vsix
+rm -R /home/theia/asl-langium/
+rm /home/theia/pub/plugins/asl-langium-0.0.1.vsix
 cd /home/theia
 git clone https://github.com/genlike/asl-langium.git
 chmod +x /home/theia/asl-langium/server/asl/bin/generator.sh
