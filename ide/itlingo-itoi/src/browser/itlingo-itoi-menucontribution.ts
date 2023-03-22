@@ -16,10 +16,10 @@ import {
 
 @injectable()
 export class TheiaExampleMenuContribution implements MenuContribution, TabBarToolbarContribution {
-
+    @inject(CommandRegistry) protected readonly  commands: CommandRegistry;
 
     constructor(
-        @inject(CommandRegistry) protected readonly  commands: CommandRegistry
+        
     ){
     }
 
