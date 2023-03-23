@@ -18,7 +18,7 @@ import * as React from '@theia/core/shared/react';
 import URI from '@theia/core/lib/common/uri';
 import { injectable, inject, postConstruct } from '@theia/core/shared/inversify';
 import { ReactWidget } from '@theia/core/lib/browser/widgets/react-widget';
-import { QuickPickItem,QuickInputService, MessageService,CommandRegistry, isOSX, environment, Path } from '@theia/core/lib/common';
+import { QuickPickItem,QuickInputService, MessageService,CommandRegistry, Path } from '@theia/core/lib/common';
 import { WorkspaceCommands, WorkspaceService } from '@theia/workspace/lib/browser';
 import { KeymapsCommands } from '@theia/keymaps/lib/browser';
 import { CommonCommands, LabelProvider, Key, KeyCode, codicon } from '@theia/core/lib/browser';
@@ -124,11 +124,11 @@ export class GettingStartedWidget extends ReactWidget {
         return <div className='gs-container'>
             {this.renderHeader()}
             <hr className='gs-hr' />
-            <div className='flex-grid'>
+            {/* <div className='flex-grid'>
                 <div className='col'>
                     {this.renderOpen()}
                 </div>
-            </div>
+            </div> */}
             <div className='flex-grid'>
                 <div className='col'>
                     {this.setupProject()}
@@ -211,95 +211,96 @@ export class GettingStartedWidget extends ReactWidget {
      * Render the `open` section.
      * Displays a collection of `open` commands.
      */
-    protected renderOpen(): React.ReactNode {
-        const requireSingleOpen = isOSX || !environment.electron.is();
+    // protected renderOpen(): React.ReactNode {
+    //     const requireSingleOpen = isOSX || !environment.electron.is();
 
-        const open = requireSingleOpen && <div className='gs-action-container'>
-            <a
-                role={'button'}
-                tabIndex={0}
-                onClick={this.doOpen}
-                onKeyDown={this.doOpenEnter}>
-                {nls.localizeByDefault('Open')}
-            </a>
-        </div>;
+    //     const open = requireSingleOpen && <div className='gs-action-container'>
+    //         <a
+    //             role={'button'}
+    //             tabIndex={0}
+    //             onClick={this.doOpen}
+    //             onKeyDown={this.doOpenEnter}>
+    //             {nls.localizeByDefault('Open')}
+    //         </a>
+    //     </div>;
 
-        const openFile = !requireSingleOpen && <div className='gs-action-container'>
-            <a
-                role={'button'}
-                tabIndex={0}
-                onClick={this.doOpenFile}
-                onKeyDown={this.doOpenFileEnter}>
-                {nls.localizeByDefault('Open File')}
-            </a>
-        </div>;
+    //     const openFile = !requireSingleOpen && <div className='gs-action-container'>
+    //         <a
+    //             role={'button'}
+    //             tabIndex={0}
+    //             onClick={this.doOpenFile}
+    //             onKeyDown={this.doOpenFileEnter}>
+    //             {nls.localizeByDefault('Open File')}
+    //         </a>
+    //     </div>;
 
-        const openFolder = !requireSingleOpen && <div className='gs-action-container'>
-            <a
-                role={'button'}
-                tabIndex={0}
-                onClick={this.doOpenFolder}
-                onKeyDown={this.doOpenFolderEnter}>
-                {nls.localizeByDefault('Open Folder')}
-            </a>
-        </div>;
+    //     const openFolder = !requireSingleOpen && <div className='gs-action-container'>
+    //         <a
+    //             role={'button'}
+    //             tabIndex={0}
+    //             onClick={this.doOpenFolder}
+    //             onKeyDown={this.doOpenFolderEnter}>
+    //             {nls.localizeByDefault('Open Folder')}
+    //         </a>
+    //     </div>;
 
-        const openWorkspace = (
-            <a
-                role={'button'}
-                tabIndex={0}
-                onClick={this.doOpenWorkspace}
-                onKeyDown={this.doOpenWorkspaceEnter}>
-                {nls.localizeByDefault('Open Workspace')}
-            </a>
-        );
+    //     const openWorkspace = (
+    //         <a
+    //             role={'button'}
+    //             tabIndex={0}
+    //             onClick={this.doOpenWorkspace}
+    //             onKeyDown={this.doOpenWorkspaceEnter}>
+    //             {nls.localizeByDefault('Open Workspace')}
+    //         </a>
+    //     );
 
-        return <div className='gs-section'>
-            <h3 className='gs-section-header'><i className={codicon('folder-opened')}></i>{nls.localizeByDefault('Open')}</h3>
-            {open}
-            {openFile}
-            {openFolder}
-            {openWorkspace}
-        </div>;
-    }
+    //     return <div className='gs-section'>
+    //         <h3 className='gs-section-header'><i className={codicon('folder-opened')}></i>{nls.localizeByDefault('Open')}</h3>
+    //         {open}
+    //         {openFile}
+    //         {openFolder}
+    //         {openWorkspace}
+    //     </div>;
+    // }
 
     /**
      * Render the recently used workspaces section.
      */
     protected renderRecentWorkspaces(): React.ReactNode {
-        const items = this.recentWorkspaces;
-        const paths = this.buildPaths(items);
-        const content = paths.slice(0, this.recentLimit).map((item, index) =>
-            <div className='gs-action-container' key={index}>
-                <a
-                    role={'button'}
-                    tabIndex={0}
-                    onClick={() => this.open(new URI(items[index]))}
-                    onKeyDown={(e: React.KeyboardEvent) => this.openEnter(e, new URI(items[index]))}>
-                    {new URI(items[index]).path.base}
-                </a>
-                <span className='gs-action-details'>
-                    {item}
-                </span>
-            </div>
-        );
+        // const items = this.recentWorkspaces;
+        // const paths = this.buildPaths(items);
+        // const content = paths.slice(0, this.recentLimit).map((item, index) =>
+        //     <div className='gs-action-container' key={index}>
+        //         <a
+        //             role={'button'}
+        //             tabIndex={0}
+        //             // onClick={() => this.open(new URI(items[index]))}
+        //             // onKeyDown={(e: React.KeyboardEvent) => this.openEnter(e, new URI(items[index]))}>
+        //             // {new URI(items[index]).path.base}
+        //         </a>
+        //         <span className='gs-action-details'>
+        //             {item}
+        //         </span>
+        //     </div>
+        // );
         // If the recently used workspaces list exceeds the limit, display `More...` which triggers the recently used workspaces quick-open menu upon selection.
-        const more = paths.length > this.recentLimit && <div className='gs-action-container'>
-            <a
-                role={'button'}
-                tabIndex={0}
-                onClick={this.doOpenRecentWorkspace}
-                onKeyDown={this.doOpenRecentWorkspaceEnter}>
-                {nls.localizeByDefault('More...')}
-            </a>
-        </div>;
-        return <div className='gs-section'>
-            <h3 className='gs-section-header'>
-                <i className={codicon('history')}></i>{nls.localizeByDefault('Recent')}
-            </h3>
-            {items.length > 0 ? content : <p className='gs-no-recent'>{nls.localizeByDefault('No recent folders')}</p>}
-            {more}
-        </div>;
+        // const more = paths.length > this.recentLimit && <div className='gs-action-container'>
+        //     <a
+        //         role={'button'}
+        //         tabIndex={0}
+        //         onClick={this.doOpenRecentWorkspace}
+        //         onKeyDown={this.doOpenRecentWorkspaceEnter}>
+        //         {nls.localizeByDefault('More...')}
+        //     </a>
+        // </div>;
+        // return <div className='gs-section'>
+        //     <h3 className='gs-section-header'>
+        //         <i className={codicon('history')}></i>{nls.localizeByDefault('Recent')}
+        //     </h3>
+        //     {items.length > 0 ? content : <p className='gs-no-recent'>{nls.localizeByDefault('No recent folders')}</p>}
+        //     {more}
+        // </div>;
+        return <div className='gs-section'></div>;
     }
 
     /**
@@ -473,16 +474,16 @@ export class GettingStartedWidget extends ReactWidget {
         }
     };
 
-    /**
-     * Open a workspace given its uri.
-     * @param uri {URI} the workspace uri.
-     */
-    protected open = (uri: URI) => this.workspaceService.open(uri);
-    protected openEnter = (e: React.KeyboardEvent, uri: URI) => {
-        if (this.isEnterKey(e)) {
-            this.open(uri);
-        }
-    };
+    // /**
+    //  * Open a workspace given its uri.
+    //  * @param uri {URI} the workspace uri.
+    //  */
+    // protected open = (uri: URI) => this.workspaceService.open(uri);
+    // protected openEnter = (e: React.KeyboardEvent, uri: URI) => {
+    //     if (this.isEnterKey(e)) {
+    //         this.open(uri);
+    //     }
+    // };
 
     /**
      * Open a link in an external window.

@@ -9,11 +9,58 @@
     "src"
   ],
   "dependencies": {
-    "@theia/core": "latest"
+    "@theia/core": "latest",
+    "fs": "0.0.1-security",
+    "log-timestamp": "^0.3.0",
+    "pg": "^8.7.3",
+    "request-ip": "^2.1.3",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "rimraf": "latest",
     "typescript": "latest"
+  },
+  "contributes": {
+    "commands": [
+      {
+          "command": "extended.git.clone",
+          "title": "Clone Git Repo",
+          "category": "Extended Git"
+      },
+      {
+        "command": "extended.git.pull",
+        "title": "Pull Git Repo",
+        "category": "Extended Git"
+    },{
+      "command": "extended.git.push",
+      "title": "Push Git Repo",
+      "category": "Extended Git"
+  }],
+  "menus": {
+    "scm/title": [
+        {
+          "command": "extended.git.clone",
+          "group": "0_header@1",
+          "when": "scmProvider == git"
+        },
+        {
+          "command": "extended.git.pull",
+          "group": "0_header@2",
+          "when": "scmProvider == git"
+        },
+        {
+          "command": "extended.git.pull",
+          "group": "0_header@3",
+          "when": "scmProvider == git"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "extended.git.pull",
+          "when": "editorHasSelection"
+        }]
+    }
+
   },
   "scripts": {
     "prepare": "yarn run clean && yarn run build",

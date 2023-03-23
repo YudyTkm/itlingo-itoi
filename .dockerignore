@@ -3,3 +3,4 @@ app.json
 heroku.yml
 license
 readme.md
+node_modules
