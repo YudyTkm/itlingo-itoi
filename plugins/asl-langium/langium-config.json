@@ -1,0 +1,12 @@
+{
+    "projectName": "Asl",
+    "languages": [{
+        "id": "asl",
+        "grammar": "src/language-server/asl.langium",
+        "fileExtensions": [".asl"],
+        "textMate": {
+            "out": "syntaxes/asl.tmLanguage.json"
+        }
+    }],
+    "out": "src/language-server/generated"
+}

@@ -1,0 +1,12 @@
+{
+    "projectName": "Rsl",
+    "languages": [{
+        "id": "rsl",
+        "grammar": "src/language-server/rsl.langium",
+        "fileExtensions": [".rsl"],
+        "textMate": {
+            "out": "syntaxes/rsl.tmLanguage.json"
+        }
+    }],
+    "out": "src/language-server/generated"
+}

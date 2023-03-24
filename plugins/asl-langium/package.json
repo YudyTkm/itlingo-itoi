@@ -1,0 +1,192 @@
+{
+    "name": "asl-langium",
+    "displayName": "asl-langium",
+    "description": "Please enter a brief description here",
+    "version": "0.0.1",
+    "repository": {
+        "url": "https://github.com/genlike/asl-langium.git"
+    },
+    "engines": {
+        "vscode": "^1.67.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [
+            {
+                "id": "asl",
+                "aliases": [
+                    "asl",
+                    "asl"
+                ],
+                "extensions": [
+                    ".asl"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "asl",
+                "scopeName": "source.asl",
+                "path": "./syntaxes/asl.tmLanguage.json"
+            }
+        ], 
+        "commands": [
+            {
+                "command": "asl.diagram.open",
+                "title": "Open in Diagram",
+                "icon": "$(symbol-structure)",
+                "category": "ASL Diagram"
+            },
+            {
+                "command": "asl.diagram.fit",
+                "title": "Fit to Screen",
+                "category": "ASL Diagram"
+            },
+            {
+                "command": "asl.diagram.center",
+                "title": "Center selection",
+                "category": "ASL Diagram"
+            },
+            {
+                "command": "asl.diagram.delete",
+                "title": "Delete selected element",
+                "category": "ASL Diagram"
+            },
+            {
+                "command": "asl.diagram.export",
+                "title": "Export diagram to SVG",
+                "category": "ASL Diagram"
+            },
+            {
+                "command": "genio.export",
+                "title": "Export from Asl..."
+            },
+            {
+                "command": "zip.import",
+                "title": "Import to ASL..."
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "asl.diagram.open",
+                    "when": "editorLangId == 'asl'"
+                },
+                {
+                    "command": "asl.diagram.fit",
+                    "when": "asl-diagram-focused"
+                },
+                {
+                    "command": "asl.diagram.center",
+                    "when": "asl-diagram-focused"
+                },
+                {
+                    "command": "asl.diagram.delete",
+                    "when": "asl-diagram-focused"
+                },
+                {
+                    "command": "asl.diagram.export",
+                    "when": "asl-diagram-focused"
+                }
+            ],
+            "editor/context": [
+                {
+                    "command": "asl.diagram.open",
+                    "when": "editorLangId == 'asl'",
+                    "group": "navigation"
+                }
+            ],
+            "editor/title": [
+                {
+                    "command": "asl.diagram.open",
+                    "when": "editorLangId == 'asl'",
+                    "group": "navigation"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "asl.diagram.open",
+                    "when": "resourceExtname == '.asl'",
+                    "group": "navigation"
+                },
+                {
+                    "command": "zip.import",
+                    "when": "explorerResourceIsFolder",
+                    "group": "navigation"
+                },
+                {
+                    "command": "genio.export",
+                    "when": "resourceExtname == '.asl'",
+                    "group": "navigation"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "key": "alt+f",
+                "mac": "alt+f",
+                "command": "asl.diagram.fit",
+                "when": "asl-diagram-focused"
+            },
+            {
+                "key": "alt+c",
+                "mac": "alt+c",
+                "command": "asl.diagram.center",
+                "when": "asl-diagram-focused"
+            },
+            {
+                "key": "alt+e",
+                "mac": "alt+e",
+                "command": "asl.diagram.export",
+                "when": "asl-diagram-focused"
+            },
+            {
+                "key": "delete",
+                "mac": "delete",
+                "command": "asl.diagram.delete",
+                "when": "asl-diagram-focused"
+            }
+        ]
+    },
+    "activationEvents": [
+        "onLanguage:asl"
+    ],
+    "files": [
+        "bin",
+        "out",
+        "src"
+    ],
+    "bin": {
+        "asl-cli": "./bin/cli"
+    },
+    "main": "./out/extension.js",
+    "scripts": {
+        "vscode:prepublish": "npm run build && npm run lint",
+        "build": "tsc -b tsconfig.json",
+        "watch": "tsc -b tsconfig.json --watch",
+        "lint": "eslint src --ext ts",
+        "langium:generate": "langium generate",
+        "langium:watch": "langium generate --watch"
+    },
+    "dependencies": {
+        "chevrotain": "~10.4.2",
+        "chalk": "~4.1.2",
+        "commander": "~10.0.0",
+        "langium": "~1.1.0",
+        "vscode-languageclient": "~8.0.2",
+        "vscode-languageserver": "~8.0.2",
+        "vscode-uri": "~3.0.7"
+    },
+    "devDependencies": {
+        "@types/node": "~16.18.11",
+        "@types/vscode": "~1.67.0",
+        "@typescript-eslint/eslint-plugin": "~5.51.0",
+        "@typescript-eslint/parser": "~5.51.0",
+        "eslint": "~8.33.0",
+        "langium-cli": "~1.1.0",
+        "typescript": "~4.9.5"
+    }
+}

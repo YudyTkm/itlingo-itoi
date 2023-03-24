@@ -1,0 +1,38 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		gradlePluginPortal()
+	}
+	dependencies {
+		classpath 'org.xtext:xtext-gradle-plugin:3.0.2'
+	}
+}
+
+subprojects {
+	ext.xtextVersion = '2.29.0'
+	ext.sprottyVersion = "0.8.0"
+	ext.elkVersion = "0.6.1"
+	repositories {
+		mavenCentral()
+	}
+
+    apply plugin: 'java-library'
+    dependencies {
+        api platform("org.eclipse.xtext:xtext-dev-bom:${xtextVersion}")
+        implementation "io.typefox.xtext2langium:io.typefox.xtext2langium:0.3.0"
+    }
+
+	apply plugin: 'org.xtext.xtend'
+	apply from: "${rootDir}/gradle/source-layout.gradle"
+	apply plugin: 'eclipse'
+
+	group = 'org.itlingo.asl'
+	version = '1.0.0-SNAPSHOT'
+
+	sourceCompatibility = '11'
+	targetCompatibility = '11'
+
+	configurations.all {
+		exclude group: 'asm'
+	}
+}

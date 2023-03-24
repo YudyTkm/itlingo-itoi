@@ -1,0 +1,5 @@
+.vscode/**
+.vscode-test/**
+.gitignore
+org.itlingo.asl.parent
+langium-quickstart.md

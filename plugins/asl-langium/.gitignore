@@ -1,0 +1,8 @@
+node_modules
+lib/*
+pack
+*.log
+*.vsix
+src-gen/
+*.tgz
+package-lock.json
