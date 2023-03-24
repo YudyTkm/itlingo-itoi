@@ -1,3 +1,0 @@
-include 'org.itlingo.asl'
-include 'org.itlingo.asl.ide'
-include 'org.itlingo.asl.tests'
