@@ -1,8 +1,7 @@
 
 import { injectable, inject } from '@theia/core/shared/inversify';
 import { Command, MessageService} from '@theia/core/lib/common';
-import {  FrontendApplication, AbstractViewContribution } from '@theia/core/lib/browser';
-import { FrontendApplicationContribution } from '@theia/core/lib/browser';
+import {  FrontendApplication, AbstractViewContribution, FrontendApplicationContribution } from '@theia/core/lib/browser';
 import { WorkspaceService } from "@theia/workspace/lib/browser/workspace-service";
 import { GettingStartedWidget } from './itlingo-itoi-widget';
 import { FrontendApplicationStateService } from '@theia/core/lib/browser/frontend-application-state';
@@ -72,7 +71,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                 if (['terminal','process'].includes(widget.id) || widget.id.startsWith('debug') || widget.id.startsWith('scm')) {
                     widget.dispose();
                 }
-            });
+        });
             //this.quickView.showItem()
             
             var xMenuItems = document.getElementById("theia-top-panel") as HTMLElement;

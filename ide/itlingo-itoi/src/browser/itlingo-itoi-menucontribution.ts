@@ -1,8 +1,8 @@
 import { injectable, inject } from '@theia/core/shared/inversify';
 import { CommandContribution,MessageService, CommandHandler, CommandRegistry, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
-import { KeybindingContribution, KeybindingRegistry, QuickInputService, } from '@theia/core/lib/browser';
+import { KeybindingContribution, KeybindingRegistry, QuickInputService } from '@theia/core/lib/browser';
 import { GIT_COMMANDS, GIT_MENUS } from '@theia/git/lib/browser/git-contribution';
-
+import { } from '@theia/core/lib/browser'
 import {
     TabBarToolbarContribution,
     TabBarToolbarItem,
@@ -13,6 +13,13 @@ import {
 //import axios from 'axios';
 
 //var g_readOnly:boolean | undefined = undefined;
+
+type GitUser = {
+    email: string,
+    username: string,
+    accessCode: string,
+}
+
 
 @injectable()
 export class TheiaExampleMenuContribution implements MenuContribution, TabBarToolbarContribution {
@@ -103,17 +110,19 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
         commands.unregisterCommand(GIT_COMMANDS.FETCH);
 
         GIT_MENUS.SUBMENU_PULL_PUSH.label = "Pull, Push, Clone";
-        commands.registerCommand(GIT_COMMANDS.PULL, {
-            execute: () => { this.myGitPull(); } 
+        GIT_COMMANDS.FETCH.label = "Clone...";
+        commands.registerCommand(GIT_COMMANDS.FETCH, {
+            execute: () => { 
+                this.myGitClone(); 
+            } 
         } as CommandHandler);
         commands.registerCommand(GIT_COMMANDS.PUSH, {
             execute:  () => { this.myGitPush(); } 
         } as CommandHandler);
-
-        GIT_COMMANDS.FETCH.label = "Clone...";
-        commands.registerCommand(GIT_COMMANDS.FETCH, {
-            execute: () => { this.myGitClone(); } 
+        commands.registerCommand(GIT_COMMANDS.PULL, {
+            execute: () => { this.myGitPull(); } 
         } as CommandHandler);
+        
     }
 
     myGitPull(){
@@ -124,9 +133,52 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
         this.messageService.log("yo");
         console.log("yo push");
     }
-    myGitClone(){
-        this.messageService.log("yo");
-        console.log("yo clone");
+    async myGitClone(){
+        //First ask the user for credentials (email, username, access token)
+
+        let gitUser: GitUser = {
+            email: "",
+            username: "",
+            accessCode: ""
+        };
+        let inputBoxEmail = this.quickInputService.createInputBox();
+        inputBoxEmail.description = "Please input your email"
+        inputBoxEmail.placeholder = "john@email.com"
+        inputBoxEmail.onDidChangeValue((text) => {
+                gitUser.email = text;
+        });
+        inputBoxEmail.show();
+        inputBoxEmail.onDidAccept(()=> {
+            let inputBoxUsername = this.quickInputService.createInputBox();
+            inputBoxUsername.description = "Please your username"
+            inputBoxUsername.placeholder = "johnson"
+            inputBoxUsername.onDidChangeValue((text) => {
+                gitUser.username = text;
+            });
+            inputBoxUsername.show();
+            inputBoxUsername.onDidAccept(()=>{
+                let inputBoxPassword = this.quickInputService.createInputBox();
+                inputBoxPassword.description = "Please input your access code"
+                inputBoxPassword.password = true
+                inputBoxPassword.onDidChangeValue((text) => {
+                    gitUser.accessCode = text;
+                });
+                inputBoxUsername.show();
+                inputBoxPassword.onDidAccept(()=>{
+                    console.log(gitUser.email)
+                    console.log(gitUser.username)
+                    console.log(gitUser.accessCode)
+                });
+            });
+        });
+            
+        
+        
+        //If there are existing files move them to temporary folder (explicit copy then delete for database events)
+
+        //Perform git clone
+
+        //Move files from the temporary folder back here
     }
 
 }
