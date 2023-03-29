@@ -144,18 +144,22 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
         let inputBoxEmail = this.quickInputService.createInputBox();
         inputBoxEmail.description = "Please input your email"
         inputBoxEmail.placeholder = "john@email.com"
-        inputBoxEmail.onDidChangeValue((text) => {
-                gitUser.email = text;
-        });
         inputBoxEmail.show();
+        inputBoxEmail.onDidChangeValue((text) => {
+            console.log("change text");
+            gitUser.email = text;
+        });
+            // opiniao do mocado
+
         inputBoxEmail.onDidAccept(()=> {
+            console.log("didAcceptEmail");
+            console.log(gitUser.email);
             let inputBoxUsername = this.quickInputService.createInputBox();
             inputBoxUsername.description = "Please your username"
             inputBoxUsername.placeholder = "johnson"
             inputBoxUsername.onDidChangeValue((text) => {
                 gitUser.username = text;
             });
-            inputBoxUsername.show();
             inputBoxUsername.onDidAccept(()=>{
                 let inputBoxPassword = this.quickInputService.createInputBox();
                 inputBoxPassword.description = "Please input your access code"
@@ -163,13 +167,14 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
                 inputBoxPassword.onDidChangeValue((text) => {
                     gitUser.accessCode = text;
                 });
-                inputBoxUsername.show();
                 inputBoxPassword.onDidAccept(()=>{
-                    console.log(gitUser.email)
-                    console.log(gitUser.username)
-                    console.log(gitUser.accessCode)
+                    console.log(gitUser.email);
+                    console.log(gitUser.username);
+                    console.log(gitUser.accessCode);
                 });
+                inputBoxPassword.show();
             });
+            inputBoxUsername.show();
         });
             
         
