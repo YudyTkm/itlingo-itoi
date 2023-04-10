@@ -54,10 +54,22 @@ RUN vsce package
 RUN cp rsl-vscode-extension-0.0.1.vsix /home/theia/ide/plugins
 RUN cd .. && rm -rf rsl-vscode-extension
 
+
+#Compile RSL extension
+WORKDIR /home/theia
+COPY plugins/vscode-code-annotation /home/theia/vscode-code-annotation
+WORKDIR /home/theia/vscode-code-annotation
+RUN npm install
+RUN vsce package
+RUN cp code-annotation-0.0.2-dev.vsix /home/theia/ide/plugins
+RUN cd .. && rm -rf vscode-code-annotation
+
+
 WORKDIR /home/theia/ide
 
 ENV NODE_OPTIONS "--max-old-space-size=8192"
 RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
+
 # RUN yarn theia build
 WORKDIR /home/theia/ide/itlingo-itoi
 RUN yarn
@@ -65,9 +77,11 @@ WORKDIR /home/theia/ide/browser-app
 RUN yarn
 
 
+RUN mkdir -p /tmp/theia/workspaces/tmp
 
-EXPOSE $PORT
+#EXPOSE $PORT
 #EXPOSE 3000
+
 
 # RUN addgroup theia && \
 #    adduser -G theia -s /bin/sh -D theia;

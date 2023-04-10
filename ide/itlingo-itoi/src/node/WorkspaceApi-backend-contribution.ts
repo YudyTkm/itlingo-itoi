@@ -23,7 +23,7 @@ let requestIp = require('request-ip');
 
 const hostfs = "/tmp/theia/workspaces/";
 const hostroot = "/home/theia/pub/";
-const staticFolderLength = 76;
+const staticFolderLength = 73;
 const COM_KEY = "v8y/B?E(H+MbQeThWmZq4t7w!z$C&F)J";
 const itlingoCloudURL = "https://itlingocloud.herokuapp.com/";
 //var itlingoCloudURL = "http://172.26.128.1:8000/";
@@ -40,21 +40,8 @@ type Editor = {
 @injectable()
 export class SwitchWSBackendContribution implements BackendApplicationContribution {
     
-    //@inject(DiskFileSystemProvider) private readonly fileChangeCollection: DiskFileSystemProvider;
-    // @inject(ApplicationShell)
-    // protected readonly shell: ApplicationShell;
-
-    // constructor(
-    //     @inject(ILogger) protected readonly logger: ILogger) {}
-
     configure(app: express.Application) {
-
-        // const client = new Client({
-        //     host:'ec2-52-31-217-108.eu-west-1.compute.amazonawas.com',
-            
-        // });
-
-
+        //setup DB
         const connectionString = process.env.DATABASE_URL;
         console.log("CONSTRING - " + connectionString)
         let pgPoolOptions:Object = {connectionString,
@@ -67,15 +54,11 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                     rejectUnauthorized: false
                 }
             };
-            //Lauch LS servers
-            console.log("PROD-launch ls");
-            // execFile("/home/theia/ls/rsl/bin/start-ls-itlingo --port 6008");
-            // execFile("/home/theia/ls/asl/bin/start-asl-ls-itlingo --port 6009");
         }
         const pgPool = new Pool(pgPoolOptions);
 
 
-
+        //
         function fetchParamsFromEvent(event: nsfw.FileChangeEvent){
             let splitPaths = event.directory.split(path.sep);
             let params = workspaces.get(splitPaths[5]) as string[];
@@ -112,6 +95,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             const fullfilepath = event.directory + '/' + event.file;
             const removeNameLength = staticFolderLength + params[0].length + 1;
             const onlyFile = fullfilepath.substring(removeNameLength);
+            if (fs.lstatSync(fullfilepath).isDirectory()) return 
             console.log("woot: " + onlyFile + " " + fullfilepath);
             const client = await pgPool.connect();
             await client.query("SELECT filename, workspace FROM t_files WHERE filename=$1 AND workspace=$2", [onlyFile,params[0]], (err:any, res:any) =>
@@ -181,8 +165,8 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             const onlyFile = fullfilepath.substring(removeNameLength);
             console.log("woot: " + onlyFile + " " + fullfilepath);
             let deleteQuery;
-            deleteQuery = "DELETE FROM t_files WHERE filename = $1 AND workspace = $2;"
-            pgPool.query(deleteQuery,[onlyFile, params[0]]);
+            deleteQuery = "DELETE FROM t_files WHERE filename LIKE $1 AND workspace = $2;"
+            pgPool.query(deleteQuery,[onlyFile + '%', params[0]]);
         }
 
         function renameFileToDB( event: nsfw.RenamedFileEvent) {
@@ -391,7 +375,7 @@ function createWorkspace(ip:string, params:string[]){
             workspaceid: Number.parseInt(params[4]),
          };
      });
-     workspaces.set(wuuid, params);
+    workspaces.set(wuuid, params);
     pullFilesFromDb(randomFoldername,params);
 }
 
