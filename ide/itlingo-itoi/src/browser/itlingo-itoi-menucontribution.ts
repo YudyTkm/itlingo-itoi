@@ -8,6 +8,7 @@ import {
     TabBarToolbarItem,
     TabBarToolbarRegistry
 } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
+
 // import {  CommonCommands } from '@theia/core/lib/browser';
 
 //import axios from 'axios';
@@ -135,50 +136,41 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
     }
     async myGitClone(){
         //First ask the user for credentials (email, username, access token)
-
         let gitUser: GitUser = {
             email: "",
             username: "",
             accessCode: ""
         };
-        let inputBoxEmail = this.quickInputService.createInputBox();
-        inputBoxEmail.description = "Please input your email"
-        inputBoxEmail.placeholder = "john@email.com"
-        inputBoxEmail.show();
-        inputBoxEmail.onDidChangeValue((text) => {
-            console.log("change text");
-            gitUser.email = text;
-        });
-            // opiniao do mocado
-
-        inputBoxEmail.onDidAccept(()=> {
+        let inputBox = this.quickInputService.createInputBox();
+        inputBox.description = "Please input your email"
+        inputBox.placeholder = "john@email.com"
+        inputBox.onDidAccept(() => {
             console.log("didAcceptEmail");
             console.log(gitUser.email);
-            let inputBoxUsername = this.quickInputService.createInputBox();
-            inputBoxUsername.description = "Please your username"
-            inputBoxUsername.placeholder = "johnson"
-            inputBoxUsername.onDidChangeValue((text) => {
-                gitUser.username = text;
-            });
-            inputBoxUsername.onDidAccept(()=>{
-                let inputBoxPassword = this.quickInputService.createInputBox();
-                inputBoxPassword.description = "Please input your access code"
-                inputBoxPassword.password = true
-                inputBoxPassword.onDidChangeValue((text) => {
-                    gitUser.accessCode = text;
-                });
-                inputBoxPassword.onDidAccept(()=>{
+            gitUser.email = inputBox.value ?? '';
+            inputBox.description = "Please your username"
+            inputBox.placeholder = "johnson"
+            inputBox.value = ""
+            inputBox.show();
+            inputBox.onDidAccept(() => {
+                console.log("didAcceptUsername");
+                gitUser.username = inputBox.value ?? '';
+                inputBox.description = "Please input your access code"
+                inputBox.value = ""
+                inputBox.password = true
+                inputBox.onDidAccept(() => {
+                    console.log("didAcceptPassword");
+                    gitUser.accessCode = inputBox.value ?? '';
                     console.log(gitUser.email);
                     console.log(gitUser.username);
                     console.log(gitUser.accessCode);
+                    inputBox.hide();
                 });
-                inputBoxPassword.show();
+                inputBox.show();
             });
-            inputBoxUsername.show();
+            inputBox.show();
         });
-            
-        
-        
+        inputBox.show();
         //If there are existing files move them to temporary folder (explicit copy then delete for database events)
 
         //Perform git clone

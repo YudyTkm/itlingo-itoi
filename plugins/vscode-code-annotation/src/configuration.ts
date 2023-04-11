@@ -2,8 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
-let storageLocation : string = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
-? vscode.workspace.workspaceFolders[0].uri.fsPath : '/tmp/debug';
+let storageLocation : string = '';
 const annotationFile : string = 'annotations.json';
 
 export const getAnnotationFilePath = (): string => {
