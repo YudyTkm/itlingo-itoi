@@ -172,7 +172,7 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
         });
         inputBox.show();
         //If there are existing files move them to temporary folder (explicit copy then delete for database events)
-
+        
         //Perform git clone
 
         //Move files from the temporary folder back here
