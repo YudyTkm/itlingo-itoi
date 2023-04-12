@@ -219,7 +219,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         //      res.end();
         // });
 
-
+        cp.execSync("mkdir -p /tmp/theia/workspaces/tmp");
         createWatcher(hostfs + 'tmp/')
         app.get('/getWorkspace', (req, res) => {
             let ip = requestIp.getClientIp(req);
