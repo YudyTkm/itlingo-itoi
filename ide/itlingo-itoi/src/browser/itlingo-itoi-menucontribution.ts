@@ -9,9 +9,9 @@ import {
     TabBarToolbarRegistry
 } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
 
-// import {  CommonCommands } from '@theia/core/lib/browser';
 
-//import axios from 'axios';
+// import {  CommonCommands } from '@theia/core/lib/browser';
+import axios from 'axios';
 
 //var g_readOnly:boolean | undefined = undefined;
 
@@ -19,7 +19,15 @@ type GitUser = {
     email: string,
     username: string,
     accessCode: string,
+    repository: string
 }
+
+const gitUser: GitUser = {
+    email: localStorage.getItem("gitEmail") ?? '',
+    username: localStorage.getItem("gitUsername") ?? '',
+    accessCode: localStorage.getItem("gitAccessCode") ?? '',
+    repository: localStorage.getItem("gitRepo") ?? ''
+};
 
 
 @injectable()
@@ -127,55 +135,82 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
     }
 
     myGitPull(){
-        this.messageService.log("yo");
-        console.log("yo pull");
+        let defaultBranch1 = localStorage.getItem("defaultBranch1");
+        let defaultBranch2 = localStorage.getItem("defaultBranch2");
+        let inputBox1 = this.quickInputService.createInputBox();
+        inputBox1.description = "Branch remote"
+        inputBox1.placeholder = "origin"
+        inputBox1.value = defaultBranch1 ?? 'origin';
+        inputBox1.onDidAccept(() => {
+            localStorage.setItem("defaultBranch1",inputBox1.value ?? '')
+            let inputBox2 = this.quickInputService.createInputBox();
+            inputBox2.description = "Branch local"
+            inputBox2.placeholder = "main"
+            inputBox2.value = defaultBranch2 ?? 'main';
+            inputBox2.onDidAccept(() => {
+                localStorage.setItem("defaultBranch2",inputBox1.value ?? '');
+                axios.get("/gitPull", {params:{ branch1:inputBox1.value ?? '', branch2:inputBox2.value ?? ''}});
+                inputBox2.hide();
+            });
+            inputBox1.hide();
+            inputBox2.show();
+        });
+        inputBox1.show();
     }
     myGitPush(){
-        this.messageService.log("yo");
-        console.log("yo push");
+        let defaultBranch1 = localStorage.getItem("defaultBranch1");
+        let defaultBranch2 = localStorage.getItem("defaultBranch2");
+        let inputBox1 = this.quickInputService.createInputBox();
+        inputBox1.description = "Branch remote"
+        inputBox1.placeholder = "origin"
+        inputBox1.value = defaultBranch1 ?? 'origin';
+        inputBox1.onDidAccept(() => {
+            localStorage.setItem("defaultBranch1",inputBox1.value ?? '')
+            let inputBox2 = this.quickInputService.createInputBox();
+            inputBox2.description = "Branch local"
+            inputBox2.placeholder = "main"
+            inputBox2.value = defaultBranch2 ?? 'main';
+            inputBox2.onDidAccept(() => {
+                localStorage.setItem("defaultBranch2",inputBox1.value ?? '');
+                axios.get("/gitPush", {params:{ branch1:localStorage.getItem("defaultBranch1") ?? '', branch2:localStorage.getItem("defaultBranch2") ?? ''}});
+                inputBox2.hide();
+            });
+            inputBox1.hide();
+            inputBox2.show();
+        });
+        inputBox1.show();
     }
     async myGitClone(){
-        //First ask the user for credentials (email, username, access token)
-        let gitUser: GitUser = {
-            email: "",
-            username: "",
-            accessCode: ""
-        };
-        let inputBox = this.quickInputService.createInputBox();
-        inputBox.description = "Please input your email"
-        inputBox.placeholder = "john@email.com"
-        inputBox.onDidAccept(() => {
-            console.log("didAcceptEmail");
-            console.log(gitUser.email);
-            gitUser.email = inputBox.value ?? '';
-            inputBox.description = "Please your username"
-            inputBox.placeholder = "johnson"
-            inputBox.value = ""
-            inputBox.show();
-            inputBox.onDidAccept(() => {
-                console.log("didAcceptUsername");
-                gitUser.username = inputBox.value ?? '';
-                inputBox.description = "Please input your access code"
-                inputBox.value = ""
-                inputBox.password = true
-                inputBox.onDidAccept(() => {
-                    console.log("didAcceptPassword");
-                    gitUser.accessCode = inputBox.value ?? '';
-                    console.log(gitUser.email);
-                    console.log(gitUser.username);
-                    console.log(gitUser.accessCode);
-                    inputBox.hide();
+        //Let the user fillout a form (email, username, access token, repo)
+        let inputBox1 = this.quickInputService.createInputBox();
+        inputBox1.description = "Please input your email"
+        inputBox1.placeholder = "john@email.com"
+        inputBox1.value = localStorage.getItem("gituser.email") ?? '';
+        inputBox1.onDidAccept(() => {
+            gitUser.email = inputBox1.value?.toString() ?? '';
+            let inputBox2 = this.quickInputService.createInputBox();
+            inputBox2.description = "Please your username"
+            inputBox2.placeholder = "johnson"
+            inputBox2.value = localStorage.getItem("gituser.username") ?? '';
+            inputBox2.onDidAccept(() => {
+                gitUser.username = inputBox2.value?.toString() ?? '';
+                let inputBox3 = this.quickInputService.createInputBox();
+                inputBox3.description = "Repository url";
+                inputBox3.value = localStorage.getItem("gituser.repo") ?? '';
+                inputBox3.placeholder = "https://username:token@github.com/username/repo.git";
+                inputBox3.password = false;
+                inputBox3.onDidAccept(() => {
+                    gitUser.repository = inputBox3.value?.toString() ?? '';
+                    callCloneBatch();
+                    inputBox3.hide();
                 });
-                inputBox.show();
+                inputBox2.hide();
+                inputBox3.show();    
             });
-            inputBox.show();
+            inputBox1.hide();
+            inputBox2.show();
         });
-        inputBox.show();
-        //If there are existing files move them to temporary folder (explicit copy then delete for database events)
-        
-        //Perform git clone
-
-        //Move files from the temporary folder back here
+        inputBox1.show();
     }
 
 }
@@ -197,6 +232,17 @@ export class TheiaExampleKeybindingContribution implements KeybindingContributio
 
 
 
+
+function callCloneBatch() {
+    let encoded = Buffer.from(JSON.stringify(gitUser)).toString("base64");
+    localStorage.setItem("gituser.email", gitUser.email);
+    localStorage.setItem("gituser.username", gitUser.username);
+    localStorage.setItem("gituser.repo", gitUser.repository);
+    //let commandString = `${gitUser.email} ${gitUser.username} ${gitUser.accessCode} ${gitUser.repository}`
+    axios.get("/cloneRepo", {params:{
+        data:encoded
+    }});
+}
 // async function getReadonly(): Promise<boolean>{
 //     console.log("g_readonly= " + g_readOnly);
 //     if(g_readOnly == undefined) {

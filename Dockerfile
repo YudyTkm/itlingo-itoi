@@ -23,7 +23,7 @@ RUN apk add openjdk11-jre dos2unix
 # ARG GITHUB_TOKEN
 COPY ide /home/theia/ide
 WORKDIR /home/theia/ide
-RUN find . -type f -print0 | xargs -0 dos2unix
+
 #COPY startup.sh .
 #RUN chmod +x startup.sh
 
@@ -37,7 +37,6 @@ COPY plugins/asl-langium /home/theia/asl-langium
 RUN chmod +x /home/theia/asl-langium/server/asl/bin/generator.sh
 RUN chmod +x /home/theia/asl-langium/server/asl/bin/importer.sh
 WORKDIR /home/theia/asl-langium
-RUN find . -type f -print0 | xargs -0 dos2unix
 RUN yarn
 RUN vsce package
 RUN cp asl-langium-0.0.1.vsix /home/theia/ide/plugins
@@ -48,7 +47,6 @@ RUN cd .. && rm -rf asl-langium
 WORKDIR /home/theia
 COPY plugins/rsl-vscode-extension /home/theia/rsl-vscode-extension
 WORKDIR /home/theia/rsl-vscode-extension
-RUN find . -type f -print0 | xargs -0 dos2unix
 RUN yarn
 RUN vsce package
 RUN cp rsl-vscode-extension-0.0.1.vsix /home/theia/ide/plugins
@@ -67,9 +65,9 @@ RUN cd .. && rm -rf vscode-code-annotation
 
 WORKDIR /home/theia/ide
 
-ENV NODE_OPTIONS "--max-old-space-size=8192"
+ENV NODE_OPTIONS "--max-old-space-size=4096"
 RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
-
+RUN find node_modules/@theia/cli/bin -type f -print0 | xargs -0 dos2unix
 # RUN yarn theia build
 WORKDIR /home/theia/ide/itlingo-itoi
 RUN yarn

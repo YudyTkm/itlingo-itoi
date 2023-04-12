@@ -1,6 +1,5 @@
 #!/bin/bash
 typeofbuild="$1"
-all="All"
 outputDir=$2
 inputDIr=$3
 APP_HOME="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"

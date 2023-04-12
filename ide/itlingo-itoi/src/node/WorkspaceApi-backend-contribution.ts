@@ -5,6 +5,7 @@ import axios from 'axios';
 //const pg = require('pg');
 import * as fs from 'fs';
 import * as nsfw from 'nsfw'
+import * as cp from 'child_process'
 import path = require("path");
 import * as uuid from 'uuid';
 // const { execFile } = require('node:child_process');
@@ -22,7 +23,7 @@ let requestIp = require('request-ip');
 // import URI from '@theia/core/lib/common/uri';
 
 const hostfs = "/tmp/theia/workspaces/";
-const hostroot = "/home/theia/pub/";
+const hostroot = "/home/theia/ide/";
 const staticFolderLength = 73;
 const COM_KEY = "v8y/B?E(H+MbQeThWmZq4t7w!z$C&F)J";
 const itlingoCloudURL = "https://itlingocloud.herokuapp.com/";
@@ -45,14 +46,14 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         const connectionString = process.env.DATABASE_URL;
         console.log("CONSTRING - " + connectionString)
         let pgPoolOptions:Object = {connectionString,
-            ssl: false
+            ssl: {
+                rejectUnauthorized: false
+            }
         };
-        if (process.env.ITOI_PROD === "PROD"){
-            console.log("PROD");
+        if (process.env.ITOI_PROD === "DEV"){
+            console.log("DEV");
             pgPoolOptions = {connectionString,
-                ssl: {
-                    rejectUnauthorized: false
-                }
+                ssl: false
             };
         }
         const pgPool = new Pool(pgPoolOptions);
@@ -319,6 +320,47 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             res.end();
         });
 
+        app.get('/cloneRepo', (req, res) => {
+            let ip = requestIp.getClientIp(req);
+            if(currentEditors[ip]) {
+                let jsonData = JSON.parse(Buffer.from(req.query.data as string, "base64").toString());
+                console.log("cloneRepoBackend");
+                console.log(jsonData.email);
+                console.log(jsonData.username);
+                console.log(jsonData.accessCode);
+                console.log(jsonData.repository);
+                let scriptPath = path.join(hostroot, "gitUtils", "cloneScript.sh");
+                cp.execSync(`${scriptPath} ${currentEditors[ip].foldername} ${jsonData.email} ${jsonData.username} ${jsonData.accessCode} ${jsonData.repository}`)
+            }
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end(); 
+        });
+
+
+        app.get('/gitPull', (req, res) => {
+            let ip = requestIp.getClientIp(req);
+            if(currentEditors[ip]) {
+                console.log("PUSSHHH!!");
+                console.log(`${req.query.branch1} ${req.query.branch2}`);
+                cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${req.query.branch1} ${req.query.branch2}`);
+            }
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end(); 
+        });
+
+        app.get('/gitPush', (req, res) => {
+            let ip = requestIp.getClientIp(req);
+            if(currentEditors[ip]) {
+                console.log("PULL!!");
+                console.log(`${req.query.branch1} ${req.query.branch2}`);
+                cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${req.query.branch1} ${req.query.branch2}`);
+            }
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'text/plain');
+            res.end(); 
+        });
 
 
         async function setupCustomFiles(editor:Editor){
