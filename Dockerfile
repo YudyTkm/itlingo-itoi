@@ -23,7 +23,7 @@ RUN apk add openjdk11-jre dos2unix
 # ARG GITHUB_TOKEN
 COPY ide /home/theia/ide
 WORKDIR /home/theia/ide
-
+RUN chmod +x gitUtils/cloneScript.sh
 #COPY startup.sh .
 #RUN chmod +x startup.sh
 
