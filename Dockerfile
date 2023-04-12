@@ -77,7 +77,7 @@ RUN yarn
 
 RUN mkdir -p /tmp/theia/workspaces/tmp
 
-#EXPOSE $PORT
+EXPOSE $PORT
 #EXPOSE 3000
 
 
