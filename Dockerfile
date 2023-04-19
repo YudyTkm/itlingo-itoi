@@ -6,7 +6,7 @@ ARG NODE_VERSION=14.21.3
 
 
 
-FROM node:${NODE_VERSION}-alpine
+FROM node:${NODE_VERSION}-alpine as 
 # See : https://github.com/theia-ide/theia-apps/issues/34
 
 RUN apk add --no-cache git openssh bash libsecret 
@@ -23,7 +23,9 @@ RUN apk add openjdk11-jre dos2unix
 # ARG GITHUB_TOKEN
 COPY ide /home/theia/ide
 WORKDIR /home/theia/ide
+
 RUN chmod +x gitUtils/cloneScript.sh
+RUN chmod +x gitUtils/gitPermissionsFix.sh
 #COPY startup.sh .
 #RUN chmod +x startup.sh
 

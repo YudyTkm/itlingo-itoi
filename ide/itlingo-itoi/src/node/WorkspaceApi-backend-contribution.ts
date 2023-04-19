@@ -70,6 +70,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             console.log("PullFiles to:");
             console.log(destinationFolder);
             console.log(params[0]);
+            console.log("write permissions: " + params[3]);
             const selectQuery = "SELECT filename, file FROM t_files WHERE workspace=$1";
             pgPool.query(selectQuery, [params[0]], (err:Error, res:any) => {
                 console.log("SELECT")
@@ -78,11 +79,25 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 res.rows.forEach((element:any) => {
                     fs.mkdirSync(getDirName(destinationFolder + '/' + element.filename), {recursive: true});
                     fs.writeFileSync(destinationFolder + '/' + element.filename, element.file);
-                    console.log("write permissions: " + params[3]);
                     //if(params[3]==="false"){
                     //fs.chmodSync(destinationFolder + '/' + element.filename, 0o444);
                     //} 
                 });
+                //verificar se a pasta .git existe
+                // if (!fs.existsSync(destinationFolder + '/.git') && !fs.existsSync(destinationFolder + '/git')){
+                //     let gitInitCommand = `cd ${destinationFolder} && git init && git config user.email "${params[1]}" && git config user.name "${params[1]}"`;
+                //     console.log("Init git with:" + gitInitCommand)
+                //     cp.execSync(gitInitCommand);
+                // }
+                // let scriptPath = path.join(hostroot, "gitUtils", "gitPermissionsFix.sh");
+                // if (fs.existsSync(destinationFolder + '/.git')){
+                //     cp.execSync(scriptPath + ' ' + destinationFolder);
+                // }
+                // if (fs.existsSync(destinationFolder + '/git')){
+                //     cp.execSync(scriptPath + ' ' + destinationFolder + '/git');
+                // }
+                //fazer git init
+                // fazer git config user no mesmo comando...
             });
         }
 
@@ -109,7 +124,6 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 if(res.rowCount > 0){
                     console.log("File Already Exists");
                 } else {
-                    
                     var rawData = fs.readFileSync(fullfilepath);
                     console.log(params);
                     client.query("INSERT INTO t_files (filename, workspace, file) VALUES ($1, $2, $3)",
