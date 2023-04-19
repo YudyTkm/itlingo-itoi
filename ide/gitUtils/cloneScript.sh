@@ -1,8 +1,7 @@
 #!/bin/sh
 workspaceDir=$1
-email=$2
-username=$3
-repo=$4
+username=$2
+repo=$3
 
 APP_HOME="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 log=log_file.txt
@@ -11,20 +10,20 @@ log=log_file.txt
 destDir="/tmp/gitGarbage/$(date +%s)/files/"
 mkdir -p $destDir
 rm -rf "$workspaceDir/.git"
+rm -rf "$workspaceDir/git"
 cp "$workspaceDir/"* $destDir
 rm -rf "$workspaceDir/"{*,.*}
 
 ##Perform git clone
 cd $workspaceDir
-git clone $repo "$workspaceDir"
+git clone $repo "$workspaceDir/git"
 
-##Move files from the temporary folder back here
 
 
 ##Setup local git user
-cd $workspaceDir
+cd $workspaceDir/git
 git config user.name "$username"
-git config user.email "$email"
+git config user.email "$username@itoi.com"
 
-sleep 2
+##Move files from the temporary folder back here
 mv -v $destDir/* $workspaceDir/

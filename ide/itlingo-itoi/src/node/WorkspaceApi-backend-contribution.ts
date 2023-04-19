@@ -219,7 +219,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         //      res.end();
         // });
 
-        cp.execSync("mkdir -p /tmp/theia/workspaces/tmp");
+        cp.execSync("mkdir -p " + hostfs + "tmp/");
         createWatcher(hostfs + 'tmp/')
         app.get('/getWorkspace', (req, res) => {
             let ip = requestIp.getClientIp(req);
@@ -330,7 +330,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 console.log(jsonData.accessCode);
                 console.log(jsonData.repository);
                 let scriptPath = path.join(hostroot, "gitUtils", "cloneScript.sh");
-                cp.execSync(`${scriptPath} ${currentEditors[ip].foldername} ${jsonData.email} ${jsonData.username} ${jsonData.accessCode} ${jsonData.repository}`)
+                cp.execSync(`${scriptPath} ${currentEditors[ip].foldername} ${jsonData.username} ${jsonData.repository}`)
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
@@ -341,9 +341,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         app.get('/gitPull', (req, res) => {
             let ip = requestIp.getClientIp(req);
             if(currentEditors[ip]) {
-                console.log("PUSSHHH!!");
-                console.log(`${req.query.branch1} ${req.query.branch2}`);
-                cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${req.query.branch1} ${req.query.branch2}`);
+                console.log("PULL!!");
+                console.log(`${req.query.repoUrl} `);
+                cp.execSync(`cd ${currentEditors[ip].foldername}/git && git pull ${req.query.repoUrl}`);
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
@@ -353,9 +353,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         app.get('/gitPush', (req, res) => {
             let ip = requestIp.getClientIp(req);
             if(currentEditors[ip]) {
-                console.log("PULL!!");
-                console.log(`${req.query.branch1} ${req.query.branch2}`);
-                cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${req.query.branch1} ${req.query.branch2}`);
+                console.log("PUSSHHH!!");
+                console.log(`${req.query.repoUrl} `);
+                cp.execSync(`cd ${currentEditors[ip].foldername}/git  && git push ${req.query.repoUrl}`);
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');

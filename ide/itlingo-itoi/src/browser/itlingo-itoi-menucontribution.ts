@@ -135,21 +135,23 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
     }
 
     myGitPull(){
-        let defaultBranch1 = localStorage.getItem("defaultBranch1");
-        let defaultBranch2 = localStorage.getItem("defaultBranch2");
+        let repo = localStorage.getItem("gituser.repo");
+        let accessCode = localStorage.getItem("gituser.accesscode");
         let inputBox1 = this.quickInputService.createInputBox();
-        inputBox1.description = "Branch remote"
-        inputBox1.placeholder = "origin"
-        inputBox1.value = defaultBranch1 ?? 'origin';
+        inputBox1.description = "Please input the repository url"
+        inputBox1.placeholder = "https://github.com/username/repo.git"
+        inputBox1.value = repo ?? '';
         inputBox1.onDidAccept(() => {
-            localStorage.setItem("defaultBranch1",inputBox1.value ?? '')
+            localStorage.setItem("gituser.repo",inputBox1.value ?? '');
             let inputBox2 = this.quickInputService.createInputBox();
-            inputBox2.description = "Branch local"
-            inputBox2.placeholder = "main"
-            inputBox2.value = defaultBranch2 ?? 'main';
+            inputBox2.description = "Please input your access code"
+            inputBox2.placeholder = "******"
+            inputBox2.password = true
+            inputBox2.value = accessCode ?? '';
             inputBox2.onDidAccept(() => {
-                localStorage.setItem("defaultBranch2",inputBox1.value ?? '');
-                axios.get("/gitPull", {params:{ branch1:inputBox1.value ?? '', branch2:inputBox2.value ?? ''}});
+                localStorage.setItem("gituser.accesscode",inputBox2.value ?? '');
+                let repoUrl = insertAccessCodeIntoRepo(inputBox1.value?? '', inputBox2.value?? '');
+                axios.get("/gitPull", {params:{ repoUrl:repoUrl}});
                 inputBox2.hide();
             });
             inputBox1.hide();
@@ -158,21 +160,23 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
         inputBox1.show();
     }
     myGitPush(){
-        let defaultBranch1 = localStorage.getItem("defaultBranch1");
-        let defaultBranch2 = localStorage.getItem("defaultBranch2");
+        let repo = localStorage.getItem("gituser.repo");
+        let accessCode = localStorage.getItem("gituser.accesscode");
         let inputBox1 = this.quickInputService.createInputBox();
-        inputBox1.description = "Branch remote"
-        inputBox1.placeholder = "origin"
-        inputBox1.value = defaultBranch1 ?? 'origin';
+        inputBox1.description = "Please input the repository url"
+        inputBox1.placeholder = "https://github.com/username/repo.git"
+        inputBox1.value = repo ?? '';
         inputBox1.onDidAccept(() => {
-            localStorage.setItem("defaultBranch1",inputBox1.value ?? '')
+            localStorage.setItem("gituser.repo",inputBox1.value ?? '');
             let inputBox2 = this.quickInputService.createInputBox();
-            inputBox2.description = "Branch local"
-            inputBox2.placeholder = "main"
-            inputBox2.value = defaultBranch2 ?? 'main';
+            inputBox2.description = "Please input your access code"
+            inputBox2.placeholder = "******"
+            inputBox2.password = true
+            inputBox2.value = accessCode ?? '';
             inputBox2.onDidAccept(() => {
-                localStorage.setItem("defaultBranch2",inputBox1.value ?? '');
-                axios.get("/gitPush", {params:{ branch1:localStorage.getItem("defaultBranch1") ?? '', branch2:localStorage.getItem("defaultBranch2") ?? ''}});
+                localStorage.setItem("gituser.accesscode",inputBox2.value ?? '');
+                let repoUrl = insertAccessCodeIntoRepo(inputBox1.value?? '', inputBox2.value?? '');
+                axios.get("/gitPush", {params:{ repoUrl:repoUrl}});
                 inputBox2.hide();
             });
             inputBox1.hide();
@@ -183,21 +187,22 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
     async myGitClone(){
         //Let the user fillout a form (email, username, access token, repo)
         let inputBox1 = this.quickInputService.createInputBox();
-        inputBox1.description = "Please input your email"
-        inputBox1.placeholder = "john@email.com"
-        inputBox1.value = localStorage.getItem("gituser.email") ?? '';
+        inputBox1.description = "Please input your username"
+        inputBox1.placeholder = "john"
+        inputBox1.value = localStorage.getItem("gituser.username") ?? '';
         inputBox1.onDidAccept(() => {
-            gitUser.email = inputBox1.value?.toString() ?? '';
+            gitUser.username = inputBox1.value?.toString() ?? '';
             let inputBox2 = this.quickInputService.createInputBox();
-            inputBox2.description = "Please your username"
-            inputBox2.placeholder = "johnson"
-            inputBox2.value = localStorage.getItem("gituser.username") ?? '';
+            inputBox2.description = "Please input your access code"
+            inputBox2.placeholder = "******"
+            inputBox2.password = true
+            inputBox2.value = localStorage.getItem("gituser.accesscode") ?? '';
             inputBox2.onDidAccept(() => {
-                gitUser.username = inputBox2.value?.toString() ?? '';
+                gitUser.accessCode = inputBox2.value?.toString() ?? '';
                 let inputBox3 = this.quickInputService.createInputBox();
                 inputBox3.description = "Repository url";
                 inputBox3.value = localStorage.getItem("gituser.repo") ?? '';
-                inputBox3.placeholder = "https://username:token@github.com/username/repo.git";
+                inputBox3.placeholder = "https://github.com/username/repo.git";
                 inputBox3.password = false;
                 inputBox3.onDidAccept(() => {
                     gitUser.repository = inputBox3.value?.toString() ?? '';
@@ -234,14 +239,20 @@ export class TheiaExampleKeybindingContribution implements KeybindingContributio
 
 
 function callCloneBatch() {
-    let encoded = Buffer.from(JSON.stringify(gitUser)).toString("base64");
-    localStorage.setItem("gituser.email", gitUser.email);
     localStorage.setItem("gituser.username", gitUser.username);
+    localStorage.setItem("gituser.accesscode", gitUser.accessCode);
     localStorage.setItem("gituser.repo", gitUser.repository);
     //let commandString = `${gitUser.email} ${gitUser.username} ${gitUser.accessCode} ${gitUser.repository}`
+    let repoUrl = insertAccessCodeIntoRepo(gitUser.repository, gitUser.accessCode);
+    gitUser.repository = repoUrl;
+    let encoded = Buffer.from(JSON.stringify(gitUser)).toString("base64");
     axios.get("/cloneRepo", {params:{
         data:encoded
     }});
+}
+
+function insertAccessCodeIntoRepo(repo: string, accessCode: string ) {
+    return [repo.slice(0,8), accessCode, "@", repo.slice(8)].join('');
 }
 // async function getReadonly(): Promise<boolean>{
 //     console.log("g_readonly= " + g_readOnly);
