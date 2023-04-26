@@ -33,6 +33,13 @@ RUN chmod +x gitUtils/gitPermissionsFix.sh
 RUN mkdir /home/theia/ls
 RUN npm install -g @vscode/vsce
 
+#Copy webview package
+WORKDIR /home/theia
+COPY plugins/sprotty-webview /home/theia/sprotty-webview
+WORKDIR /home/theia/sprotty-webview
+RUN yarn
+RUN yarn link
+
 #Compile ASL extension
 WORKDIR /home/theia
 COPY plugins/asl-langium /home/theia/asl-langium
@@ -55,7 +62,7 @@ RUN cp rsl-vscode-extension-0.0.1.vsix /home/theia/ide/plugins
 RUN cd .. && rm -rf rsl-vscode-extension
 
 
-#Compile RSL extension
+#Compile Annotation plugin
 WORKDIR /home/theia
 COPY plugins/vscode-code-annotation /home/theia/vscode-code-annotation
 WORKDIR /home/theia/vscode-code-annotation
