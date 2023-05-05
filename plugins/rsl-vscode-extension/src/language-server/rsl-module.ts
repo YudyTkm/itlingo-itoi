@@ -1,18 +1,22 @@
 import {
     createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject,
-    LangiumServices, LangiumSharedServices, 
+    LangiumServices, LangiumSharedServices, Module, PartialLangiumServices, 
     // Module, PartialLangiumServices
 } from 'langium';
 import { RslGeneratedModule, RslGeneratedSharedModule } from './generated/module';
-// import { RslValidator, registerValidationChecks } from './rsl-validator';
+import { QualifiedNameProvider } from './rsl-naming';
+import { RslScopeComputation } from './rsl-scope';
+import { RslCompletionProvider } from './rsl-completion';
+import { RslScopeProvider } from './rsl-scope-provider';
+import { RslLinker } from './rsl-linker';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type RslAddedServices = {
-    // validation: {
-    //     RslValidator: RslValidator
-    // }
+    references: {
+        QualifiedNameProvider: QualifiedNameProvider
+    },
 }
 
 /**
@@ -26,11 +30,17 @@ export type RslAddedServices = {
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
-// export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedServices> = {
-//     validation: {
-//         RslValidator: () => new RslValidator()
-//     }
-// };
+ export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedServices> = {
+    references: {
+        ScopeComputation: (services) => new RslScopeComputation(services),
+        ScopeProvider: (services) => new RslScopeProvider(services),
+        Linker: (services) => new RslLinker(services),
+        QualifiedNameProvider: () => new QualifiedNameProvider()
+    },
+    lsp: {
+       CompletionProvider: (services) => new RslCompletionProvider(services)
+    }
+};
 
 /**
  * Create the full set of services required by Langium.
@@ -58,7 +68,7 @@ export function createRslServices(context: DefaultSharedModuleContext): {
     const Rsl = inject(
         createDefaultModule({ shared }),
         RslGeneratedModule,
-        // RslModule
+        RslModule
     );
     shared.ServiceRegistry.register(Rsl);
     // registerValidationChecks(Rsl);

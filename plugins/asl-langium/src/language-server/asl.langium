@@ -30,7 +30,7 @@ Month infers Month:
     ^type=('Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec' ) 
 ;
 
-^Date infers ^_Date:
+^Date infers _Date:
     day=INT  '-' month=Month  '-' year=INT   
 ;
 
@@ -818,28 +818,28 @@ DataEnumeration infers DataEnumeration:
     'DataEnumeration' name=ID  (nameAlias=STRING )? 'values' '(' values+=DataEnumerationElement  (',' values+=DataEnumerationElement  )* ')' ('[' (tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
-DataEnumerationRef infers DataEnumerationRef:
-    ^type=[DataEnumeration:QualifiedName ] 
-;
-
 DataEnumerationElement infers DataEnumerationElement:
     name=ID  (nameAlias=STRING )?  
 ;
 
+DataEnumerationRef infers DataEnumerationRef:
+    ^type=[DataEnumeration:QualifiedName ] 
+;
+
 Data infers Data:
-    'Data' name=ID  (nameAlias=STRING )? ':' ^type=[DataEntity:QualifiedName ] ('[' ('withValues' table=DataAttributeValues  )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
+    'Data' name=ID  (nameAlias=STRING )? ':' ^type=[DataEntity:QualifiedName ] (':=' table=DataTable  )? ('[' (tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
-DataAttributeValues infers DataAttributeValues:
-    (tableHeader=DataAttributeRefs ) tableRows+=DataAttributeTableRow *  
+DataTable infers DataTable:
+    '[' (tableHeader=DataTableHeader ) (tableRows+=DataTableRow )* ']'  
 ;
 
-DataAttributeRefs infers DataAttributeRefs:
-    ('|' attributeRef+=[DataAttribute:QualifiedName ] )+ "+|"  
+DataTableHeader infers DataTableHeader:
+    '[' (attributeRefs+=[DataAttribute:QualifiedName ]) ("," attributeRefs+=[DataAttribute:QualifiedName ] )* "]"  
 ;
 
-DataAttributeTableRow infers DataAttributeTableRow:
-    ('|' attributeValues+=AttributeValue  )+ "+|"  
+DataTableRow infers DataTableRow:
+    '[' (attributeValues+=AttributeValue ) ("," attributeValues+=AttributeValue  )* "]"  
 ;
 
 ForeignKey infers ForeignKey:
@@ -885,12 +885,12 @@ ContextDimensionActor infers ContextDimensionActor:
 ContextDimensionDevice infers ContextDimensionDevice:
     'ContexDevice' name=ID  (nameAlias=STRING )? ':' ^type=ContextDimensionDeviceType  ('[' 
     (
-         ('cpuRam' cpuRam=INT  'Kb' ) 
+         ('cpuRam' cpuRam=INT  'Kb' )
         &('cpuProcessor' cpuProcessor=INT  'KHz' )
         &('battery' battery=INT  '%' )
         &('screenDiagonalSize' diagonalSize=INT  'pt' )
         &('screenSizeCategory' sizeCategory=ScreenSizeCategoryType  )
-        &('screenPixelSize' pixelSizeX=INT  'x' pixelSizeY=INT  'px' ) 
+        &('screenPixelSize' pixelSizeX=INT  'x' pixelSizeY=INT  'px' )
         &('screenDensity' screenDensity=INT  'dpi' )
         &('networkConnectivity' networkConnectivity=NetworkConnectivityType  )
     )
@@ -959,7 +959,7 @@ DetailsSumFormula infers DetailsFormula:
 
 type DetailsFormulaOp = 'count' | 'sum';
 DetailsFormulaOp returns string:
-    'count' | 'sum'
+    DetailsFormulaOp_COUNT | DetailsFormulaOp_SUM
 ;
 DetailsFormulaOp_COUNT returns string: 'count' ;
 DetailsFormulaOp_SUM returns string: 'sum' ;
@@ -1019,3 +1019,4 @@ Function infers _Function:
 Variable infers Variable:
     value=[DataAttribute:QualifiedName ] 
 ;
+

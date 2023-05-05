@@ -3,12 +3,20 @@ import {
     LangiumServices, LangiumSharedServices, Module, PartialLangiumServices
 } from 'langium';
 import { AslGeneratedModule, AslGeneratedSharedModule } from './generated/module';
+import { QualifiedNameProvider } from './asl-naming';
+import { AslScopeComputation } from './asl-scope';
+import { AslCompletionProvider } from './asl-completion';
+import { AslScopeProvider } from './asl-scope-provider';
+import { AslLinker } from './asl-linker';
 // import { AslValidator, registerValidationChecks } from './asl-validator';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type AslAddedServices = {
+    references: {
+        QualifiedNameProvider: QualifiedNameProvider
+    },
     // validation: {
     //     AslValidator: AslValidator
     // }
@@ -26,6 +34,15 @@ export type AslServices = LangiumServices & AslAddedServices
  * selected services, while the custom services must be fully specified.
  */
 export const AslModule: Module<AslServices, PartialLangiumServices & AslAddedServices> = {
+    references: {
+        ScopeComputation: (services) => new AslScopeComputation(services),
+        ScopeProvider: (services) => new AslScopeProvider(services),
+        Linker: (services) => new AslLinker(services),
+        QualifiedNameProvider: () => new QualifiedNameProvider()
+    },
+    lsp: {
+       CompletionProvider: (services) => new AslCompletionProvider(services)
+    }
     // validation: {
     //     AslValidator: () => new AslValidator()
     // }

@@ -6,7 +6,7 @@ ARG NODE_VERSION=14.21.3
 
 
 
-FROM node:${NODE_VERSION}-alpine as 
+FROM node:${NODE_VERSION}-alpine
 # See : https://github.com/theia-ide/theia-apps/issues/34
 
 RUN apk add --no-cache git openssh bash libsecret 

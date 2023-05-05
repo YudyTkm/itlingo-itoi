@@ -30,7 +30,7 @@ Month infers Month:
     ^type=('Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec' ) 
 ;
 
-^Date infers ^_Date:
+^Date infers _Date:
     day=INT  '-' month=Month  '-' year=INT   
 ;
 
@@ -1172,10 +1172,8 @@ TestOperationTarget infers TestOperationTarget:
 
 type OperationTargetType = 'button' | 'element' | 'checkbox' | 'listByValue' | 'readFrom' | 'writeTo';
 OperationTargetType returns string:
-    'button' | 'element' | 'checkbox' | 'listByValue' | 'readFrom' | 'writeTo'
+    OperationTargetType_button | OperationTargetType_element | OperationTargetType_checkbox | OperationTargetType_listByValue | OperationTargetType_readFrom | OperationTargetType_writeTo
 ;
-//OperationTargetType_button | OperationTargetType_element | OperationTargetType_checkbox | OperationTargetType_listByValue | OperationTargetType_readFrom | OperationTargetType_writeTo
-
 OperationTargetType_button returns string: 'button' ;
 OperationTargetType_element returns string: 'element' ;
 OperationTargetType_checkbox returns string: 'checkbox' ;
