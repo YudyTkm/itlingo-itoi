@@ -26124,32 +26124,20 @@ const RslGrammar = () => loadedRslGrammar !== null && loadedRslGrammar !== void 
     {
       "$type": "TerminalRule",
       "hidden": true,
-      "name": "ML_COMMENT",
-      "type": {
-        "$type": "ReturnType",
-        "name": "string"
-      },
+      "name": "WS",
       "definition": {
-        "$type": "TerminalGroup",
-        "elements": [
-          {
-            "$type": "CharacterRange",
-            "left": {
-              "$type": "Keyword",
-              "value": "/*"
-            }
-          },
-          {
-            "$type": "UntilToken",
-            "terminal": {
-              "$type": "CharacterRange",
-              "left": {
-                "$type": "Keyword",
-                "value": "*/"
-              }
-            }
-          }
-        ]
+        "$type": "RegexToken",
+        "regex": "\\\\s+"
+      },
+      "fragment": false
+    },
+    {
+      "$type": "TerminalRule",
+      "hidden": true,
+      "name": "ML_COMMENT",
+      "definition": {
+        "$type": "RegexToken",
+        "regex": "\\\\/\\\\*[\\\\s\\\\S]*?\\\\*\\\\/"
       },
       "fragment": false
     },
@@ -26157,118 +26145,9 @@ const RslGrammar = () => loadedRslGrammar !== null && loadedRslGrammar !== void 
       "$type": "TerminalRule",
       "hidden": true,
       "name": "SL_COMMENT",
-      "type": {
-        "$type": "ReturnType",
-        "name": "string"
-      },
       "definition": {
-        "$type": "TerminalGroup",
-        "elements": [
-          {
-            "$type": "CharacterRange",
-            "left": {
-              "$type": "Keyword",
-              "value": "//"
-            }
-          },
-          {
-            "$type": "NegatedToken",
-            "terminal": {
-              "$type": "TerminalAlternatives",
-              "elements": [
-                {
-                  "$type": "CharacterRange",
-                  "left": {
-                    "$type": "Keyword",
-                    "value": "\\n"
-                  }
-                },
-                {
-                  "$type": "CharacterRange",
-                  "left": {
-                    "$type": "Keyword",
-                    "value": "\\r"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "$type": "TerminalGroup",
-            "elements": [
-              {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\r"
-                },
-                "cardinality": "?"
-              },
-              {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\n"
-                }
-              }
-            ],
-            "cardinality": "?"
-          }
-        ]
-      },
-      "fragment": false
-    },
-    {
-      "$type": "TerminalRule",
-      "hidden": true,
-      "name": "WS",
-      "type": {
-        "$type": "ReturnType",
-        "name": "string"
-      },
-      "definition": {
-        "$type": "TerminalAlternatives",
-        "elements": [
-          {
-            "$type": "TerminalAlternatives",
-            "elements": [
-              {
-                "$type": "TerminalAlternatives",
-                "elements": [
-                  {
-                    "$type": "CharacterRange",
-                    "left": {
-                      "$type": "Keyword",
-                      "value": " "
-                    }
-                  },
-                  {
-                    "$type": "CharacterRange",
-                    "left": {
-                      "$type": "Keyword",
-                      "value": "\\t"
-                    }
-                  }
-                ]
-              },
-              {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\r"
-                }
-              }
-            ]
-          },
-          {
-            "$type": "CharacterRange",
-            "left": {
-              "$type": "Keyword",
-              "value": "\\n"
-            }
-          }
-        ],
-        "cardinality": "+"
+        "$type": "RegexToken",
+        "regex": "\\\\/\\\\/[^\\\\n\\\\r]*"
       },
       "fragment": false
     },

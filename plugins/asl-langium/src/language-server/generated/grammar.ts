@@ -18892,59 +18892,8 @@ export const AslGrammar = (): Grammar => loadedAslGrammar ?? (loadedAslGrammar =
         "name": "string"
       },
       "definition": {
-        "$type": "TerminalGroup",
-        "elements": [
-          {
-            "$type": "CharacterRange",
-            "left": {
-              "$type": "Keyword",
-              "value": "//"
-            }
-          },
-          {
-            "$type": "NegatedToken",
-            "terminal": {
-              "$type": "TerminalAlternatives",
-              "elements": [
-                {
-                  "$type": "CharacterRange",
-                  "left": {
-                    "$type": "Keyword",
-                    "value": "\\n"
-                  }
-                },
-                {
-                  "$type": "CharacterRange",
-                  "left": {
-                    "$type": "Keyword",
-                    "value": "\\r"
-                  }
-                }
-              ]
-            }
-          },
-          {
-            "$type": "TerminalGroup",
-            "elements": [
-              {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\r"
-                },
-                "cardinality": "?"
-              },
-              {
-                "$type": "CharacterRange",
-                "left": {
-                  "$type": "Keyword",
-                  "value": "\\n"
-                }
-              }
-            ],
-            "cardinality": "?"
-          }
-        ]
+        "$type": "RegexToken",
+        "regex": "\\\\/\\\\/[^\\\\n\\\\r]*"
       },
       "fragment": false
     },
