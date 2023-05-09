@@ -14,7 +14,7 @@ export function isActionType(item: unknown): item is ActionType {
     return reflection.isInstance(item, ActionType);
 }
 
-export type ActiveElement = ActiveEvent | ActiveFlow | ActiveTask | UseCase;
+export type ActiveElement = ActiveEvent | ActiveFlow | ActiveTask;
 
 export const ActiveElement = 'ActiveElement';
 
@@ -62,7 +62,7 @@ export function isActorType(item: unknown): item is ActorType {
     return reflection.isInstance(item, ActorType);
 }
 
-export type BehaviorElement = ActiveElement;
+export type BehaviorElement = ActiveElement | UseCase;
 
 export const BehaviorElement = 'BehaviorElement';
 
@@ -282,12 +282,20 @@ export function isSystemConcept(item: unknown): item is SystemConcept {
     return reflection.isInstance(item, SystemConcept);
 }
 
-export type SystemElement = BehaviorElement | IncludeElementGeneric | OtherElement | StructureElement | UIModelElement;
+export type SystemElement = BehaviorElement | IncludeElementGeneric | OtherElement | StructureElement | SystemSet | UIModelElement;
 
 export const SystemElement = 'SystemElement';
 
 export function isSystemElement(item: unknown): item is SystemElement {
     return reflection.isInstance(item, SystemElement);
+}
+
+export type SystemSet = Theme | View;
+
+export const SystemSet = 'SystemSet';
+
+export function isSystemSet(item: unknown): item is SystemSet {
+    return reflection.isInstance(item, SystemSet);
 }
 
 export type SystemSubType = SystemSubTypeExtendedRef | SystemSubTypeOriginal;
@@ -1187,7 +1195,7 @@ export function isDataEntityClusterTypeExtendedRef(item: unknown): item is DataE
 export interface DataEntityClusterTypeOriginal extends AstNode {
     readonly $container: DataEntityCluster;
     readonly $type: 'DataEntityClusterTypeOriginal';
-    type: 'Document' | 'Master' | 'Other' | 'Parameter' | 'Reference' | 'Transaction'
+    type: 'Document' | 'Master' | 'Multidimensional' | 'Other' | 'Parameter' | 'Reference' | 'Transaction'
 }
 
 export const DataEntityClusterTypeOriginal = 'DataEntityClusterTypeOriginal';
@@ -1240,7 +1248,7 @@ export function isDataEntitySubTypeExtendedRef(item: unknown): item is DataEntit
 export interface DataEntitySubTypeOriginal extends AstNode {
     readonly $container: DataEntity;
     readonly $type: 'DataEntitySubTypeOriginal';
-    type: 'Other' | 'Regular' | 'Weak'
+    type: 'Dimension' | 'Fact' | 'Other' | 'Regular' | 'Weak'
 }
 
 export const DataEntitySubTypeOriginal = 'DataEntitySubTypeOriginal';
@@ -1278,7 +1286,7 @@ export function isDataEntityTypeExtendedRef(item: unknown): item is DataEntityTy
 export interface DataEntityTypeOriginal extends AstNode {
     readonly $container: DataEntity;
     readonly $type: 'DataEntityTypeOriginal';
-    type: 'Document' | 'Master' | 'Other' | 'Parameter' | 'Reference' | 'Transaction'
+    type: 'Document' | 'Master' | 'Multidimensional' | 'Other' | 'Parameter' | 'Reference' | 'Transaction'
 }
 
 export const DataEntityTypeOriginal = 'DataEntityTypeOriginal';
@@ -1685,6 +1693,7 @@ export interface Plus extends AstNode {
     readonly $container: ArithmeticFormula | ArithmeticSigned | BooleanExpression | BooleanNegation | Comparison | DataAttributeConstraint | Equals | Membership | Minus | MultiOrDivOrMod | Plus | TernaryExpression | UIComponentPart | _Function;
     readonly $type: 'Plus';
     left: Expression
+    right: Expression
 }
 
 export const Plus = 'Plus';
@@ -1727,6 +1736,18 @@ export const RefDataEntity = 'RefDataEntity';
 
 export function isRefDataEntity(item: unknown): item is RefDataEntity {
     return reflection.isInstance(item, RefDataEntity);
+}
+
+export interface ReferenceElements extends AstNode {
+    readonly $container: Theme | View;
+    readonly $type: 'ReferenceElements';
+    references: Array<Reference<SystemElement>>
+}
+
+export const ReferenceElements = 'ReferenceElements';
+
+export function isReferenceElements(item: unknown): item is ReferenceElements {
+    return reflection.isInstance(item, ReferenceElements);
 }
 
 export interface RefFlowTo extends AstNode {
@@ -2009,7 +2030,7 @@ export function isSystemTypeOriginal(item: unknown): item is SystemTypeOriginal 
 }
 
 export interface Tag extends AstNode {
-    readonly $container: ActiveEvent | ActiveFlow | ActiveTask | Context | ContextDimensionActor | ContextDimensionDevice | ContextDimensionSensor | ContextVariable | Data | DataAttribute | DataEntity | DataEntityCluster | DataEnumeration | IncludeAll | IncludeElement | Stereotype | System | UIAction | UIActionEvent | UIComponent | UIComponentPart | UIContainer | UIElementEvent | UIPortDefinition | UISystemEvent | UIThrowingEvent | UseCase;
+    readonly $container: ActiveEvent | ActiveFlow | ActiveTask | Context | ContextDimensionActor | ContextDimensionDevice | ContextDimensionSensor | ContextVariable | Data | DataAttribute | DataEntity | DataEntityCluster | DataEnumeration | IncludeAll | IncludeElement | Stereotype | System | Theme | UIAction | UIActionEvent | UIComponent | UIComponentPart | UIContainer | UIElementEvent | UIPortDefinition | UISystemEvent | UIThrowingEvent | UseCase | View;
     readonly $type: 'Tag';
     nameAlias: string
     value?: string
@@ -2033,6 +2054,35 @@ export const TernaryExpression = 'TernaryExpression';
 
 export function isTernaryExpression(item: unknown): item is TernaryExpression {
     return reflection.isInstance(item, TernaryExpression);
+}
+
+export interface Theme extends AstNode {
+    readonly $container: RefFlowTo | System | UIAction | UIActionEvent | UIComponent | UIComponentPart | UIContainer | UIElementEvent | UIParameterBinding | UIParameterBindingGroup | UIPortDefinition | UISystemEvent | UIThrowingEvent;
+    readonly $type: 'Theme';
+    description?: string
+    elements: ReferenceElements
+    name: string
+    nameAlias?: string
+    tags: Array<Tag>
+    type: ThemeType
+}
+
+export const Theme = 'Theme';
+
+export function isTheme(item: unknown): item is Theme {
+    return reflection.isInstance(item, Theme);
+}
+
+export interface ThemeType extends AstNode {
+    readonly $container: Theme;
+    readonly $type: 'ThemeType';
+    type: 'ActiveStructureTheme' | 'ActiveTheme' | 'PassiveStructureTheme' | 'UITheme' | 'UseCaseTheme'
+}
+
+export const ThemeType = 'ThemeType';
+
+export function isThemeType(item: unknown): item is ThemeType {
+    return reflection.isInstance(item, ThemeType);
 }
 
 export interface UCActions extends AstNode {
@@ -3064,6 +3114,35 @@ export function isVariable(item: unknown): item is Variable {
     return reflection.isInstance(item, Variable);
 }
 
+export interface View extends AstNode {
+    readonly $container: RefFlowTo | System | UIAction | UIActionEvent | UIComponent | UIComponentPart | UIContainer | UIElementEvent | UIParameterBinding | UIParameterBindingGroup | UIPortDefinition | UISystemEvent | UIThrowingEvent;
+    readonly $type: 'View';
+    description?: string
+    elements: ReferenceElements
+    name: string
+    nameAlias?: string
+    tags: Array<Tag>
+    type: ViewType
+}
+
+export const View = 'View';
+
+export function isView(item: unknown): item is View {
+    return reflection.isInstance(item, View);
+}
+
+export interface ViewType extends AstNode {
+    readonly $container: View;
+    readonly $type: 'ViewType';
+    type: 'ActiveStructureView' | 'ActiveView' | 'PassiveStructureView' | 'UIView' | 'UseCaseView'
+}
+
+export const ViewType = 'ViewType';
+
+export function isViewType(item: unknown): item is ViewType {
+    return reflection.isInstance(item, ViewType);
+}
+
 export interface _Date extends AttributeValue {
     readonly $container: DataTableRow | _Date;
     readonly $type: '_Date';
@@ -3073,10 +3152,8 @@ export interface _Date extends AttributeValue {
 }
 
 export const _Date = '_Date';
-
 export const DoubleOrInt = 'DoubleOrInt';
 export const Percentage = 'Percentage';
-
 
 export function is_Date(item: unknown): item is _Date {
     return reflection.isInstance(item, _Date);
@@ -3281,6 +3358,7 @@ export interface AslAstType {
     RefFlowTo: RefFlowTo
     RefSystems: RefSystems
     RefUC: RefUC
+    ReferenceElements: ReferenceElements
     ScreenSizeCategoryType: ScreenSizeCategoryType
     ScreenSizeCategoryTypeExtended: ScreenSizeCategoryTypeExtended
     ScreenSizeCategoryTypeExtendedRef: ScreenSizeCategoryTypeExtendedRef
@@ -3299,6 +3377,7 @@ export interface AslAstType {
     System: System
     SystemConcept: SystemConcept
     SystemElement: SystemElement
+    SystemSet: SystemSet
     SystemSubType: SystemSubType
     SystemSubTypeExtended: SystemSubTypeExtended
     SystemSubTypeExtendedRef: SystemSubTypeExtendedRef
@@ -3309,6 +3388,8 @@ export interface AslAstType {
     SystemTypeOriginal: SystemTypeOriginal
     Tag: Tag
     TernaryExpression: TernaryExpression
+    Theme: Theme
+    ThemeType: ThemeType
     TypeExtended: TypeExtended
     UCActions: UCActions
     UCExtends: UCExtends
@@ -3404,6 +3485,8 @@ export interface AslAstType {
     UserActivityStatusTypeOriginal: UserActivityStatusTypeOriginal
     Variable: Variable
     VariableReference: VariableReference
+    View: View
+    ViewType: ViewType
     _Date: _Date
     _Function: _Function
 }
@@ -3411,7 +3494,7 @@ export interface AslAstType {
 export class AslAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['ActionType', 'ActionTypeExtended', 'ActionTypeExtendedRef', 'ActionTypeOriginal', 'ActiveElement', 'ActiveEvent', 'ActiveEventType', 'ActiveEventTypeExtended', 'ActiveEventTypeExtendedRef', 'ActiveEventTypeOriginal', 'ActiveFlow', 'ActiveFlowType', 'ActiveFlowTypeExtended', 'ActiveFlowTypeExtendedRef', 'ActiveFlowTypeOriginal', 'ActiveStructureElement', 'ActiveTask', 'ActiveTaskType', 'ActiveTaskTypeExtended', 'ActiveTaskTypeExtendedRef', 'ActiveTaskTypeOriginal', 'ActorType', 'ActorTypeExtended', 'ActorTypeExtendedRef', 'ActorTypeOriginal', 'ArithmeticFormula', 'ArithmeticSigned', 'AttributeValue', 'BehaviorElement', 'BooleanExpression', 'BooleanLiteral', 'BooleanNegation', 'Check', 'ChildDataEntity', 'Comparison', 'Context', 'ContextDimension', 'ContextDimensionActor', 'ContextDimensionDevice', 'ContextDimensionDeviceType', 'ContextDimensionDeviceTypeExtended', 'ContextDimensionDeviceTypeExtendedRef', 'ContextDimensionDeviceTypeOriginal', 'ContextDimensionSensor', 'ContextDimensionSensorType', 'ContextDimensionSensorTypeExtended', 'ContextDimensionSensorTypeExtendedRef', 'ContextDimensionSensorTypeOriginal', 'ContextElement', 'ContextVariable', 'Data', 'DataAttribute', 'DataAttributeConstraint', 'DataAttributeRefsList', 'DataAttributeType', 'DataAttributeTypeExtended', 'DataAttributeTypeExtendedRef', 'DataAttributeTypeOriginal', 'DataEntity', 'DataEntityCluster', 'DataEntityClusterType', 'DataEntityClusterTypeExtended', 'DataEntityClusterTypeExtendedRef', 'DataEntityClusterTypeOriginal', 'DataEntityConstraint', 'DataEntityGeneric', 'DataEntitySubType', 'DataEntitySubTypeExtended', 'DataEntitySubTypeExtendedRef', 'DataEntitySubTypeOriginal', 'DataEntityType', 'DataEntityTypeExtended', 'DataEntityTypeExtendedRef', 'DataEntityTypeOriginal', 'DataEnumeration', 'DataEnumerationElement', 'DataEnumerationRef', 'DataTable', 'DataTableHeader', 'DataTableRow', 'DetailsFormula', 'DetailsFormulaOp', 'Equals', 'Expression', 'FlowElement', 'ForeignKey', 'ForeignKeyOnDeleteType', 'ForeignKeyOnDeleteTypeExtended', 'ForeignKeyOnDeleteTypeExtendedRef', 'ForeignKeyOnDeleteTypeOriginal', 'Formula', 'FunctionReference', 'Import', 'IncludeAll', 'IncludeElement', 'IncludeElementGeneric', 'IncludeSystemElementType', 'IntegerLiteral', 'LiteralExpression', 'ManyToMany', 'Membership', 'MetricType', 'MetricTypeExtended', 'MetricTypeExtendedRef', 'MetricTypeOriginal', 'Minus', 'Model', 'Month', 'MultiOrDivOrMod', 'Multiplicity', 'NetworkConnectivityType', 'NetworkConnectivityTypeExtended', 'NetworkConnectivityTypeExtendedRef', 'NetworkConnectivityTypeOriginal', 'NullLiteral', 'OtherElement', 'PackageAbstract', 'PackageSystem', 'PassiveStructureElement', 'Plus', 'RefActiveElement', 'RefActor', 'RefDataEntity', 'RefFlowTo', 'RefSystems', 'RefUC', 'ScreenSizeCategoryType', 'ScreenSizeCategoryTypeExtended', 'ScreenSizeCategoryTypeExtendedRef', 'ScreenSizeCategoryTypeOriginal', 'SensorStatusType', 'SensorStatusTypeExtended', 'SensorStatusTypeExtendedRef', 'SensorStatusTypeOriginal', 'Stereotype', 'StereotypeType', 'StereotypeTypeExtended', 'StereotypeTypeExtendedRef', 'StereotypeTypeOriginal', 'StringLiteral', 'StructureElement', 'System', 'SystemConcept', 'SystemElement', 'SystemSubType', 'SystemSubTypeExtended', 'SystemSubTypeExtendedRef', 'SystemSubTypeOriginal', 'SystemType', 'SystemTypeExtended', 'SystemTypeExtendedRef', 'SystemTypeOriginal', 'Tag', 'TernaryExpression', 'TypeExtended', 'UCActions', 'UCExtends', 'UCExtensionPoint', 'UCExtensionPoints', 'UCIncludes', 'UIAction', 'UIActionEvent', 'UIActionEventType', 'UIActionEventTypeExtended', 'UIActionEventTypeExtendedRef', 'UIActionEventTypeOriginal', 'UIActionType', 'UIActionTypeExtended', 'UIActionTypeExtendedRef', 'UIActionTypeOriginal', 'UICatchingEvent', 'UIComponent', 'UIComponentPart', 'UIComponentPartSubType', 'UIComponentPartSubTypeExtended', 'UIComponentPartSubTypeExtendedRef', 'UIComponentPartSubTypeOriginal', 'UIComponentPartType', 'UIComponentPartTypeExtended', 'UIComponentPartTypeExtendedRef', 'UIComponentPartTypeOriginal', 'UIComponentRef', 'UIComponentSubType', 'UIComponentSubTypeExtended', 'UIComponentSubTypeExtendedRef', 'UIComponentSubTypeOriginal', 'UIComponentType', 'UIComponentTypeExtended', 'UIComponentTypeExtendedRef', 'UIComponentTypeOriginal', 'UIContainer', 'UIContainerSubType', 'UIContainerSubTypeExtended', 'UIContainerSubTypeExtendedRef', 'UIContainerSubTypeOriginal', 'UIContainerType', 'UIContainerTypeExtended', 'UIContainerTypeExtendedRef', 'UIContainerTypeOriginal', 'UIContextExpression', 'UIElement', 'UIElementEvent', 'UIElementEventSubType', 'UIElementEventSubTypeExtended', 'UIElementEventSubTypeExtendedRef', 'UIElementEventSubTypeOriginal', 'UIElementEventType', 'UIElementEventTypeExtended', 'UIElementEventTypeExtendedRef', 'UIElementEventTypeOriginal', 'UIEvent', 'UIExpression', 'UIModelElement', 'UIParameter', 'UIParameterBinding', 'UIParameterBindingGroup', 'UIPortDefinition', 'UIPortDefinitionType', 'UIPortDefinitionTypeExtended', 'UIPortDefinitionTypeExtendedRef', 'UIPortDefinitionTypeOriginal', 'UISimpleExpression', 'UISystemEvent', 'UISystemEventType', 'UISystemEventTypeExtended', 'UISystemEventTypeExtendedRef', 'UISystemEventTypeOriginal', 'UIThrowingEvent', 'UIThrowingEventType', 'UIThrowingEventTypeExtended', 'UIThrowingEventTypeExtendedRef', 'UIThrowingEventTypeOriginal', 'UIWireframeType', 'UIWireframeTypeExtended', 'UIWireframeTypeExtendedRef', 'UIWireframeTypeOriginal', 'UpdateField', 'UpdateFields', 'UseCase', 'UseCaseType', 'UseCaseTypeExtended', 'UseCaseTypeExtendedRef', 'UseCaseTypeOriginal', 'UserActivityStatusType', 'UserActivityStatusTypeExtended', 'UserActivityStatusTypeExtendedRef', 'UserActivityStatusTypeOriginal', 'Variable', 'VariableReference', '_Date', '_Function'];
+        return ['ActionType', 'ActionTypeExtended', 'ActionTypeExtendedRef', 'ActionTypeOriginal', 'ActiveElement', 'ActiveEvent', 'ActiveEventType', 'ActiveEventTypeExtended', 'ActiveEventTypeExtendedRef', 'ActiveEventTypeOriginal', 'ActiveFlow', 'ActiveFlowType', 'ActiveFlowTypeExtended', 'ActiveFlowTypeExtendedRef', 'ActiveFlowTypeOriginal', 'ActiveStructureElement', 'ActiveTask', 'ActiveTaskType', 'ActiveTaskTypeExtended', 'ActiveTaskTypeExtendedRef', 'ActiveTaskTypeOriginal', 'ActorType', 'ActorTypeExtended', 'ActorTypeExtendedRef', 'ActorTypeOriginal', 'ArithmeticFormula', 'ArithmeticSigned', 'AttributeValue', 'BehaviorElement', 'BooleanExpression', 'BooleanLiteral', 'BooleanNegation', 'Check', 'ChildDataEntity', 'Comparison', 'Context', 'ContextDimension', 'ContextDimensionActor', 'ContextDimensionDevice', 'ContextDimensionDeviceType', 'ContextDimensionDeviceTypeExtended', 'ContextDimensionDeviceTypeExtendedRef', 'ContextDimensionDeviceTypeOriginal', 'ContextDimensionSensor', 'ContextDimensionSensorType', 'ContextDimensionSensorTypeExtended', 'ContextDimensionSensorTypeExtendedRef', 'ContextDimensionSensorTypeOriginal', 'ContextElement', 'ContextVariable', 'Data', 'DataAttribute', 'DataAttributeConstraint', 'DataAttributeRefsList', 'DataAttributeType', 'DataAttributeTypeExtended', 'DataAttributeTypeExtendedRef', 'DataAttributeTypeOriginal', 'DataEntity', 'DataEntityCluster', 'DataEntityClusterType', 'DataEntityClusterTypeExtended', 'DataEntityClusterTypeExtendedRef', 'DataEntityClusterTypeOriginal', 'DataEntityConstraint', 'DataEntityGeneric', 'DataEntitySubType', 'DataEntitySubTypeExtended', 'DataEntitySubTypeExtendedRef', 'DataEntitySubTypeOriginal', 'DataEntityType', 'DataEntityTypeExtended', 'DataEntityTypeExtendedRef', 'DataEntityTypeOriginal', 'DataEnumeration', 'DataEnumerationElement', 'DataEnumerationRef', 'DataTable', 'DataTableHeader', 'DataTableRow', 'DetailsFormula', 'DetailsFormulaOp', 'Equals', 'Expression', 'FlowElement', 'ForeignKey', 'ForeignKeyOnDeleteType', 'ForeignKeyOnDeleteTypeExtended', 'ForeignKeyOnDeleteTypeExtendedRef', 'ForeignKeyOnDeleteTypeOriginal', 'Formula', 'FunctionReference', 'Import', 'IncludeAll', 'IncludeElement', 'IncludeElementGeneric', 'IncludeSystemElementType', 'IntegerLiteral', 'LiteralExpression', 'ManyToMany', 'Membership', 'MetricType', 'MetricTypeExtended', 'MetricTypeExtendedRef', 'MetricTypeOriginal', 'Minus', 'Model', 'Month', 'MultiOrDivOrMod', 'Multiplicity', 'NetworkConnectivityType', 'NetworkConnectivityTypeExtended', 'NetworkConnectivityTypeExtendedRef', 'NetworkConnectivityTypeOriginal', 'NullLiteral', 'OtherElement', 'PackageAbstract', 'PackageSystem', 'PassiveStructureElement', 'Plus', 'RefActiveElement', 'RefActor', 'RefDataEntity', 'RefFlowTo', 'RefSystems', 'RefUC', 'ReferenceElements', 'ScreenSizeCategoryType', 'ScreenSizeCategoryTypeExtended', 'ScreenSizeCategoryTypeExtendedRef', 'ScreenSizeCategoryTypeOriginal', 'SensorStatusType', 'SensorStatusTypeExtended', 'SensorStatusTypeExtendedRef', 'SensorStatusTypeOriginal', 'Stereotype', 'StereotypeType', 'StereotypeTypeExtended', 'StereotypeTypeExtendedRef', 'StereotypeTypeOriginal', 'StringLiteral', 'StructureElement', 'System', 'SystemConcept', 'SystemElement', 'SystemSet', 'SystemSubType', 'SystemSubTypeExtended', 'SystemSubTypeExtendedRef', 'SystemSubTypeOriginal', 'SystemType', 'SystemTypeExtended', 'SystemTypeExtendedRef', 'SystemTypeOriginal', 'Tag', 'TernaryExpression', 'Theme', 'ThemeType', 'TypeExtended', 'UCActions', 'UCExtends', 'UCExtensionPoint', 'UCExtensionPoints', 'UCIncludes', 'UIAction', 'UIActionEvent', 'UIActionEventType', 'UIActionEventTypeExtended', 'UIActionEventTypeExtendedRef', 'UIActionEventTypeOriginal', 'UIActionType', 'UIActionTypeExtended', 'UIActionTypeExtendedRef', 'UIActionTypeOriginal', 'UICatchingEvent', 'UIComponent', 'UIComponentPart', 'UIComponentPartSubType', 'UIComponentPartSubTypeExtended', 'UIComponentPartSubTypeExtendedRef', 'UIComponentPartSubTypeOriginal', 'UIComponentPartType', 'UIComponentPartTypeExtended', 'UIComponentPartTypeExtendedRef', 'UIComponentPartTypeOriginal', 'UIComponentRef', 'UIComponentSubType', 'UIComponentSubTypeExtended', 'UIComponentSubTypeExtendedRef', 'UIComponentSubTypeOriginal', 'UIComponentType', 'UIComponentTypeExtended', 'UIComponentTypeExtendedRef', 'UIComponentTypeOriginal', 'UIContainer', 'UIContainerSubType', 'UIContainerSubTypeExtended', 'UIContainerSubTypeExtendedRef', 'UIContainerSubTypeOriginal', 'UIContainerType', 'UIContainerTypeExtended', 'UIContainerTypeExtendedRef', 'UIContainerTypeOriginal', 'UIContextExpression', 'UIElement', 'UIElementEvent', 'UIElementEventSubType', 'UIElementEventSubTypeExtended', 'UIElementEventSubTypeExtendedRef', 'UIElementEventSubTypeOriginal', 'UIElementEventType', 'UIElementEventTypeExtended', 'UIElementEventTypeExtendedRef', 'UIElementEventTypeOriginal', 'UIEvent', 'UIExpression', 'UIModelElement', 'UIParameter', 'UIParameterBinding', 'UIParameterBindingGroup', 'UIPortDefinition', 'UIPortDefinitionType', 'UIPortDefinitionTypeExtended', 'UIPortDefinitionTypeExtendedRef', 'UIPortDefinitionTypeOriginal', 'UISimpleExpression', 'UISystemEvent', 'UISystemEventType', 'UISystemEventTypeExtended', 'UISystemEventTypeExtendedRef', 'UISystemEventTypeOriginal', 'UIThrowingEvent', 'UIThrowingEventType', 'UIThrowingEventTypeExtended', 'UIThrowingEventTypeExtendedRef', 'UIThrowingEventTypeOriginal', 'UIWireframeType', 'UIWireframeTypeExtended', 'UIWireframeTypeExtendedRef', 'UIWireframeTypeOriginal', 'UpdateField', 'UpdateFields', 'UseCase', 'UseCaseType', 'UseCaseTypeExtended', 'UseCaseTypeExtendedRef', 'UseCaseTypeOriginal', 'UserActivityStatusType', 'UserActivityStatusTypeExtended', 'UserActivityStatusTypeExtendedRef', 'UserActivityStatusTypeOriginal', 'Variable', 'VariableReference', 'View', 'ViewType', '_Date', '_Function'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
@@ -3462,13 +3545,13 @@ export class AslAstReflection extends AbstractAstReflection {
             case ActionTypeOriginal: {
                 return this.isSubtype(ActionType, supertype);
             }
-            case ActiveElement: {
+            case ActiveElement:
+            case UseCase: {
                 return this.isSubtype(BehaviorElement, supertype);
             }
             case ActiveEvent:
             case ActiveFlow:
-            case ActiveTask:
-            case UseCase: {
+            case ActiveTask: {
                 return this.isSubtype(ActiveElement, supertype);
             }
             case ActiveEventTypeExtendedRef:
@@ -3512,6 +3595,7 @@ export class AslAstReflection extends AbstractAstReflection {
             case IncludeElementGeneric:
             case OtherElement:
             case StructureElement:
+            case SystemSet:
             case UIModelElement: {
                 return this.isSubtype(SystemElement, supertype);
             }
@@ -3623,6 +3707,10 @@ export class AslAstReflection extends AbstractAstReflection {
             case SystemTypeExtendedRef:
             case SystemTypeOriginal: {
                 return this.isSubtype(SystemType, supertype);
+            }
+            case Theme:
+            case View: {
+                return this.isSubtype(SystemSet, supertype);
             }
             case UIAction:
             case UIComponentPart:
@@ -3815,7 +3903,8 @@ export class AslAstReflection extends AbstractAstReflection {
             case 'System:sut': {
                 return System;
             }
-            case 'IncludeElement:element': {
+            case 'IncludeElement:element':
+            case 'ReferenceElements:references': {
                 return SystemElement;
             }
             case 'MetricTypeExtendedRef:type': {
@@ -4147,6 +4236,14 @@ export class AslAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
+            case 'ReferenceElements': {
+                return {
+                    name: 'ReferenceElements',
+                    mandatory: [
+                        { name: 'references', type: 'array' }
+                    ]
+                };
+            }
             case 'RefFlowTo': {
                 return {
                     name: 'RefFlowTo',
@@ -4188,6 +4285,14 @@ export class AslAstReflection extends AbstractAstReflection {
                         { name: 'isReusable', type: 'boolean' },
                         { name: 'isTestSuite', type: 'boolean' },
                         { name: 'systemConcepts', type: 'array' },
+                        { name: 'tags', type: 'array' }
+                    ]
+                };
+            }
+            case 'Theme': {
+                return {
+                    name: 'Theme',
+                    mandatory: [
                         { name: 'tags', type: 'array' }
                     ]
                 };
@@ -4349,6 +4454,14 @@ export class AslAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
+            case 'View': {
+                return {
+                    name: 'View',
+                    mandatory: [
+                        { name: 'tags', type: 'array' }
+                    ]
+                };
+            }
             default: {
                 return {
                     name: type,
@@ -4360,4 +4473,3 @@ export class AslAstReflection extends AbstractAstReflection {
 }
 
 export const reflection = new AslAstReflection();
-

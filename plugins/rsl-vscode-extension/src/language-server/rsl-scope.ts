@@ -37,12 +37,15 @@ export class RslScopeComputation extends DefaultScopeComputation {
         let filteredNamespace: Map<string, string[]> = new Map<string, string[]>();
         
         for(const imp of rootNode.packages[0].imports){
-            let key = imp.importedNamespace.substring(0, imp.importedNamespace.lastIndexOf('.'));
+            let importIdentifier = imp.importedNamespace.substring(0, imp.importedNamespace.lastIndexOf('.'));
+            let pack = importIdentifier.substring(0, importIdentifier.lastIndexOf('.'));
+            let system = importIdentifier.substring(importIdentifier.lastIndexOf('.')+1);;
+            let identifier: string = pack+ "," + system;
             let value = imp.importedNamespace.substring(imp.importedNamespace.lastIndexOf('.')+1);
-            if (key in filteredNamespace){
-                filteredNamespace.get(key)?.push(value);
+            if (identifier in filteredNamespace){
+                filteredNamespace.get(identifier)?.push(value);
             } else {
-                filteredNamespace.set(key, [value,])
+                filteredNamespace.set(identifier, [value,])
             }
             
         }
@@ -53,13 +56,14 @@ export class RslScopeComputation extends DefaultScopeComputation {
         .filter(node => {
             let model : Model = node as Model;
             for(const [key, _] of filteredNamespace){
-                if (key === model.packages[0].name) return true;
+                let keys = key.split(",");
+                if (keys[0] === model.packages[0].name && keys[1] === model.packages[0].system?.name) return true;
             }
             return false;
         }).toArray();
             
         for (const headNode of imports){
-            const filters = filteredNamespace.get((headNode as Model).packages[0].name);
+            const filters = filteredNamespace.get((headNode as Model).packages[0].name + "," + (headNode as Model).packages[0].system?.name);
              if (!filters) continue;
             if(filters.includes('*')) {
                 for (const node of streamAllContents(headNode)) {

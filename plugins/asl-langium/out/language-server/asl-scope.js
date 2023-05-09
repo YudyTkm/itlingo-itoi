@@ -34,13 +34,17 @@ class AslScopeComputation extends langium_1.DefaultScopeComputation {
             //importedNamespace = Package1.Package2.BillingApp_Asl.*
             let filteredNamespace = new Map();
             for (const imp of rootNode.packages[0].imports) {
-                let key = imp.importedNamespace.substring(0, imp.importedNamespace.lastIndexOf('.'));
+                let importIdentifier = imp.importedNamespace.substring(0, imp.importedNamespace.lastIndexOf('.'));
+                let pack = importIdentifier.substring(0, importIdentifier.lastIndexOf('.'));
+                let system = importIdentifier.substring(importIdentifier.lastIndexOf('.') + 1);
+                ;
+                let identifier = pack + "," + system;
                 let value = imp.importedNamespace.substring(imp.importedNamespace.lastIndexOf('.') + 1);
-                if (key in filteredNamespace) {
-                    (_a = filteredNamespace.get(key)) === null || _a === void 0 ? void 0 : _a.push(value);
+                if (identifier in filteredNamespace) {
+                    (_a = filteredNamespace.get(identifier)) === null || _a === void 0 ? void 0 : _a.push(value);
                 }
                 else {
-                    filteredNamespace.set(key, [value,]);
+                    filteredNamespace.set(identifier, [value,]);
                 }
             }
             let imports = this.services.shared.workspace.LangiumDocuments.all
@@ -49,13 +53,14 @@ class AslScopeComputation extends langium_1.DefaultScopeComputation {
                 .filter(node => {
                 let model = node;
                 for (const [key, _] of filteredNamespace) {
-                    if (key === model.packages[0].name)
+                    let keys = key.split(",");
+                    if (keys[0] === model.packages[0].name && keys[1] === model.packages[0].system.name)
                         return true;
                 }
                 return false;
             }).toArray();
             for (const headNode of imports) {
-                const filters = filteredNamespace.get(headNode.packages[0].name);
+                const filters = filteredNamespace.get(headNode.packages[0].name + "," + headNode.packages[0].system.name);
                 if (!filters)
                     continue;
                 if (filters.includes('*')) {

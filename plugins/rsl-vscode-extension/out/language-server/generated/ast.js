@@ -4,19 +4,19 @@
  * DO NOT EDIT MANUALLY!
  ******************************************************************************/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isOtherElement = exports.OtherElement = exports.isOperationTargetType = exports.OperationTargetType = exports.isMetricType = exports.MetricType = exports.isIncludeElementGeneric = exports.IncludeElementGeneric = exports.isGoalType = exports.GoalType = exports.isGoalSubType = exports.GoalSubType = exports.isGlossaryTermType = exports.GlossaryTermType = exports.isFRType = exports.FRType = exports.isForeignKeyOnDeleteType = exports.ForeignKeyOnDeleteType = exports.isDataEntityType = exports.DataEntityType = exports.isDataEntitySubType = exports.DataEntitySubType = exports.isDataEntityGeneric = exports.DataEntityGeneric = exports.isDataEntityClusterType = exports.DataEntityClusterType = exports.isConstraintType = exports.ConstraintType = exports.isConstraintSubType = exports.ConstraintSubType = exports.isConditionalExpression = exports.ConditionalExpression = exports.isCheckType = exports.CheckType = exports.isBehaviorElement = exports.BehaviorElement = exports.isActorType = exports.ActorType = exports.isActiveTaskType = exports.ActiveTaskType = exports.isActiveStructureElement = exports.ActiveStructureElement = exports.isActiveFlowType = exports.ActiveFlowType = exports.isActiveEventType = exports.ActiveEventType = exports.isActiveElement = exports.ActiveElement = exports.isActionType = exports.ActionType = void 0;
-exports.isSystemRelation = exports.SystemRelation = exports.isSystemElement = exports.SystemElement = exports.isSystemConcept = exports.SystemConcept = exports.isStructureElement = exports.StructureElement = exports.isStereotypeType = exports.StereotypeType = exports.isStepType = exports.StepType = exports.isStepSubType = exports.StepSubType = exports.isStepSubSubType = exports.StepSubSubType = exports.isStates = exports.States = exports.isStateMachineType = exports.StateMachineType = exports.isStakeholderType = exports.StakeholderType = exports.isStakeholderSubType = exports.StakeholderSubType = exports.isScenarioType = exports.ScenarioType = exports.isRiskType = exports.RiskType = exports.isRiskTreatmentType = exports.RiskTreatmentType = exports.isRiskSubType = exports.RiskSubType = exports.isRiskGeneric = exports.RiskGeneric = exports.isRequirementsRelationType = exports.RequirementsRelationType = exports.isRequirement = exports.Requirement = exports.isRelationType = exports.RelationType = exports.isQRType = exports.QRType = exports.isQRSubType = exports.QRSubType = exports.isPriorityType = exports.PriorityType = exports.isPassiveStructureElement = exports.PassiveStructureElement = exports.isPackageAbstract = exports.PackageAbstract = void 0;
-exports.isActiveEventTypeExtendedRef = exports.ActiveEventTypeExtendedRef = exports.isActiveEventTypeExtended = exports.ActiveEventTypeExtended = exports.isActiveEvent = exports.ActiveEvent = exports.isActionTypeOriginal = exports.ActionTypeOriginal = exports.isActionTypeExtendedRef = exports.ActionTypeExtendedRef = exports.isActionTypeExtended = exports.ActionTypeExtended = exports.isAcceptanceCriteriaTest = exports.AcceptanceCriteriaTest = exports.isAcceptanceCriteriaScenario = exports.AcceptanceCriteriaScenario = exports.isAcceptanceCriteriaRule = exports.AcceptanceCriteriaRule = exports.isAcceptanceCriteria = exports.AcceptanceCriteria = exports.isVulnerabilityType = exports.VulnerabilityType = exports.isVulnerabilitySubType = exports.VulnerabilitySubType = exports.isVulnerabilityAttackVector = exports.VulnerabilityAttackVector = exports.isUserStoryType = exports.UserStoryType = exports.isUseCaseType = exports.UseCaseType = exports.isTypeExtended = exports.TypeExtended = exports.isTestType = exports.TestType = exports.isTestsRelationType = exports.TestsRelationType = exports.isTestScenarioType = exports.TestScenarioType = exports.isTest = exports.Test = exports.isSystemType = exports.SystemType = exports.isSystemSubType = exports.SystemSubType = exports.isSystemsRelationType = exports.SystemsRelationType = exports.isSystemsRelationCategory = exports.SystemsRelationCategory = exports.isSystemSet = exports.SystemSet = void 0;
-exports.isConstraintTypeExtendedRef = exports.ConstraintTypeExtendedRef = exports.isConstraintTypeExtended = exports.ConstraintTypeExtended = exports.isConstraintSubTypeOriginal = exports.ConstraintSubTypeOriginal = exports.isConstraintSubTypeExtendedRef = exports.ConstraintSubTypeExtendedRef = exports.isConstraintSubTypeExtended = exports.ConstraintSubTypeExtended = exports.isConstraint = exports.Constraint = exports.isChildDataEntity = exports.ChildDataEntity = exports.isCheckTypeOriginal = exports.CheckTypeOriginal = exports.isCheckTypeExtendedRef = exports.CheckTypeExtendedRef = exports.isCheckTypeExtended = exports.CheckTypeExtended = exports.isCheck = exports.Check = exports.isAttributeValue = exports.AttributeValue = exports.isActorTypeOriginal = exports.ActorTypeOriginal = exports.isActorTypeExtendedRef = exports.ActorTypeExtendedRef = exports.isActorTypeExtended = exports.ActorTypeExtended = exports.isActor = exports.Actor = exports.isActiveTaskTypeOriginal = exports.ActiveTaskTypeOriginal = exports.isActiveTaskTypeExtendedRef = exports.ActiveTaskTypeExtendedRef = exports.isActiveTaskTypeExtended = exports.ActiveTaskTypeExtended = exports.isActiveTask = exports.ActiveTask = exports.isActiveFlowTypeOriginal = exports.ActiveFlowTypeOriginal = exports.isActiveFlowTypeExtendedRef = exports.ActiveFlowTypeExtendedRef = exports.isActiveFlowTypeExtended = exports.ActiveFlowTypeExtended = exports.isActiveFlow = exports.ActiveFlow = exports.isActiveEventTypeOriginal = exports.ActiveEventTypeOriginal = void 0;
-exports.isDataVariableRefs = exports.DataVariableRefs = exports.isDataEnumeration = exports.DataEnumeration = exports.isDataEntityTypeOriginal = exports.DataEntityTypeOriginal = exports.isDataEntityTypeExtendedRef = exports.DataEntityTypeExtendedRef = exports.isDataEntityTypeExtended = exports.DataEntityTypeExtended = exports.isDataEntityTest = exports.DataEntityTest = exports.isDataEntitySubTypeOriginal = exports.DataEntitySubTypeOriginal = exports.isDataEntitySubTypeExtendedRef = exports.DataEntitySubTypeExtendedRef = exports.isDataEntitySubTypeExtended = exports.DataEntitySubTypeExtended = exports.isDataEntityConstraint = exports.DataEntityConstraint = exports.isDataEntityClusterTypeOriginal = exports.DataEntityClusterTypeOriginal = exports.isDataEntityClusterTypeExtendedRef = exports.DataEntityClusterTypeExtendedRef = exports.isDataEntityClusterTypeExtended = exports.DataEntityClusterTypeExtended = exports.isDataEntityCluster = exports.DataEntityCluster = exports.isDataEntity = exports.DataEntity = exports.isDataAttributeValues = exports.DataAttributeValues = exports.isDataAttributeTypeExtended = exports.DataAttributeTypeExtended = exports.isDataAttributeType = exports.DataAttributeType = exports.isDataAttributeTableRow = exports.DataAttributeTableRow = exports.isDataAttributeRefsList = exports.DataAttributeRefsList = exports.isDataAttributeRefs = exports.DataAttributeRefs = exports.isDataAttributeConstraint = exports.DataAttributeConstraint = exports.isDataAttribute = exports.DataAttribute = exports.isData = exports.Data = exports.isConstraintTypeOriginal = exports.ConstraintTypeOriginal = void 0;
-exports.isGoalTypeOriginal = exports.GoalTypeOriginal = exports.isGoalTypeExtendedRef = exports.GoalTypeExtendedRef = exports.isGoalTypeExtended = exports.GoalTypeExtended = exports.isGoalSubTypeOriginal = exports.GoalSubTypeOriginal = exports.isGoalSubTypeExtendedRef = exports.GoalSubTypeExtendedRef = exports.isGoalSubTypeExtended = exports.GoalSubTypeExtended = exports.isGoal = exports.Goal = exports.isGlossaryTermTypeOriginal = exports.GlossaryTermTypeOriginal = exports.isGlossaryTermTypeExtendedRef = exports.GlossaryTermTypeExtendedRef = exports.isGlossaryTermTypeExtended = exports.GlossaryTermTypeExtended = exports.isGlossaryTerm = exports.GlossaryTerm = exports.isFRTypeOriginal = exports.FRTypeOriginal = exports.isFRTypeExtendedRef = exports.FRTypeExtendedRef = exports.isFRTypeExtended = exports.FRTypeExtended = exports.isFR = exports.FR = exports.isForeignKeyOnDeleteTypeOriginal = exports.ForeignKeyOnDeleteTypeOriginal = exports.isForeignKeyOnDeleteTypeExtendedRef = exports.ForeignKeyOnDeleteTypeExtendedRef = exports.isForeignKeyOnDeleteTypeExtended = exports.ForeignKeyOnDeleteTypeExtended = exports.isForeignKey = exports.ForeignKey = exports.isExpressionOperator = exports.ExpressionOperator = exports.isExpression = exports.Expression = exports.isElementsRelationType = exports.ElementsRelationType = exports.isElementsRelation = exports.ElementsRelation = exports.isDataVariableValues = exports.DataVariableValues = exports.isDataVariableTableRow = exports.DataVariableTableRow = void 0;
-exports.isQRTypeOriginal = exports.QRTypeOriginal = exports.isQRTypeExtendedRef = exports.QRTypeExtendedRef = exports.isQRTypeExtended = exports.QRTypeExtended = exports.isQRSubTypeOriginal = exports.QRSubTypeOriginal = exports.isQRSubTypeExtendedRef = exports.QRSubTypeExtendedRef = exports.isQRSubTypeExtended = exports.QRSubTypeExtended = exports.isQR = exports.QR = exports.isPriorityTypeOriginal = exports.PriorityTypeOriginal = exports.isPriorityTypeExtendedRef = exports.PriorityTypeExtendedRef = exports.isPriorityTypeExtended = exports.PriorityTypeExtended = exports.isPackageSystem = exports.PackageSystem = exports.isOperationExtension = exports.OperationExtension = exports.isMultiplicity = exports.Multiplicity = exports.isModel = exports.Model = exports.isMetricTypeOriginal = exports.MetricTypeOriginal = exports.isMetricTypeExtendedRef = exports.MetricTypeExtendedRef = exports.isMetricTypeExtended = exports.MetricTypeExtended = exports.isManyToMany = exports.ManyToMany = exports.isMainScenario = exports.MainScenario = exports.isIncludeSystemElementType = exports.IncludeSystemElementType = exports.isIncludeElement = exports.IncludeElement = exports.isIncludeAll = exports.IncludeAll = exports.isImport = exports.Import = exports.isImpactLevel = exports.ImpactLevel = exports.isIfExpression = exports.IfExpression = void 0;
-exports.isRiskTreatmentTypeExtended = exports.RiskTreatmentTypeExtended = exports.isRiskTreatment = exports.RiskTreatment = exports.isRiskSubTypeOriginal = exports.RiskSubTypeOriginal = exports.isRiskSubTypeExtendedRef = exports.RiskSubTypeExtendedRef = exports.isRiskSubTypeExtended = exports.RiskSubTypeExtended = exports.isRiskStatus = exports.RiskStatus = exports.isRiskAssessment = exports.RiskAssessment = exports.isRisk = exports.Risk = exports.isRequirementsRelationTypeOriginal = exports.RequirementsRelationTypeOriginal = exports.isRequirementsRelationTypeExtendedRef = exports.RequirementsRelationTypeExtendedRef = exports.isRequirementsRelationTypeExtended = exports.RequirementsRelationTypeExtended = exports.isRequirementsRelation = exports.RequirementsRelation = exports.isRepeatExpression = exports.RepeatExpression = exports.isRelationTypeOriginal = exports.RelationTypeOriginal = exports.isRelationTypeExtendedRef = exports.RelationTypeExtendedRef = exports.isRelationTypeExtended = exports.RelationTypeExtended = exports.isRefUCAction = exports.RefUCAction = exports.isRefUC = exports.RefUC = exports.isRefTermApplicableTo = exports.RefTermApplicableTo = exports.isRefSystems = exports.RefSystems = exports.isRefRequirements = exports.RefRequirements = exports.isReferenceElements = exports.ReferenceElements = exports.isRefDataEntity = exports.RefDataEntity = exports.isRefActor = exports.RefActor = exports.isRefActiveElement = exports.RefActiveElement = void 0;
-exports.isStep = exports.Step = exports.isStateSequence = exports.StateSequence = exports.isStateMachineTypeOriginal = exports.StateMachineTypeOriginal = exports.isStateMachineTypeExtendedRef = exports.StateMachineTypeExtendedRef = exports.isStateMachineTypeExtended = exports.StateMachineTypeExtended = exports.isStateMachineTest = exports.StateMachineTest = exports.isStateMachine = exports.StateMachine = exports.isState = exports.State = exports.isStakeholderTypeOriginal = exports.StakeholderTypeOriginal = exports.isStakeholderTypeExtendedRef = exports.StakeholderTypeExtendedRef = exports.isStakeholderTypeExtended = exports.StakeholderTypeExtended = exports.isStakeholderSubTypeOriginal = exports.StakeholderSubTypeOriginal = exports.isStakeholderSubTypeExtendedRef = exports.StakeholderSubTypeExtendedRef = exports.isStakeholderSubTypeExtended = exports.StakeholderSubTypeExtended = exports.isStakeholder = exports.Stakeholder = exports.isSimpleTestStep = exports.SimpleTestStep = exports.isScenarioTypeOriginal = exports.ScenarioTypeOriginal = exports.isScenarioTypeExtendedRef = exports.ScenarioTypeExtendedRef = exports.isScenarioTypeExtended = exports.ScenarioTypeExtended = exports.isScenario = exports.Scenario = exports.isRiskTypeOriginal = exports.RiskTypeOriginal = exports.isRiskTypeExtendedRef = exports.RiskTypeExtendedRef = exports.isRiskTypeExtended = exports.RiskTypeExtended = exports.isRiskTreatmentTypeOriginal = exports.RiskTreatmentTypeOriginal = exports.isRiskTreatmentTypeExtendedRef = exports.RiskTreatmentTypeExtendedRef = void 0;
-exports.isSystemSubTypeOriginal = exports.SystemSubTypeOriginal = exports.isSystemSubTypeExtendedRef = exports.SystemSubTypeExtendedRef = exports.isSystemSubTypeExtended = exports.SystemSubTypeExtended = exports.isSystemsRelationTypeOriginal = exports.SystemsRelationTypeOriginal = exports.isSystemsRelationTypeExtendedRef = exports.SystemsRelationTypeExtendedRef = exports.isSystemsRelationTypeExtended = exports.SystemsRelationTypeExtended = exports.isSystemsRelationCategoryOriginal = exports.SystemsRelationCategoryOriginal = exports.isSystemsRelationCategoryExtendedRef = exports.SystemsRelationCategoryExtendedRef = exports.isSystemsRelationCategoryExtended = exports.SystemsRelationCategoryExtended = exports.isSystemsRelation = exports.SystemsRelation = exports.isSystem = exports.System = exports.isStereotypeTypeOriginal = exports.StereotypeTypeOriginal = exports.isStereotypeTypeExtendedRef = exports.StereotypeTypeExtendedRef = exports.isStereotypeTypeExtended = exports.StereotypeTypeExtended = exports.isStereotype = exports.Stereotype = exports.isStepTypeOriginal = exports.StepTypeOriginal = exports.isStepTypeExtendedRef = exports.StepTypeExtendedRef = exports.isStepTypeExtended = exports.StepTypeExtended = exports.isStepSubTypeOriginal = exports.StepSubTypeOriginal = exports.isStepSubTypeExtendedRef = exports.StepSubTypeExtendedRef = exports.isStepSubTypeExtended = exports.StepSubTypeExtended = exports.isStepSubSubTypeOriginal = exports.StepSubSubTypeOriginal = exports.isStepSubSubTypeExtendedRef = exports.StepSubSubTypeExtendedRef = exports.isStepSubSubTypeExtended = exports.StepSubSubTypeExtended = exports.isStepOperationUCType = exports.StepOperationUCType = void 0;
-exports.isTransition = exports.Transition = exports.isThreat = exports.Threat = exports.isThemeType = exports.ThemeType = exports.isTheme = exports.Theme = exports.isTestVariable = exports.TestVariable = exports.isTestTypeOriginal = exports.TestTypeOriginal = exports.isTestTypeExtendedRef = exports.TestTypeExtendedRef = exports.isTestTypeExtended = exports.TestTypeExtended = exports.isTestStep = exports.TestStep = exports.isTestsRelationTypeOriginal = exports.TestsRelationTypeOriginal = exports.isTestsRelationTypeExtendedRef = exports.TestsRelationTypeExtendedRef = exports.isTestsRelationTypeExtended = exports.TestsRelationTypeExtended = exports.isTestsRelation = exports.TestsRelation = exports.isTestScenarioTypeOriginal = exports.TestScenarioTypeOriginal = exports.isTestScenarioTypeExtendedRef = exports.TestScenarioTypeExtendedRef = exports.isTestScenarioTypeExtended = exports.TestScenarioTypeExtended = exports.isTestScenario = exports.TestScenario = exports.isTestOperationTarget = exports.TestOperationTarget = exports.isTestDataAttribute = exports.TestDataAttribute = exports.isTestCheck = exports.TestCheck = exports.isTermApplicableTo = exports.TermApplicableTo = exports.isTag = exports.Tag = exports.isSystemTypeOriginal = exports.SystemTypeOriginal = exports.isSystemTypeExtendedRef = exports.SystemTypeExtendedRef = exports.isSystemTypeExtended = exports.SystemTypeExtended = void 0;
-exports.isVulnerabilitySubTypeOriginal = exports.VulnerabilitySubTypeOriginal = exports.isVulnerabilitySubTypeExtendedRef = exports.VulnerabilitySubTypeExtendedRef = exports.isVulnerabilitySubTypeExtended = exports.VulnerabilitySubTypeExtended = exports.isVulnerabilityAttackVectorOriginal = exports.VulnerabilityAttackVectorOriginal = exports.isVulnerabilityAttackVectorExtendedRef = exports.VulnerabilityAttackVectorExtendedRef = exports.isVulnerabilityAttackVectorExtended = exports.VulnerabilityAttackVectorExtended = exports.isVulnerability = exports.Vulnerability = exports.isViewType = exports.ViewType = exports.isView = exports.View = exports.isUserStoryTypeOriginal = exports.UserStoryTypeOriginal = exports.isUserStoryTypeExtendedRef = exports.UserStoryTypeExtendedRef = exports.isUserStoryTypeExtended = exports.UserStoryTypeExtended = exports.isUserStory = exports.UserStory = exports.isUseCaseTypeOriginal = exports.UseCaseTypeOriginal = exports.isUseCaseTypeExtendedRef = exports.UseCaseTypeExtendedRef = exports.isUseCaseTypeExtended = exports.UseCaseTypeExtended = exports.isUseCaseTest = exports.UseCaseTest = exports.isUseCase = exports.UseCase = exports.isUpdateFields = exports.UpdateFields = exports.isUpdateField = exports.UpdateField = exports.isUCIncludes = exports.UCIncludes = exports.isUCExtensionPoints = exports.UCExtensionPoints = exports.isUCExtensionPoint = exports.UCExtensionPoint = exports.isUCExtends = exports.UCExtends = exports.isUCActions = exports.UCActions = void 0;
-exports.reflection = exports.RslAstReflection = exports.isDataEnumerationRef = exports.DataEnumerationRef = exports.isDataAttributeTypeOriginal = exports.DataAttributeTypeOriginal = exports.isDataAttributeTypeExtendedRef = exports.DataAttributeTypeExtendedRef = exports.isMonth = exports.Month = exports.is_Date = exports.Percentage = exports.DoubleOrInt = exports._Date = exports.isVulnerabilityTypeOriginal = exports.VulnerabilityTypeOriginal = exports.isVulnerabilityTypeExtendedRef = exports.VulnerabilityTypeExtendedRef = exports.isVulnerabilityTypeExtended = exports.VulnerabilityTypeExtended = void 0;
+exports.isMetricType = exports.MetricType = exports.isLinguisticRuleSeverityLevel = exports.LinguisticRuleSeverityLevel = exports.isLinguisticRuleElementProperty = exports.LinguisticRuleElementProperty = exports.isLinguisticFragmentPart = exports.LinguisticFragmentPart = exports.isLinguisticElement = exports.LinguisticElement = exports.isIncludeElementGeneric = exports.IncludeElementGeneric = exports.isGoalType = exports.GoalType = exports.isGoalSubType = exports.GoalSubType = exports.isGlossaryTermType = exports.GlossaryTermType = exports.isFRType = exports.FRType = exports.isForeignKeyOnDeleteType = exports.ForeignKeyOnDeleteType = exports.isDataEntityType = exports.DataEntityType = exports.isDataEntitySubType = exports.DataEntitySubType = exports.isDataEntityGeneric = exports.DataEntityGeneric = exports.isDataEntityClusterType = exports.DataEntityClusterType = exports.isConstraintType = exports.ConstraintType = exports.isConstraintSubType = exports.ConstraintSubType = exports.isBehaviorElement = exports.BehaviorElement = exports.isActorType = exports.ActorType = exports.isActiveTaskType = exports.ActiveTaskType = exports.isActiveStructureElement = exports.ActiveStructureElement = exports.isActiveFlowType = exports.ActiveFlowType = exports.isActiveEventType = exports.ActiveEventType = exports.isActiveElement = exports.ActiveElement = exports.isActionType = exports.ActionType = void 0;
+exports.isSystemElement = exports.SystemElement = exports.isSystemConcept = exports.SystemConcept = exports.isStructureElement = exports.StructureElement = exports.isStereotypeType = exports.StereotypeType = exports.isStepType = exports.StepType = exports.isStepSubType = exports.StepSubType = exports.isStates = exports.States = exports.isStateMachineType = exports.StateMachineType = exports.isStakeholderType = exports.StakeholderType = exports.isStakeholderSubType = exports.StakeholderSubType = exports.isScenarioType = exports.ScenarioType = exports.isRiskType = exports.RiskType = exports.isRiskTreatmentType = exports.RiskTreatmentType = exports.isRiskSubType = exports.RiskSubType = exports.isRiskGeneric = exports.RiskGeneric = exports.isRequirementsRelationType = exports.RequirementsRelationType = exports.isRequirement = exports.Requirement = exports.isRelationType = exports.RelationType = exports.isQRType = exports.QRType = exports.isQRSubType = exports.QRSubType = exports.isPriorityType = exports.PriorityType = exports.isPassiveStructureElement = exports.PassiveStructureElement = exports.isPartOfSpeechEnum = exports.PartOfSpeechEnum = exports.isPackageAbstract = exports.PackageAbstract = exports.isOtherElement = exports.OtherElement = void 0;
+exports.isActionTypeExtended = exports.ActionTypeExtended = exports.isAcceptanceCriteriaTest = exports.AcceptanceCriteriaTest = exports.isAcceptanceCriteriaScenario = exports.AcceptanceCriteriaScenario = exports.isAcceptanceCriteriaRule = exports.AcceptanceCriteriaRule = exports.isAcceptanceCriteria = exports.AcceptanceCriteria = exports.is_Date = exports._Date = exports.isVulnerabilityType = exports.VulnerabilityType = exports.isVulnerabilitySubType = exports.VulnerabilitySubType = exports.isVulnerabilityAttackVector = exports.VulnerabilityAttackVector = exports.isUserStoryType = exports.UserStoryType = exports.isUseCaseType = exports.UseCaseType = exports.isTypeExtended = exports.TypeExtended = exports.isTestType = exports.TestType = exports.isTestSuiteSetupTeardown = exports.TestSuiteSetupTeardown = exports.isTestsRelationType = exports.TestsRelationType = exports.isTestScenarioType = exports.TestScenarioType = exports.isTestElement = exports.TestElement = exports.isTestData = exports.TestData = exports.isTest = exports.Test = exports.isSystemType = exports.SystemType = exports.isSystemSubType = exports.SystemSubType = exports.isSystemsRelationType = exports.SystemsRelationType = exports.isSystemsRelationCategory = exports.SystemsRelationCategory = exports.isSystemSet = exports.SystemSet = exports.isSystemRelation = exports.SystemRelation = void 0;
+exports.isConstraintSubTypeExtendedRef = exports.ConstraintSubTypeExtendedRef = exports.isConstraintSubTypeExtended = exports.ConstraintSubTypeExtended = exports.isConstraint = exports.Constraint = exports.isChildDataEntity = exports.ChildDataEntity = exports.isCheck = exports.Check = exports.isBoolean = exports.Boolean = exports.isAttributeValue = exports.AttributeValue = exports.isActorTypeOriginal = exports.ActorTypeOriginal = exports.isActorTypeExtendedRef = exports.ActorTypeExtendedRef = exports.isActorTypeExtended = exports.ActorTypeExtended = exports.isActor = exports.Actor = exports.isActiveTaskTypeOriginal = exports.ActiveTaskTypeOriginal = exports.isActiveTaskTypeExtendedRef = exports.ActiveTaskTypeExtendedRef = exports.isActiveTaskTypeExtended = exports.ActiveTaskTypeExtended = exports.isActiveTask = exports.ActiveTask = exports.isActiveFlowTypeOriginal = exports.ActiveFlowTypeOriginal = exports.isActiveFlowTypeExtendedRef = exports.ActiveFlowTypeExtendedRef = exports.isActiveFlowTypeExtended = exports.ActiveFlowTypeExtended = exports.isActiveFlow = exports.ActiveFlow = exports.isActiveEventTypeOriginal = exports.ActiveEventTypeOriginal = exports.isActiveEventTypeExtendedRef = exports.ActiveEventTypeExtendedRef = exports.isActiveEventTypeExtended = exports.ActiveEventTypeExtended = exports.isActiveEvent = exports.ActiveEvent = exports.isActionTypeOriginal = exports.ActionTypeOriginal = exports.isActionTypeExtendedRef = exports.ActionTypeExtendedRef = void 0;
+exports.isDataEnumerationElement = exports.DataEnumerationElement = exports.isDataEnumeration = exports.DataEnumeration = exports.isDataEntityTypeOriginal = exports.DataEntityTypeOriginal = exports.isDataEntityTypeExtendedRef = exports.DataEntityTypeExtendedRef = exports.isDataEntityTypeExtended = exports.DataEntityTypeExtended = exports.isDataEntityTest = exports.DataEntityTest = exports.isDataEntitySubTypeOriginal = exports.DataEntitySubTypeOriginal = exports.isDataEntitySubTypeExtendedRef = exports.DataEntitySubTypeExtendedRef = exports.isDataEntitySubTypeExtended = exports.DataEntitySubTypeExtended = exports.isDataEntityConstraint = exports.DataEntityConstraint = exports.isDataEntityClusterTypeOriginal = exports.DataEntityClusterTypeOriginal = exports.isDataEntityClusterTypeExtendedRef = exports.DataEntityClusterTypeExtendedRef = exports.isDataEntityClusterTypeExtended = exports.DataEntityClusterTypeExtended = exports.isDataEntityCluster = exports.DataEntityCluster = exports.isDataEntity = exports.DataEntity = exports.isDataAttributeTypeExtended = exports.DataAttributeTypeExtended = exports.isDataAttributeType = exports.DataAttributeType = exports.isDataAttributeRefsList = exports.DataAttributeRefsList = exports.isDataAttributeConstraint = exports.DataAttributeConstraint = exports.isDataAttribute = exports.DataAttribute = exports.isData = exports.Data = exports.isConstraintTypeOriginal = exports.ConstraintTypeOriginal = exports.isConstraintTypeExtendedRef = exports.ConstraintTypeExtendedRef = exports.isConstraintTypeExtended = exports.ConstraintTypeExtended = exports.isConstraintSubTypeOriginal = exports.ConstraintSubTypeOriginal = void 0;
+exports.isGoalTypeExtended = exports.GoalTypeExtended = exports.isGoalSubTypeOriginal = exports.GoalSubTypeOriginal = exports.isGoalSubTypeExtendedRef = exports.GoalSubTypeExtendedRef = exports.isGoalSubTypeExtended = exports.GoalSubTypeExtended = exports.isGoal = exports.Goal = exports.isGlossaryTermTypeOriginal = exports.GlossaryTermTypeOriginal = exports.isGlossaryTermTypeExtendedRef = exports.GlossaryTermTypeExtendedRef = exports.isGlossaryTermTypeExtended = exports.GlossaryTermTypeExtended = exports.isGlossaryTerm = exports.GlossaryTerm = exports.isFRTypeOriginal = exports.FRTypeOriginal = exports.isFRTypeExtendedRef = exports.FRTypeExtendedRef = exports.isFRTypeExtended = exports.FRTypeExtended = exports.isFR = exports.FR = exports.isForeignKeyOnDeleteTypeOriginal = exports.ForeignKeyOnDeleteTypeOriginal = exports.isForeignKeyOnDeleteTypeExtendedRef = exports.ForeignKeyOnDeleteTypeExtendedRef = exports.isForeignKeyOnDeleteTypeExtended = exports.ForeignKeyOnDeleteTypeExtended = exports.isForeignKey = exports.ForeignKey = exports.isExpressionOperator = exports.ExpressionOperator = exports.isExpression = exports.Expression = exports.isElementsRelationType = exports.ElementsRelationType = exports.isElementsRelation = exports.ElementsRelation = exports.isDateTime = exports.DateTime = exports.isDataTableRow = exports.DataTableRow = exports.isDataTableHeader = exports.DataTableHeader = exports.isDataTable = exports.DataTable = void 0;
+exports.isPriorityTypeExtended = exports.PriorityTypeExtended = exports.isPartOfSpeech = exports.PartOfSpeech = exports.isPackageSystem = exports.PackageSystem = exports.isMultiplicity = exports.Multiplicity = exports.isMonth = exports.Month = exports.isModel = exports.Model = exports.isMetricTypeOriginal = exports.MetricTypeOriginal = exports.isMetricTypeExtendedRef = exports.MetricTypeExtendedRef = exports.isMetricTypeExtended = exports.MetricTypeExtended = exports.isManyToMany = exports.ManyToMany = exports.isMainScenario = exports.MainScenario = exports.isLinguisticRuleType = exports.LinguisticRuleType = exports.isLinguisticRuleElementAndProperty = exports.LinguisticRuleElementAndProperty = exports.isLinguisticRuleElement = exports.LinguisticRuleElement = exports.isLinguisticRule = exports.LinguisticRule = exports.isLinguisticPattern = exports.LinguisticPattern = exports.isLinguisticFragmentRef = exports.LinguisticFragmentRef = exports.isLinguisticFragment = exports.LinguisticFragment = exports.isIncludeSystemElementType = exports.IncludeSystemElementType = exports.isIncludeElement = exports.IncludeElement = exports.isIncludeAll = exports.IncludeAll = exports.isImport = exports.Import = exports.isImpactLevel = exports.ImpactLevel = exports.isGoalTypeOriginal = exports.GoalTypeOriginal = exports.isGoalTypeExtendedRef = exports.GoalTypeExtendedRef = void 0;
+exports.isRisk = exports.Risk = exports.isRequirementsRelationTypeOriginal = exports.RequirementsRelationTypeOriginal = exports.isRequirementsRelationTypeExtendedRef = exports.RequirementsRelationTypeExtendedRef = exports.isRequirementsRelationTypeExtended = exports.RequirementsRelationTypeExtended = exports.isRequirementsRelation = exports.RequirementsRelation = exports.isRelationTypeOriginal = exports.RelationTypeOriginal = exports.isRelationTypeExtendedRef = exports.RelationTypeExtendedRef = exports.isRelationTypeExtended = exports.RelationTypeExtended = exports.isRefUCAction = exports.RefUCAction = exports.isRefUC = exports.RefUC = exports.isRefTermApplicableTo = exports.RefTermApplicableTo = exports.isRefRequirements = exports.RefRequirements = exports.isReferenceElements = exports.ReferenceElements = exports.isRefDataEntity = exports.RefDataEntity = exports.isRefActor = exports.RefActor = exports.isRefActiveElement = exports.RefActiveElement = exports.isQRTypeOriginal = exports.QRTypeOriginal = exports.isQRTypeExtendedRef = exports.QRTypeExtendedRef = exports.isQRTypeExtended = exports.QRTypeExtended = exports.isQRSubTypeOriginal = exports.QRSubTypeOriginal = exports.isQRSubTypeExtendedRef = exports.QRSubTypeExtendedRef = exports.isQRSubTypeExtended = exports.QRSubTypeExtended = exports.isQR = exports.QR = exports.isPriorityTypeOriginal = exports.PriorityTypeOriginal = exports.isPriorityTypeExtendedRef = exports.PriorityTypeExtendedRef = void 0;
+exports.isStateMachine = exports.StateMachine = exports.isState = exports.State = exports.isStakeholderTypeOriginal = exports.StakeholderTypeOriginal = exports.isStakeholderTypeExtendedRef = exports.StakeholderTypeExtendedRef = exports.isStakeholderTypeExtended = exports.StakeholderTypeExtended = exports.isStakeholderSubTypeOriginal = exports.StakeholderSubTypeOriginal = exports.isStakeholderSubTypeExtendedRef = exports.StakeholderSubTypeExtendedRef = exports.isStakeholderSubTypeExtended = exports.StakeholderSubTypeExtended = exports.isStakeholder = exports.Stakeholder = exports.isScenarioTypeOriginal = exports.ScenarioTypeOriginal = exports.isScenarioTypeExtendedRef = exports.ScenarioTypeExtendedRef = exports.isScenarioTypeExtended = exports.ScenarioTypeExtended = exports.isScenario = exports.Scenario = exports.isRiskTypeOriginal = exports.RiskTypeOriginal = exports.isRiskTypeExtendedRef = exports.RiskTypeExtendedRef = exports.isRiskTypeExtended = exports.RiskTypeExtended = exports.isRiskTreatmentTypeOriginal = exports.RiskTreatmentTypeOriginal = exports.isRiskTreatmentTypeExtendedRef = exports.RiskTreatmentTypeExtendedRef = exports.isRiskTreatmentTypeExtended = exports.RiskTreatmentTypeExtended = exports.isRiskTreatment = exports.RiskTreatment = exports.isRiskSubTypeOriginal = exports.RiskSubTypeOriginal = exports.isRiskSubTypeExtendedRef = exports.RiskSubTypeExtendedRef = exports.isRiskSubTypeExtended = exports.RiskSubTypeExtended = exports.isRiskStatus = exports.RiskStatus = exports.isRiskAssessment = exports.RiskAssessment = void 0;
+exports.isSystemsRelationTypeOriginal = exports.SystemsRelationTypeOriginal = exports.isSystemsRelationTypeExtendedRef = exports.SystemsRelationTypeExtendedRef = exports.isSystemsRelationTypeExtended = exports.SystemsRelationTypeExtended = exports.isSystemsRelationCategoryOriginal = exports.SystemsRelationCategoryOriginal = exports.isSystemsRelationCategoryExtendedRef = exports.SystemsRelationCategoryExtendedRef = exports.isSystemsRelationCategoryExtended = exports.SystemsRelationCategoryExtended = exports.isSystemsRelation = exports.SystemsRelation = exports.isSystem = exports.System = exports.isStereotypeTypeOriginal = exports.StereotypeTypeOriginal = exports.isStereotypeTypeExtendedRef = exports.StereotypeTypeExtendedRef = exports.isStereotypeTypeExtended = exports.StereotypeTypeExtended = exports.isStereotype = exports.Stereotype = exports.isStepTypeOriginal = exports.StepTypeOriginal = exports.isStepTypeExtendedRef = exports.StepTypeExtendedRef = exports.isStepTypeExtended = exports.StepTypeExtended = exports.isStepSubTypeOriginal = exports.StepSubTypeOriginal = exports.isStepSubTypeExtendedRef = exports.StepSubTypeExtendedRef = exports.isStepSubTypeExtended = exports.StepSubTypeExtended = exports.isStepOperationUCType = exports.StepOperationUCType = exports.isStep = exports.Step = exports.isStateSequence = exports.StateSequence = exports.isStateMachineTypeOriginal = exports.StateMachineTypeOriginal = exports.isStateMachineTypeExtendedRef = exports.StateMachineTypeExtendedRef = exports.isStateMachineTypeExtended = exports.StateMachineTypeExtended = exports.isStateMachineTest = exports.StateMachineTest = void 0;
+exports.isTestTypeOriginal = exports.TestTypeOriginal = exports.isTestTypeExtendedRef = exports.TestTypeExtendedRef = exports.isTestTypeExtended = exports.TestTypeExtended = exports.isTestSuiteTeardown = exports.TestSuiteTeardown = exports.isTestSuiteSetup = exports.TestSuiteSetup = exports.isTestSuite = exports.TestSuite = exports.isTestStep = exports.TestStep = exports.isTestsRelationTypeOriginal = exports.TestsRelationTypeOriginal = exports.isTestsRelationTypeExtendedRef = exports.TestsRelationTypeExtendedRef = exports.isTestsRelationTypeExtended = exports.TestsRelationTypeExtended = exports.isTestsRelation = exports.TestsRelation = exports.isTestScenarioTypeOriginal = exports.TestScenarioTypeOriginal = exports.isTestScenarioTypeExtendedRef = exports.TestScenarioTypeExtendedRef = exports.isTestScenarioTypeExtended = exports.TestScenarioTypeExtended = exports.isTestParameter = exports.TestParameter = exports.isTestDataAttribute = exports.TestDataAttribute = exports.isTestCase = exports.TestCase = exports.isTermApplicableTo = exports.TermApplicableTo = exports.isTag = exports.Tag = exports.isSystemTypeOriginal = exports.SystemTypeOriginal = exports.isSystemTypeExtendedRef = exports.SystemTypeExtendedRef = exports.isSystemTypeExtended = exports.SystemTypeExtended = exports.isSystemSubTypeOriginal = exports.SystemSubTypeOriginal = exports.isSystemSubTypeExtendedRef = exports.SystemSubTypeExtendedRef = exports.isSystemSubTypeExtended = exports.SystemSubTypeExtended = void 0;
+exports.isViewType = exports.ViewType = exports.isView = exports.View = exports.isVariableTypeExtended = exports.VariableTypeExtended = exports.isVariableType = exports.VariableType = exports.isUserStoryTypeOriginal = exports.UserStoryTypeOriginal = exports.isUserStoryTypeExtendedRef = exports.UserStoryTypeExtendedRef = exports.isUserStoryTypeExtended = exports.UserStoryTypeExtended = exports.isUserStory = exports.UserStory = exports.isUseCaseTypeOriginal = exports.UseCaseTypeOriginal = exports.isUseCaseTypeExtendedRef = exports.UseCaseTypeExtendedRef = exports.isUseCaseTypeExtended = exports.UseCaseTypeExtended = exports.isUseCaseTest = exports.UseCaseTest = exports.isUseCase = exports.UseCase = exports.isUpdateFields = exports.UpdateFields = exports.isUpdateField = exports.UpdateField = exports.isUCIncludes = exports.UCIncludes = exports.isUCExtensionPoints = exports.UCExtensionPoints = exports.isUCExtensionPoint = exports.UCExtensionPoint = exports.isUCExtends = exports.UCExtends = exports.isUCActions = exports.UCActions = exports.isTransition = exports.Transition = exports.isTime = exports.Time = exports.isThreat = exports.Threat = exports.isThemeType = exports.ThemeType = exports.isTheme = exports.Theme = void 0;
+exports.reflection = exports.RslAstReflection = exports.isVariableTypeOriginal = exports.VariableTypeOriginal = exports.isVariableTypeExtendedRef = exports.VariableTypeExtendedRef = exports.isDataEnumerationRef = exports.DataEnumerationRef = exports.isDataAttributeTypeOriginal = exports.DataAttributeTypeOriginal = exports.isDataAttributeTypeExtendedRef = exports.DataAttributeTypeExtendedRef = exports.isWord = exports.Word = exports.isVulnerabilityTypeOriginal = exports.VulnerabilityTypeOriginal = exports.isVulnerabilityTypeExtendedRef = exports.VulnerabilityTypeExtendedRef = exports.isVulnerabilityTypeExtended = exports.VulnerabilityTypeExtended = exports.isVulnerabilitySubTypeOriginal = exports.VulnerabilitySubTypeOriginal = exports.isVulnerabilitySubTypeExtendedRef = exports.VulnerabilitySubTypeExtendedRef = exports.isVulnerabilitySubTypeExtended = exports.VulnerabilitySubTypeExtended = exports.isVulnerabilityAttackVectorOriginal = exports.VulnerabilityAttackVectorOriginal = exports.isVulnerabilityAttackVectorExtendedRef = exports.VulnerabilityAttackVectorExtendedRef = exports.isVulnerabilityAttackVectorExtended = exports.VulnerabilityAttackVectorExtended = exports.isVulnerability = exports.Vulnerability = void 0;
 /* eslint-disable */
 const langium_1 = require("langium");
 exports.ActionType = 'ActionType';
@@ -59,16 +59,6 @@ function isBehaviorElement(item) {
     return exports.reflection.isInstance(item, exports.BehaviorElement);
 }
 exports.isBehaviorElement = isBehaviorElement;
-exports.CheckType = 'CheckType';
-function isCheckType(item) {
-    return exports.reflection.isInstance(item, exports.CheckType);
-}
-exports.isCheckType = isCheckType;
-exports.ConditionalExpression = 'ConditionalExpression';
-function isConditionalExpression(item) {
-    return exports.reflection.isInstance(item, exports.ConditionalExpression);
-}
-exports.isConditionalExpression = isConditionalExpression;
 exports.ConstraintSubType = 'ConstraintSubType';
 function isConstraintSubType(item) {
     return exports.reflection.isInstance(item, exports.ConstraintSubType);
@@ -129,16 +119,31 @@ function isIncludeElementGeneric(item) {
     return exports.reflection.isInstance(item, exports.IncludeElementGeneric);
 }
 exports.isIncludeElementGeneric = isIncludeElementGeneric;
+exports.LinguisticElement = 'LinguisticElement';
+function isLinguisticElement(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticElement);
+}
+exports.isLinguisticElement = isLinguisticElement;
+exports.LinguisticFragmentPart = 'LinguisticFragmentPart';
+function isLinguisticFragmentPart(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticFragmentPart);
+}
+exports.isLinguisticFragmentPart = isLinguisticFragmentPart;
+exports.LinguisticRuleElementProperty = 'LinguisticRuleElementProperty';
+function isLinguisticRuleElementProperty(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticRuleElementProperty);
+}
+exports.isLinguisticRuleElementProperty = isLinguisticRuleElementProperty;
+exports.LinguisticRuleSeverityLevel = 'LinguisticRuleSeverityLevel';
+function isLinguisticRuleSeverityLevel(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticRuleSeverityLevel);
+}
+exports.isLinguisticRuleSeverityLevel = isLinguisticRuleSeverityLevel;
 exports.MetricType = 'MetricType';
 function isMetricType(item) {
     return exports.reflection.isInstance(item, exports.MetricType);
 }
 exports.isMetricType = isMetricType;
-exports.OperationTargetType = 'OperationTargetType';
-function isOperationTargetType(item) {
-    return exports.reflection.isInstance(item, exports.OperationTargetType);
-}
-exports.isOperationTargetType = isOperationTargetType;
 exports.OtherElement = 'OtherElement';
 function isOtherElement(item) {
     return exports.reflection.isInstance(item, exports.OtherElement);
@@ -149,6 +154,11 @@ function isPackageAbstract(item) {
     return exports.reflection.isInstance(item, exports.PackageAbstract);
 }
 exports.isPackageAbstract = isPackageAbstract;
+exports.PartOfSpeechEnum = 'PartOfSpeechEnum';
+function isPartOfSpeechEnum(item) {
+    return exports.reflection.isInstance(item, exports.PartOfSpeechEnum);
+}
+exports.isPartOfSpeechEnum = isPartOfSpeechEnum;
 exports.PassiveStructureElement = 'PassiveStructureElement';
 function isPassiveStructureElement(item) {
     return exports.reflection.isInstance(item, exports.PassiveStructureElement);
@@ -229,11 +239,6 @@ function isStates(item) {
     return exports.reflection.isInstance(item, exports.States);
 }
 exports.isStates = isStates;
-exports.StepSubSubType = 'StepSubSubType';
-function isStepSubSubType(item) {
-    return exports.reflection.isInstance(item, exports.StepSubSubType);
-}
-exports.isStepSubSubType = isStepSubSubType;
 exports.StepSubType = 'StepSubType';
 function isStepSubType(item) {
     return exports.reflection.isInstance(item, exports.StepSubType);
@@ -299,6 +304,16 @@ function isTest(item) {
     return exports.reflection.isInstance(item, exports.Test);
 }
 exports.isTest = isTest;
+exports.TestData = 'TestData';
+function isTestData(item) {
+    return exports.reflection.isInstance(item, exports.TestData);
+}
+exports.isTestData = isTestData;
+exports.TestElement = 'TestElement';
+function isTestElement(item) {
+    return exports.reflection.isInstance(item, exports.TestElement);
+}
+exports.isTestElement = isTestElement;
 exports.TestScenarioType = 'TestScenarioType';
 function isTestScenarioType(item) {
     return exports.reflection.isInstance(item, exports.TestScenarioType);
@@ -309,6 +324,11 @@ function isTestsRelationType(item) {
     return exports.reflection.isInstance(item, exports.TestsRelationType);
 }
 exports.isTestsRelationType = isTestsRelationType;
+exports.TestSuiteSetupTeardown = 'TestSuiteSetupTeardown';
+function isTestSuiteSetupTeardown(item) {
+    return exports.reflection.isInstance(item, exports.TestSuiteSetupTeardown);
+}
+exports.isTestSuiteSetupTeardown = isTestSuiteSetupTeardown;
 exports.TestType = 'TestType';
 function isTestType(item) {
     return exports.reflection.isInstance(item, exports.TestType);
@@ -344,6 +364,11 @@ function isVulnerabilityType(item) {
     return exports.reflection.isInstance(item, exports.VulnerabilityType);
 }
 exports.isVulnerabilityType = isVulnerabilityType;
+exports._Date = '_Date';
+function is_Date(item) {
+    return exports.reflection.isInstance(item, exports._Date);
+}
+exports.is_Date = is_Date;
 exports.AcceptanceCriteria = 'AcceptanceCriteria';
 function isAcceptanceCriteria(item) {
     return exports.reflection.isInstance(item, exports.AcceptanceCriteria);
@@ -464,26 +489,16 @@ function isAttributeValue(item) {
     return exports.reflection.isInstance(item, exports.AttributeValue);
 }
 exports.isAttributeValue = isAttributeValue;
+exports.Boolean = 'Boolean';
+function isBoolean(item) {
+    return exports.reflection.isInstance(item, exports.Boolean);
+}
+exports.isBoolean = isBoolean;
 exports.Check = 'Check';
 function isCheck(item) {
     return exports.reflection.isInstance(item, exports.Check);
 }
 exports.isCheck = isCheck;
-exports.CheckTypeExtended = 'CheckTypeExtended';
-function isCheckTypeExtended(item) {
-    return exports.reflection.isInstance(item, exports.CheckTypeExtended);
-}
-exports.isCheckTypeExtended = isCheckTypeExtended;
-exports.CheckTypeExtendedRef = 'CheckTypeExtendedRef';
-function isCheckTypeExtendedRef(item) {
-    return exports.reflection.isInstance(item, exports.CheckTypeExtendedRef);
-}
-exports.isCheckTypeExtendedRef = isCheckTypeExtendedRef;
-exports.CheckTypeOriginal = 'CheckTypeOriginal';
-function isCheckTypeOriginal(item) {
-    return exports.reflection.isInstance(item, exports.CheckTypeOriginal);
-}
-exports.isCheckTypeOriginal = isCheckTypeOriginal;
 exports.ChildDataEntity = 'ChildDataEntity';
 function isChildDataEntity(item) {
     return exports.reflection.isInstance(item, exports.ChildDataEntity);
@@ -539,21 +554,11 @@ function isDataAttributeConstraint(item) {
     return exports.reflection.isInstance(item, exports.DataAttributeConstraint);
 }
 exports.isDataAttributeConstraint = isDataAttributeConstraint;
-exports.DataAttributeRefs = 'DataAttributeRefs';
-function isDataAttributeRefs(item) {
-    return exports.reflection.isInstance(item, exports.DataAttributeRefs);
-}
-exports.isDataAttributeRefs = isDataAttributeRefs;
 exports.DataAttributeRefsList = 'DataAttributeRefsList';
 function isDataAttributeRefsList(item) {
     return exports.reflection.isInstance(item, exports.DataAttributeRefsList);
 }
 exports.isDataAttributeRefsList = isDataAttributeRefsList;
-exports.DataAttributeTableRow = 'DataAttributeTableRow';
-function isDataAttributeTableRow(item) {
-    return exports.reflection.isInstance(item, exports.DataAttributeTableRow);
-}
-exports.isDataAttributeTableRow = isDataAttributeTableRow;
 exports.DataAttributeType = 'DataAttributeType';
 function isDataAttributeType(item) {
     return exports.reflection.isInstance(item, exports.DataAttributeType);
@@ -564,11 +569,6 @@ function isDataAttributeTypeExtended(item) {
     return exports.reflection.isInstance(item, exports.DataAttributeTypeExtended);
 }
 exports.isDataAttributeTypeExtended = isDataAttributeTypeExtended;
-exports.DataAttributeValues = 'DataAttributeValues';
-function isDataAttributeValues(item) {
-    return exports.reflection.isInstance(item, exports.DataAttributeValues);
-}
-exports.isDataAttributeValues = isDataAttributeValues;
 exports.DataEntity = 'DataEntity';
 function isDataEntity(item) {
     return exports.reflection.isInstance(item, exports.DataEntity);
@@ -639,21 +639,31 @@ function isDataEnumeration(item) {
     return exports.reflection.isInstance(item, exports.DataEnumeration);
 }
 exports.isDataEnumeration = isDataEnumeration;
-exports.DataVariableRefs = 'DataVariableRefs';
-function isDataVariableRefs(item) {
-    return exports.reflection.isInstance(item, exports.DataVariableRefs);
+exports.DataEnumerationElement = 'DataEnumerationElement';
+function isDataEnumerationElement(item) {
+    return exports.reflection.isInstance(item, exports.DataEnumerationElement);
 }
-exports.isDataVariableRefs = isDataVariableRefs;
-exports.DataVariableTableRow = 'DataVariableTableRow';
-function isDataVariableTableRow(item) {
-    return exports.reflection.isInstance(item, exports.DataVariableTableRow);
+exports.isDataEnumerationElement = isDataEnumerationElement;
+exports.DataTable = 'DataTable';
+function isDataTable(item) {
+    return exports.reflection.isInstance(item, exports.DataTable);
 }
-exports.isDataVariableTableRow = isDataVariableTableRow;
-exports.DataVariableValues = 'DataVariableValues';
-function isDataVariableValues(item) {
-    return exports.reflection.isInstance(item, exports.DataVariableValues);
+exports.isDataTable = isDataTable;
+exports.DataTableHeader = 'DataTableHeader';
+function isDataTableHeader(item) {
+    return exports.reflection.isInstance(item, exports.DataTableHeader);
 }
-exports.isDataVariableValues = isDataVariableValues;
+exports.isDataTableHeader = isDataTableHeader;
+exports.DataTableRow = 'DataTableRow';
+function isDataTableRow(item) {
+    return exports.reflection.isInstance(item, exports.DataTableRow);
+}
+exports.isDataTableRow = isDataTableRow;
+exports.DateTime = 'DateTime';
+function isDateTime(item) {
+    return exports.reflection.isInstance(item, exports.DateTime);
+}
+exports.isDateTime = isDateTime;
 exports.ElementsRelation = 'ElementsRelation';
 function isElementsRelation(item) {
     return exports.reflection.isInstance(item, exports.ElementsRelation);
@@ -769,11 +779,6 @@ function isGoalTypeOriginal(item) {
     return exports.reflection.isInstance(item, exports.GoalTypeOriginal);
 }
 exports.isGoalTypeOriginal = isGoalTypeOriginal;
-exports.IfExpression = 'IfExpression';
-function isIfExpression(item) {
-    return exports.reflection.isInstance(item, exports.IfExpression);
-}
-exports.isIfExpression = isIfExpression;
 exports.ImpactLevel = 'ImpactLevel';
 function isImpactLevel(item) {
     return exports.reflection.isInstance(item, exports.ImpactLevel);
@@ -799,6 +804,41 @@ function isIncludeSystemElementType(item) {
     return exports.reflection.isInstance(item, exports.IncludeSystemElementType);
 }
 exports.isIncludeSystemElementType = isIncludeSystemElementType;
+exports.LinguisticFragment = 'LinguisticFragment';
+function isLinguisticFragment(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticFragment);
+}
+exports.isLinguisticFragment = isLinguisticFragment;
+exports.LinguisticFragmentRef = 'LinguisticFragmentRef';
+function isLinguisticFragmentRef(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticFragmentRef);
+}
+exports.isLinguisticFragmentRef = isLinguisticFragmentRef;
+exports.LinguisticPattern = 'LinguisticPattern';
+function isLinguisticPattern(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticPattern);
+}
+exports.isLinguisticPattern = isLinguisticPattern;
+exports.LinguisticRule = 'LinguisticRule';
+function isLinguisticRule(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticRule);
+}
+exports.isLinguisticRule = isLinguisticRule;
+exports.LinguisticRuleElement = 'LinguisticRuleElement';
+function isLinguisticRuleElement(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticRuleElement);
+}
+exports.isLinguisticRuleElement = isLinguisticRuleElement;
+exports.LinguisticRuleElementAndProperty = 'LinguisticRuleElementAndProperty';
+function isLinguisticRuleElementAndProperty(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticRuleElementAndProperty);
+}
+exports.isLinguisticRuleElementAndProperty = isLinguisticRuleElementAndProperty;
+exports.LinguisticRuleType = 'LinguisticRuleType';
+function isLinguisticRuleType(item) {
+    return exports.reflection.isInstance(item, exports.LinguisticRuleType);
+}
+exports.isLinguisticRuleType = isLinguisticRuleType;
 exports.MainScenario = 'MainScenario';
 function isMainScenario(item) {
     return exports.reflection.isInstance(item, exports.MainScenario);
@@ -829,21 +869,26 @@ function isModel(item) {
     return exports.reflection.isInstance(item, exports.Model);
 }
 exports.isModel = isModel;
+exports.Month = 'Month';
+function isMonth(item) {
+    return exports.reflection.isInstance(item, exports.Month);
+}
+exports.isMonth = isMonth;
 exports.Multiplicity = 'Multiplicity';
 function isMultiplicity(item) {
     return exports.reflection.isInstance(item, exports.Multiplicity);
 }
 exports.isMultiplicity = isMultiplicity;
-exports.OperationExtension = 'OperationExtension';
-function isOperationExtension(item) {
-    return exports.reflection.isInstance(item, exports.OperationExtension);
-}
-exports.isOperationExtension = isOperationExtension;
 exports.PackageSystem = 'PackageSystem';
 function isPackageSystem(item) {
     return exports.reflection.isInstance(item, exports.PackageSystem);
 }
 exports.isPackageSystem = isPackageSystem;
+exports.PartOfSpeech = 'PartOfSpeech';
+function isPartOfSpeech(item) {
+    return exports.reflection.isInstance(item, exports.PartOfSpeech);
+}
+exports.isPartOfSpeech = isPartOfSpeech;
 exports.PriorityTypeExtended = 'PriorityTypeExtended';
 function isPriorityTypeExtended(item) {
     return exports.reflection.isInstance(item, exports.PriorityTypeExtended);
@@ -919,11 +964,6 @@ function isRefRequirements(item) {
     return exports.reflection.isInstance(item, exports.RefRequirements);
 }
 exports.isRefRequirements = isRefRequirements;
-exports.RefSystems = 'RefSystems';
-function isRefSystems(item) {
-    return exports.reflection.isInstance(item, exports.RefSystems);
-}
-exports.isRefSystems = isRefSystems;
 exports.RefTermApplicableTo = 'RefTermApplicableTo';
 function isRefTermApplicableTo(item) {
     return exports.reflection.isInstance(item, exports.RefTermApplicableTo);
@@ -954,11 +994,6 @@ function isRelationTypeOriginal(item) {
     return exports.reflection.isInstance(item, exports.RelationTypeOriginal);
 }
 exports.isRelationTypeOriginal = isRelationTypeOriginal;
-exports.RepeatExpression = 'RepeatExpression';
-function isRepeatExpression(item) {
-    return exports.reflection.isInstance(item, exports.RepeatExpression);
-}
-exports.isRepeatExpression = isRepeatExpression;
 exports.RequirementsRelation = 'RequirementsRelation';
 function isRequirementsRelation(item) {
     return exports.reflection.isInstance(item, exports.RequirementsRelation);
@@ -1064,11 +1099,6 @@ function isScenarioTypeOriginal(item) {
     return exports.reflection.isInstance(item, exports.ScenarioTypeOriginal);
 }
 exports.isScenarioTypeOriginal = isScenarioTypeOriginal;
-exports.SimpleTestStep = 'SimpleTestStep';
-function isSimpleTestStep(item) {
-    return exports.reflection.isInstance(item, exports.SimpleTestStep);
-}
-exports.isSimpleTestStep = isSimpleTestStep;
 exports.Stakeholder = 'Stakeholder';
 function isStakeholder(item) {
     return exports.reflection.isInstance(item, exports.Stakeholder);
@@ -1149,21 +1179,6 @@ function isStepOperationUCType(item) {
     return exports.reflection.isInstance(item, exports.StepOperationUCType);
 }
 exports.isStepOperationUCType = isStepOperationUCType;
-exports.StepSubSubTypeExtended = 'StepSubSubTypeExtended';
-function isStepSubSubTypeExtended(item) {
-    return exports.reflection.isInstance(item, exports.StepSubSubTypeExtended);
-}
-exports.isStepSubSubTypeExtended = isStepSubSubTypeExtended;
-exports.StepSubSubTypeExtendedRef = 'StepSubSubTypeExtendedRef';
-function isStepSubSubTypeExtendedRef(item) {
-    return exports.reflection.isInstance(item, exports.StepSubSubTypeExtendedRef);
-}
-exports.isStepSubSubTypeExtendedRef = isStepSubSubTypeExtendedRef;
-exports.StepSubSubTypeOriginal = 'StepSubSubTypeOriginal';
-function isStepSubSubTypeOriginal(item) {
-    return exports.reflection.isInstance(item, exports.StepSubSubTypeOriginal);
-}
-exports.isStepSubSubTypeOriginal = isStepSubSubTypeOriginal;
 exports.StepSubTypeExtended = 'StepSubTypeExtended';
 function isStepSubTypeExtended(item) {
     return exports.reflection.isInstance(item, exports.StepSubTypeExtended);
@@ -1294,26 +1309,21 @@ function isTermApplicableTo(item) {
     return exports.reflection.isInstance(item, exports.TermApplicableTo);
 }
 exports.isTermApplicableTo = isTermApplicableTo;
-exports.TestCheck = 'TestCheck';
-function isTestCheck(item) {
-    return exports.reflection.isInstance(item, exports.TestCheck);
+exports.TestCase = 'TestCase';
+function isTestCase(item) {
+    return exports.reflection.isInstance(item, exports.TestCase);
 }
-exports.isTestCheck = isTestCheck;
+exports.isTestCase = isTestCase;
 exports.TestDataAttribute = 'TestDataAttribute';
 function isTestDataAttribute(item) {
     return exports.reflection.isInstance(item, exports.TestDataAttribute);
 }
 exports.isTestDataAttribute = isTestDataAttribute;
-exports.TestOperationTarget = 'TestOperationTarget';
-function isTestOperationTarget(item) {
-    return exports.reflection.isInstance(item, exports.TestOperationTarget);
+exports.TestParameter = 'TestParameter';
+function isTestParameter(item) {
+    return exports.reflection.isInstance(item, exports.TestParameter);
 }
-exports.isTestOperationTarget = isTestOperationTarget;
-exports.TestScenario = 'TestScenario';
-function isTestScenario(item) {
-    return exports.reflection.isInstance(item, exports.TestScenario);
-}
-exports.isTestScenario = isTestScenario;
+exports.isTestParameter = isTestParameter;
 exports.TestScenarioTypeExtended = 'TestScenarioTypeExtended';
 function isTestScenarioTypeExtended(item) {
     return exports.reflection.isInstance(item, exports.TestScenarioTypeExtended);
@@ -1354,6 +1364,21 @@ function isTestStep(item) {
     return exports.reflection.isInstance(item, exports.TestStep);
 }
 exports.isTestStep = isTestStep;
+exports.TestSuite = 'TestSuite';
+function isTestSuite(item) {
+    return exports.reflection.isInstance(item, exports.TestSuite);
+}
+exports.isTestSuite = isTestSuite;
+exports.TestSuiteSetup = 'TestSuiteSetup';
+function isTestSuiteSetup(item) {
+    return exports.reflection.isInstance(item, exports.TestSuiteSetup);
+}
+exports.isTestSuiteSetup = isTestSuiteSetup;
+exports.TestSuiteTeardown = 'TestSuiteTeardown';
+function isTestSuiteTeardown(item) {
+    return exports.reflection.isInstance(item, exports.TestSuiteTeardown);
+}
+exports.isTestSuiteTeardown = isTestSuiteTeardown;
 exports.TestTypeExtended = 'TestTypeExtended';
 function isTestTypeExtended(item) {
     return exports.reflection.isInstance(item, exports.TestTypeExtended);
@@ -1369,11 +1394,6 @@ function isTestTypeOriginal(item) {
     return exports.reflection.isInstance(item, exports.TestTypeOriginal);
 }
 exports.isTestTypeOriginal = isTestTypeOriginal;
-exports.TestVariable = 'TestVariable';
-function isTestVariable(item) {
-    return exports.reflection.isInstance(item, exports.TestVariable);
-}
-exports.isTestVariable = isTestVariable;
 exports.Theme = 'Theme';
 function isTheme(item) {
     return exports.reflection.isInstance(item, exports.Theme);
@@ -1389,6 +1409,11 @@ function isThreat(item) {
     return exports.reflection.isInstance(item, exports.Threat);
 }
 exports.isThreat = isThreat;
+exports.Time = 'Time';
+function isTime(item) {
+    return exports.reflection.isInstance(item, exports.Time);
+}
+exports.isTime = isTime;
 exports.Transition = 'Transition';
 function isTransition(item) {
     return exports.reflection.isInstance(item, exports.Transition);
@@ -1474,6 +1499,16 @@ function isUserStoryTypeOriginal(item) {
     return exports.reflection.isInstance(item, exports.UserStoryTypeOriginal);
 }
 exports.isUserStoryTypeOriginal = isUserStoryTypeOriginal;
+exports.VariableType = 'VariableType';
+function isVariableType(item) {
+    return exports.reflection.isInstance(item, exports.VariableType);
+}
+exports.isVariableType = isVariableType;
+exports.VariableTypeExtended = 'VariableTypeExtended';
+function isVariableTypeExtended(item) {
+    return exports.reflection.isInstance(item, exports.VariableTypeExtended);
+}
+exports.isVariableTypeExtended = isVariableTypeExtended;
 exports.View = 'View';
 function isView(item) {
     return exports.reflection.isInstance(item, exports.View);
@@ -1534,18 +1569,11 @@ function isVulnerabilityTypeOriginal(item) {
     return exports.reflection.isInstance(item, exports.VulnerabilityTypeOriginal);
 }
 exports.isVulnerabilityTypeOriginal = isVulnerabilityTypeOriginal;
-exports._Date = '_Date';
-exports.DoubleOrInt = 'DoubleOrInt';
-exports.Percentage = 'Percentage';
-function is_Date(item) {
-    return exports.reflection.isInstance(item, exports._Date);
+exports.Word = 'Word';
+function isWord(item) {
+    return exports.reflection.isInstance(item, exports.Word);
 }
-exports.is_Date = is_Date;
-exports.Month = 'Month';
-function isMonth(item) {
-    return exports.reflection.isInstance(item, exports.Month);
-}
-exports.isMonth = isMonth;
+exports.isWord = isWord;
 exports.DataAttributeTypeExtendedRef = 'DataAttributeTypeExtendedRef';
 function isDataAttributeTypeExtendedRef(item) {
     return exports.reflection.isInstance(item, exports.DataAttributeTypeExtendedRef);
@@ -1561,18 +1589,22 @@ function isDataEnumerationRef(item) {
     return exports.reflection.isInstance(item, exports.DataEnumerationRef);
 }
 exports.isDataEnumerationRef = isDataEnumerationRef;
+exports.VariableTypeExtendedRef = 'VariableTypeExtendedRef';
+function isVariableTypeExtendedRef(item) {
+    return exports.reflection.isInstance(item, exports.VariableTypeExtendedRef);
+}
+exports.isVariableTypeExtendedRef = isVariableTypeExtendedRef;
+exports.VariableTypeOriginal = 'VariableTypeOriginal';
+function isVariableTypeOriginal(item) {
+    return exports.reflection.isInstance(item, exports.VariableTypeOriginal);
+}
+exports.isVariableTypeOriginal = isVariableTypeOriginal;
 class RslAstReflection extends langium_1.AbstractAstReflection {
     getAllTypes() {
-        return ['AcceptanceCriteria', 'AcceptanceCriteriaRule', 'AcceptanceCriteriaScenario', 'AcceptanceCriteriaTest', 'ActionType', 'ActionTypeExtended', 'ActionTypeExtendedRef', 'ActionTypeOriginal', 'ActiveElement', 'ActiveEvent', 'ActiveEventType', 'ActiveEventTypeExtended', 'ActiveEventTypeExtendedRef', 'ActiveEventTypeOriginal', 'ActiveFlow', 'ActiveFlowType', 'ActiveFlowTypeExtended', 'ActiveFlowTypeExtendedRef', 'ActiveFlowTypeOriginal', 'ActiveStructureElement', 'ActiveTask', 'ActiveTaskType', 'ActiveTaskTypeExtended', 'ActiveTaskTypeExtendedRef', 'ActiveTaskTypeOriginal', 'Actor', 'ActorType', 'ActorTypeExtended', 'ActorTypeExtendedRef', 'ActorTypeOriginal', 'AttributeValue', 'BehaviorElement', 'Check', 'CheckType', 'CheckTypeExtended', 'CheckTypeExtendedRef', 'CheckTypeOriginal', 'ChildDataEntity', 'ConditionalExpression', 'Constraint', 'ConstraintSubType', 'ConstraintSubTypeExtended', 'ConstraintSubTypeExtendedRef', 'ConstraintSubTypeOriginal', 'ConstraintType', 'ConstraintTypeExtended', 'ConstraintTypeExtendedRef', 'ConstraintTypeOriginal', 'Data', 'DataAttribute', 'DataAttributeConstraint', 'DataAttributeRefs', 'DataAttributeRefsList', 'DataAttributeTableRow', 'DataAttributeType', 'DataAttributeTypeExtended', 'DataAttributeTypeExtendedRef', 'DataAttributeTypeOriginal', 'DataAttributeValues', 'DataEntity', 'DataEntityCluster', 'DataEntityClusterType', 'DataEntityClusterTypeExtended', 'DataEntityClusterTypeExtendedRef', 'DataEntityClusterTypeOriginal', 'DataEntityConstraint', 'DataEntityGeneric', 'DataEntitySubType', 'DataEntitySubTypeExtended', 'DataEntitySubTypeExtendedRef', 'DataEntitySubTypeOriginal', 'DataEntityTest', 'DataEntityType', 'DataEntityTypeExtended', 'DataEntityTypeExtendedRef', 'DataEntityTypeOriginal', 'DataEnumeration', 'DataEnumerationRef', 'DataVariableRefs', 'DataVariableTableRow', 'DataVariableValues', 'ElementsRelation', 'ElementsRelationType', 'Expression', 'ExpressionOperator', 'FR', 'FRType', 'FRTypeExtended', 'FRTypeExtendedRef', 'FRTypeOriginal', 'ForeignKey', 'ForeignKeyOnDeleteType', 'ForeignKeyOnDeleteTypeExtended', 'ForeignKeyOnDeleteTypeExtendedRef', 'ForeignKeyOnDeleteTypeOriginal', 'GlossaryTerm', 'GlossaryTermType', 'GlossaryTermTypeExtended', 'GlossaryTermTypeExtendedRef', 'GlossaryTermTypeOriginal', 'Goal', 'GoalSubType', 'GoalSubTypeExtended', 'GoalSubTypeExtendedRef', 'GoalSubTypeOriginal', 'GoalType', 'GoalTypeExtended', 'GoalTypeExtendedRef', 'GoalTypeOriginal', 'IfExpression', 'ImpactLevel', 'Import', 'IncludeAll', 'IncludeElement', 'IncludeElementGeneric', 'IncludeSystemElementType', 'MainScenario', 'ManyToMany', 'MetricType', 'MetricTypeExtended', 'MetricTypeExtendedRef', 'MetricTypeOriginal', 'Model', 'Month', 'Multiplicity', 'OperationExtension', 'OperationTargetType', 'OtherElement', 'PackageAbstract', 'PackageSystem', 'PassiveStructureElement', 'PriorityType', 'PriorityTypeExtended', 'PriorityTypeExtendedRef', 'PriorityTypeOriginal', 'QR', 'QRSubType', 'QRSubTypeExtended', 'QRSubTypeExtendedRef', 'QRSubTypeOriginal', 'QRType', 'QRTypeExtended', 'QRTypeExtendedRef', 'QRTypeOriginal', 'RefActiveElement', 'RefActor', 'RefDataEntity', 'RefRequirements', 'RefSystems', 'RefTermApplicableTo', 'RefUC', 'RefUCAction', 'ReferenceElements', 'RelationType', 'RelationTypeExtended', 'RelationTypeExtendedRef', 'RelationTypeOriginal', 'RepeatExpression', 'Requirement', 'RequirementsRelation', 'RequirementsRelationType', 'RequirementsRelationTypeExtended', 'RequirementsRelationTypeExtendedRef', 'RequirementsRelationTypeOriginal', 'Risk', 'RiskAssessment', 'RiskGeneric', 'RiskStatus', 'RiskSubType', 'RiskSubTypeExtended', 'RiskSubTypeExtendedRef', 'RiskSubTypeOriginal', 'RiskTreatment', 'RiskTreatmentType', 'RiskTreatmentTypeExtended', 'RiskTreatmentTypeExtendedRef', 'RiskTreatmentTypeOriginal', 'RiskType', 'RiskTypeExtended', 'RiskTypeExtendedRef', 'RiskTypeOriginal', 'Scenario', 'ScenarioType', 'ScenarioTypeExtended', 'ScenarioTypeExtendedRef', 'ScenarioTypeOriginal', 'SimpleTestStep', 'Stakeholder', 'StakeholderSubType', 'StakeholderSubTypeExtended', 'StakeholderSubTypeExtendedRef', 'StakeholderSubTypeOriginal', 'StakeholderType', 'StakeholderTypeExtended', 'StakeholderTypeExtendedRef', 'StakeholderTypeOriginal', 'State', 'StateMachine', 'StateMachineTest', 'StateMachineType', 'StateMachineTypeExtended', 'StateMachineTypeExtendedRef', 'StateMachineTypeOriginal', 'StateSequence', 'States', 'Step', 'StepOperationUCType', 'StepSubSubType', 'StepSubSubTypeExtended', 'StepSubSubTypeExtendedRef', 'StepSubSubTypeOriginal', 'StepSubType', 'StepSubTypeExtended', 'StepSubTypeExtendedRef', 'StepSubTypeOriginal', 'StepType', 'StepTypeExtended', 'StepTypeExtendedRef', 'StepTypeOriginal', 'Stereotype', 'StereotypeType', 'StereotypeTypeExtended', 'StereotypeTypeExtendedRef', 'StereotypeTypeOriginal', 'StructureElement', 'System', 'SystemConcept', 'SystemElement', 'SystemRelation', 'SystemSet', 'SystemSubType', 'SystemSubTypeExtended', 'SystemSubTypeExtendedRef', 'SystemSubTypeOriginal', 'SystemType', 'SystemTypeExtended', 'SystemTypeExtendedRef', 'SystemTypeOriginal', 'SystemsRelation', 'SystemsRelationCategory', 'SystemsRelationCategoryExtended', 'SystemsRelationCategoryExtendedRef', 'SystemsRelationCategoryOriginal', 'SystemsRelationType', 'SystemsRelationTypeExtended', 'SystemsRelationTypeExtendedRef', 'SystemsRelationTypeOriginal', 'Tag', 'TermApplicableTo', 'Test', 'TestCheck', 'TestDataAttribute', 'TestOperationTarget', 'TestScenario', 'TestScenarioType', 'TestScenarioTypeExtended', 'TestScenarioTypeExtendedRef', 'TestScenarioTypeOriginal', 'TestStep', 'TestType', 'TestTypeExtended', 'TestTypeExtendedRef', 'TestTypeOriginal', 'TestVariable', 'TestsRelation', 'TestsRelationType', 'TestsRelationTypeExtended', 'TestsRelationTypeExtendedRef', 'TestsRelationTypeOriginal', 'Theme', 'ThemeType', 'Threat', 'Transition', 'TypeExtended', 'UCActions', 'UCExtends', 'UCExtensionPoint', 'UCExtensionPoints', 'UCIncludes', 'UpdateField', 'UpdateFields', 'UseCase', 'UseCaseTest', 'UseCaseType', 'UseCaseTypeExtended', 'UseCaseTypeExtendedRef', 'UseCaseTypeOriginal', 'UserStory', 'UserStoryType', 'UserStoryTypeExtended', 'UserStoryTypeExtendedRef', 'UserStoryTypeOriginal', 'View', 'ViewType', 'Vulnerability', 'VulnerabilityAttackVector', 'VulnerabilityAttackVectorExtended', 'VulnerabilityAttackVectorExtendedRef', 'VulnerabilityAttackVectorOriginal', 'VulnerabilitySubType', 'VulnerabilitySubTypeExtended', 'VulnerabilitySubTypeExtendedRef', 'VulnerabilitySubTypeOriginal', 'VulnerabilityType', 'VulnerabilityTypeExtended', 'VulnerabilityTypeExtendedRef', 'VulnerabilityTypeOriginal', '_Date'];
+        return ['AcceptanceCriteria', 'AcceptanceCriteriaRule', 'AcceptanceCriteriaScenario', 'AcceptanceCriteriaTest', 'ActionType', 'ActionTypeExtended', 'ActionTypeExtendedRef', 'ActionTypeOriginal', 'ActiveElement', 'ActiveEvent', 'ActiveEventType', 'ActiveEventTypeExtended', 'ActiveEventTypeExtendedRef', 'ActiveEventTypeOriginal', 'ActiveFlow', 'ActiveFlowType', 'ActiveFlowTypeExtended', 'ActiveFlowTypeExtendedRef', 'ActiveFlowTypeOriginal', 'ActiveStructureElement', 'ActiveTask', 'ActiveTaskType', 'ActiveTaskTypeExtended', 'ActiveTaskTypeExtendedRef', 'ActiveTaskTypeOriginal', 'Actor', 'ActorType', 'ActorTypeExtended', 'ActorTypeExtendedRef', 'ActorTypeOriginal', 'AttributeValue', 'BehaviorElement', 'Boolean', 'Check', 'ChildDataEntity', 'Constraint', 'ConstraintSubType', 'ConstraintSubTypeExtended', 'ConstraintSubTypeExtendedRef', 'ConstraintSubTypeOriginal', 'ConstraintType', 'ConstraintTypeExtended', 'ConstraintTypeExtendedRef', 'ConstraintTypeOriginal', 'Data', 'DataAttribute', 'DataAttributeConstraint', 'DataAttributeRefsList', 'DataAttributeType', 'DataAttributeTypeExtended', 'DataAttributeTypeExtendedRef', 'DataAttributeTypeOriginal', 'DataEntity', 'DataEntityCluster', 'DataEntityClusterType', 'DataEntityClusterTypeExtended', 'DataEntityClusterTypeExtendedRef', 'DataEntityClusterTypeOriginal', 'DataEntityConstraint', 'DataEntityGeneric', 'DataEntitySubType', 'DataEntitySubTypeExtended', 'DataEntitySubTypeExtendedRef', 'DataEntitySubTypeOriginal', 'DataEntityTest', 'DataEntityType', 'DataEntityTypeExtended', 'DataEntityTypeExtendedRef', 'DataEntityTypeOriginal', 'DataEnumeration', 'DataEnumerationElement', 'DataEnumerationRef', 'DataTable', 'DataTableHeader', 'DataTableRow', 'DateTime', 'ElementsRelation', 'ElementsRelationType', 'Expression', 'ExpressionOperator', 'FR', 'FRType', 'FRTypeExtended', 'FRTypeExtendedRef', 'FRTypeOriginal', 'ForeignKey', 'ForeignKeyOnDeleteType', 'ForeignKeyOnDeleteTypeExtended', 'ForeignKeyOnDeleteTypeExtendedRef', 'ForeignKeyOnDeleteTypeOriginal', 'GlossaryTerm', 'GlossaryTermType', 'GlossaryTermTypeExtended', 'GlossaryTermTypeExtendedRef', 'GlossaryTermTypeOriginal', 'Goal', 'GoalSubType', 'GoalSubTypeExtended', 'GoalSubTypeExtendedRef', 'GoalSubTypeOriginal', 'GoalType', 'GoalTypeExtended', 'GoalTypeExtendedRef', 'GoalTypeOriginal', 'ImpactLevel', 'Import', 'IncludeAll', 'IncludeElement', 'IncludeElementGeneric', 'IncludeSystemElementType', 'LinguisticElement', 'LinguisticFragment', 'LinguisticFragmentPart', 'LinguisticFragmentRef', 'LinguisticPattern', 'LinguisticRule', 'LinguisticRuleElement', 'LinguisticRuleElementAndProperty', 'LinguisticRuleElementProperty', 'LinguisticRuleSeverityLevel', 'LinguisticRuleType', 'MainScenario', 'ManyToMany', 'MetricType', 'MetricTypeExtended', 'MetricTypeExtendedRef', 'MetricTypeOriginal', 'Model', 'Month', 'Multiplicity', 'OtherElement', 'PackageAbstract', 'PackageSystem', 'PartOfSpeech', 'PartOfSpeechEnum', 'PassiveStructureElement', 'PriorityType', 'PriorityTypeExtended', 'PriorityTypeExtendedRef', 'PriorityTypeOriginal', 'QR', 'QRSubType', 'QRSubTypeExtended', 'QRSubTypeExtendedRef', 'QRSubTypeOriginal', 'QRType', 'QRTypeExtended', 'QRTypeExtendedRef', 'QRTypeOriginal', 'RefActiveElement', 'RefActor', 'RefDataEntity', 'RefRequirements', 'RefTermApplicableTo', 'RefUC', 'RefUCAction', 'ReferenceElements', 'RelationType', 'RelationTypeExtended', 'RelationTypeExtendedRef', 'RelationTypeOriginal', 'Requirement', 'RequirementsRelation', 'RequirementsRelationType', 'RequirementsRelationTypeExtended', 'RequirementsRelationTypeExtendedRef', 'RequirementsRelationTypeOriginal', 'Risk', 'RiskAssessment', 'RiskGeneric', 'RiskStatus', 'RiskSubType', 'RiskSubTypeExtended', 'RiskSubTypeExtendedRef', 'RiskSubTypeOriginal', 'RiskTreatment', 'RiskTreatmentType', 'RiskTreatmentTypeExtended', 'RiskTreatmentTypeExtendedRef', 'RiskTreatmentTypeOriginal', 'RiskType', 'RiskTypeExtended', 'RiskTypeExtendedRef', 'RiskTypeOriginal', 'Scenario', 'ScenarioType', 'ScenarioTypeExtended', 'ScenarioTypeExtendedRef', 'ScenarioTypeOriginal', 'Stakeholder', 'StakeholderSubType', 'StakeholderSubTypeExtended', 'StakeholderSubTypeExtendedRef', 'StakeholderSubTypeOriginal', 'StakeholderType', 'StakeholderTypeExtended', 'StakeholderTypeExtendedRef', 'StakeholderTypeOriginal', 'State', 'StateMachine', 'StateMachineTest', 'StateMachineType', 'StateMachineTypeExtended', 'StateMachineTypeExtendedRef', 'StateMachineTypeOriginal', 'StateSequence', 'States', 'Step', 'StepOperationUCType', 'StepSubType', 'StepSubTypeExtended', 'StepSubTypeExtendedRef', 'StepSubTypeOriginal', 'StepType', 'StepTypeExtended', 'StepTypeExtendedRef', 'StepTypeOriginal', 'Stereotype', 'StereotypeType', 'StereotypeTypeExtended', 'StereotypeTypeExtendedRef', 'StereotypeTypeOriginal', 'StructureElement', 'System', 'SystemConcept', 'SystemElement', 'SystemRelation', 'SystemSet', 'SystemSubType', 'SystemSubTypeExtended', 'SystemSubTypeExtendedRef', 'SystemSubTypeOriginal', 'SystemType', 'SystemTypeExtended', 'SystemTypeExtendedRef', 'SystemTypeOriginal', 'SystemsRelation', 'SystemsRelationCategory', 'SystemsRelationCategoryExtended', 'SystemsRelationCategoryExtendedRef', 'SystemsRelationCategoryOriginal', 'SystemsRelationType', 'SystemsRelationTypeExtended', 'SystemsRelationTypeExtendedRef', 'SystemsRelationTypeOriginal', 'Tag', 'TermApplicableTo', 'Test', 'TestCase', 'TestData', 'TestDataAttribute', 'TestElement', 'TestParameter', 'TestScenarioType', 'TestScenarioTypeExtended', 'TestScenarioTypeExtendedRef', 'TestScenarioTypeOriginal', 'TestStep', 'TestSuite', 'TestSuiteSetup', 'TestSuiteSetupTeardown', 'TestSuiteTeardown', 'TestType', 'TestTypeExtended', 'TestTypeExtendedRef', 'TestTypeOriginal', 'TestsRelation', 'TestsRelationType', 'TestsRelationTypeExtended', 'TestsRelationTypeExtendedRef', 'TestsRelationTypeOriginal', 'Theme', 'ThemeType', 'Threat', 'Time', 'Transition', 'TypeExtended', 'UCActions', 'UCExtends', 'UCExtensionPoint', 'UCExtensionPoints', 'UCIncludes', 'UpdateField', 'UpdateFields', 'UseCase', 'UseCaseTest', 'UseCaseType', 'UseCaseTypeExtended', 'UseCaseTypeExtendedRef', 'UseCaseTypeOriginal', 'UserStory', 'UserStoryType', 'UserStoryTypeExtended', 'UserStoryTypeExtendedRef', 'UserStoryTypeOriginal', 'VariableType', 'VariableTypeExtended', 'VariableTypeExtendedRef', 'VariableTypeOriginal', 'View', 'ViewType', 'Vulnerability', 'VulnerabilityAttackVector', 'VulnerabilityAttackVectorExtended', 'VulnerabilityAttackVectorExtendedRef', 'VulnerabilityAttackVectorOriginal', 'VulnerabilitySubType', 'VulnerabilitySubTypeExtended', 'VulnerabilitySubTypeExtendedRef', 'VulnerabilitySubTypeOriginal', 'VulnerabilityType', 'VulnerabilityTypeExtended', 'VulnerabilityTypeExtendedRef', 'VulnerabilityTypeOriginal', 'Word', '_Date'];
     }
     computeIsSubtype(subtype, supertype) {
         switch (subtype) {
-            case exports._Date:
-            case exports.DoubleOrInt:
-            case exports.Month:
-            case exports.Percentage: {
-                return this.isSubtype(exports.AttributeValue, supertype);
-            }
             case exports.AcceptanceCriteriaTest:
             case exports.DataEntityTest:
             case exports.StateMachineTest:
@@ -1584,7 +1616,6 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.ActiveFlowTypeExtended:
             case exports.ActiveTaskTypeExtended:
             case exports.ActorTypeExtended:
-            case exports.CheckTypeExtended:
             case exports.ConstraintSubTypeExtended:
             case exports.ConstraintTypeExtended:
             case exports.DataAttributeTypeExtended:
@@ -1609,7 +1640,6 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.StakeholderSubTypeExtended:
             case exports.StakeholderTypeExtended:
             case exports.StateMachineTypeExtended:
-            case exports.StepSubSubTypeExtended:
             case exports.StepSubTypeExtended:
             case exports.StepTypeExtended:
             case exports.StereotypeTypeExtended:
@@ -1622,6 +1652,7 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.TestTypeExtended:
             case exports.UseCaseTypeExtended:
             case exports.UserStoryTypeExtended:
+            case exports.VariableTypeExtended:
             case exports.VulnerabilityAttackVectorExtended:
             case exports.VulnerabilitySubTypeExtended:
             case exports.VulnerabilityTypeExtended: {
@@ -1668,13 +1699,8 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.IncludeElementGeneric:
             case exports.OtherElement:
             case exports.Requirement:
-            case exports.StructureElement:
-            case exports.Test: {
+            case exports.StructureElement: {
                 return this.isSubtype(exports.SystemElement, supertype);
-            }
-            case exports.CheckTypeExtendedRef:
-            case exports.CheckTypeOriginal: {
-                return this.isSubtype(exports.CheckType, supertype);
             }
             case exports.Constraint:
             case exports.FR:
@@ -1692,14 +1718,11 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.ConstraintTypeOriginal: {
                 return this.isSubtype(exports.ConstraintType, supertype);
             }
-            case exports.Data:
-            case exports.DataEntityGeneric:
-            case exports.DataEnumeration: {
-                return this.isSubtype(exports.PassiveStructureElement, supertype);
+            case exports.Data: {
+                return this.isSubtype(exports.PassiveStructureElement, supertype) || this.isSubtype(exports.TestData, supertype);
             }
             case exports.DataAttributeTypeExtendedRef:
-            case exports.DataAttributeTypeOriginal:
-            case exports.DataEnumerationRef: {
+            case exports.DataAttributeTypeOriginal: {
                 return this.isSubtype(exports.DataAttributeType, supertype);
             }
             case exports.DataEntity:
@@ -1710,6 +1733,10 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.DataEntityClusterTypeOriginal: {
                 return this.isSubtype(exports.DataEntityClusterType, supertype);
             }
+            case exports.DataEntityGeneric:
+            case exports.DataEnumeration: {
+                return this.isSubtype(exports.PassiveStructureElement, supertype);
+            }
             case exports.DataEntitySubTypeExtendedRef:
             case exports.DataEntitySubTypeOriginal: {
                 return this.isSubtype(exports.DataEntitySubType, supertype);
@@ -1717,6 +1744,9 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.DataEntityTypeExtendedRef:
             case exports.DataEntityTypeOriginal: {
                 return this.isSubtype(exports.DataEntityType, supertype);
+            }
+            case exports.DataEnumerationRef: {
+                return this.isSubtype(exports.DataAttributeType, supertype) || this.isSubtype(exports.VariableType, supertype);
             }
             case exports.ElementsRelation:
             case exports.RequirementsRelation:
@@ -1750,13 +1780,25 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.GoalTypeOriginal: {
                 return this.isSubtype(exports.GoalType, supertype);
             }
-            case exports.IfExpression:
-            case exports.RepeatExpression: {
-                return this.isSubtype(exports.ConditionalExpression, supertype);
-            }
             case exports.IncludeAll:
             case exports.IncludeElement: {
                 return this.isSubtype(exports.IncludeElementGeneric, supertype);
+            }
+            case exports.LinguisticElement:
+            case exports.SystemElement:
+            case exports.SystemRelation:
+            case exports.SystemSet: {
+                return this.isSubtype(exports.SystemConcept, supertype);
+            }
+            case exports.LinguisticFragment:
+            case exports.LinguisticRule: {
+                return this.isSubtype(exports.LinguisticElement, supertype);
+            }
+            case exports.LinguisticFragmentRef:
+            case exports.LinguisticRuleElementAndProperty:
+            case exports.PartOfSpeech:
+            case exports.Word: {
+                return this.isSubtype(exports.LinguisticFragmentPart, supertype);
             }
             case exports.MetricTypeExtendedRef:
             case exports.MetricTypeOriginal: {
@@ -1820,10 +1862,6 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.StateMachineTypeOriginal: {
                 return this.isSubtype(exports.StateMachineType, supertype);
             }
-            case exports.StepSubSubTypeExtendedRef:
-            case exports.StepSubSubTypeOriginal: {
-                return this.isSubtype(exports.StepSubSubType, supertype);
-            }
             case exports.StepSubTypeExtendedRef:
             case exports.StepSubTypeOriginal: {
                 return this.isSubtype(exports.StepSubType, supertype);
@@ -1835,11 +1873,6 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.StereotypeTypeExtendedRef:
             case exports.StereotypeTypeOriginal: {
                 return this.isSubtype(exports.StereotypeType, supertype);
-            }
-            case exports.SystemElement:
-            case exports.SystemRelation:
-            case exports.SystemSet: {
-                return this.isSubtype(exports.SystemConcept, supertype);
             }
             case exports.SystemsRelationCategoryExtendedRef:
             case exports.SystemsRelationCategoryOriginal: {
@@ -1857,6 +1890,11 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.SystemTypeOriginal: {
                 return this.isSubtype(exports.SystemType, supertype);
             }
+            case exports.Test:
+            case exports.TestData:
+            case exports.TestSuiteSetupTeardown: {
+                return this.isSubtype(exports.TestElement, supertype);
+            }
             case exports.TestScenarioTypeExtendedRef:
             case exports.TestScenarioTypeOriginal: {
                 return this.isSubtype(exports.TestScenarioType, supertype);
@@ -1864,6 +1902,10 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.TestsRelationTypeExtendedRef:
             case exports.TestsRelationTypeOriginal: {
                 return this.isSubtype(exports.TestsRelationType, supertype);
+            }
+            case exports.TestSuiteSetup:
+            case exports.TestSuiteTeardown: {
+                return this.isSubtype(exports.TestSuiteSetupTeardown, supertype);
             }
             case exports.TestTypeExtendedRef:
             case exports.TestTypeOriginal: {
@@ -1880,6 +1922,10 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case exports.UserStoryTypeExtendedRef:
             case exports.UserStoryTypeOriginal: {
                 return this.isSubtype(exports.UserStoryType, supertype);
+            }
+            case exports.VariableTypeExtendedRef:
+            case exports.VariableTypeOriginal: {
+                return this.isSubtype(exports.VariableType, supertype);
             }
             case exports.VulnerabilityAttackVectorExtendedRef:
             case exports.VulnerabilityAttackVectorOriginal: {
@@ -1940,28 +1986,30 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             }
             case 'Actor:super':
             case 'RefActor:refs':
-            case 'SimpleTestStep:actor':
             case 'Step:actor':
             case 'TestStep:actor':
             case 'UseCase:primaryActor':
+            case 'UseCaseTest:primaryActor':
             case 'UserStory:actor': {
                 return exports.Actor;
             }
             case 'ActorTypeExtendedRef:type': {
                 return exports.ActorTypeExtended;
             }
-            case 'CheckTypeExtendedRef:type': {
-                return exports.CheckTypeExtended;
-            }
             case 'ChildDataEntity:child':
+            case 'Data:type':
             case 'DataEntity:super':
             case 'DataEntityCluster:main':
             case 'DataEntityTest:entity':
+            case 'DataEnumerationRef:dataEntity':
             case 'ForeignKey:targetEntity':
             case 'ManyToMany:targetEntity':
             case 'ManyToMany:throughEntity':
             case 'RefDataEntity:refDataEntity':
-            case 'TestScenario:entity': {
+            case 'TestCase:entity':
+            case 'VariableType:dataEntity':
+            case 'VariableTypeExtendedRef:dataEntity':
+            case 'VariableTypeOriginal:dataEntity': {
                 return exports.DataEntity;
             }
             case 'Constraint:partOf': {
@@ -1973,28 +2021,14 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case 'ConstraintTypeExtendedRef:type': {
                 return exports.ConstraintTypeExtended;
             }
-            case 'Data:type':
-            case 'StateMachine:entity':
-            case 'UseCase:dataEntity': {
-                return exports.DataEntityGeneric;
-            }
-            case 'DataAttributeRefs:attributeRef':
             case 'DataAttributeRefsList:attributeRef':
             case 'DataEntityConstraint:showAsAttribute':
-            case 'DataVariableRefs:variableRef':
+            case 'DataTableHeader:attributeRefs':
             case 'ForeignKey:showAsField':
             case 'ForeignKey:toField':
             case 'ManyToMany:throughSourceField':
             case 'ManyToMany:throughTargetField':
-            case 'TestCheck:codeVariable':
-            case 'TestCheck:expected':
-            case 'TestCheck:limitVariable':
-            case 'TestCheck:textVariable':
-            case 'TestCheck:timeoutVariable':
-            case 'TestCheck:urlVariable':
-            case 'TestCheck:variable':
-            case 'TestDataAttribute:attribute':
-            case 'TestOperationTarget:variable': {
+            case 'TestDataAttribute:attribute': {
                 return exports.DataAttribute;
             }
             case 'DataAttributeTypeExtendedRef:type': {
@@ -2045,12 +2079,14 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             }
             case 'IncludeAll:system':
             case 'IncludeElement:system':
-            case 'RefSystems:refs':
             case 'System:partOf':
-            case 'System:sut':
             case 'SystemsRelation:source':
-            case 'SystemsRelation:target': {
+            case 'SystemsRelation:target':
+            case 'TestSuite:sut': {
                 return exports.System;
+            }
+            case 'LinguisticFragmentRef:option': {
+                return exports.LinguisticFragment;
             }
             case 'MetricTypeExtendedRef:type': {
                 return exports.MetricTypeExtended;
@@ -2103,14 +2139,15 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case 'ScenarioTypeExtendedRef:type': {
                 return exports.ScenarioTypeExtended;
             }
-            case 'SimpleTestStep:next': {
-                return exports.TestStep;
-            }
             case 'StakeholderSubTypeExtendedRef:type': {
                 return exports.StakeholderSubTypeExtended;
             }
             case 'StakeholderTypeExtendedRef:type': {
                 return exports.StakeholderTypeExtended;
+            }
+            case 'StateMachine:entity':
+            case 'UseCase:dataEntity': {
+                return exports.DataEntityGeneric;
             }
             case 'StateMachineTest:stateMachine': {
                 return exports.StateMachine;
@@ -2122,12 +2159,13 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case 'Transition:nextstate': {
                 return exports.State;
             }
-            case 'Step:next':
-            case 'TestStep:next': {
-                return exports.Step;
+            case 'Step:event':
+            case 'TestStep:event':
+            case 'UseCase:triggeredBy': {
+                return exports.ActiveEvent;
             }
-            case 'StepSubSubTypeExtendedRef:type': {
-                return exports.StepSubSubTypeExtended;
+            case 'Step:next': {
+                return exports.Step;
             }
             case 'StepSubTypeExtendedRef:type': {
                 return exports.StepSubTypeExtended;
@@ -2150,9 +2188,6 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case 'SystemTypeExtendedRef:type': {
                 return exports.SystemTypeExtended;
             }
-            case 'TestScenario:variable': {
-                return exports.TestVariable;
-            }
             case 'TestScenarioTypeExtendedRef:type': {
                 return exports.TestScenarioTypeExtended;
             }
@@ -2163,14 +2198,14 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case 'TestsRelationTypeExtendedRef:type': {
                 return exports.TestsRelationTypeExtended;
             }
+            case 'TestStep:testCase': {
+                return exports.TestCase;
+            }
             case 'TestTypeExtendedRef:type': {
                 return exports.TestTypeExtended;
             }
             case 'UCExtends:extensionPoint': {
                 return exports.UCExtensionPoint;
-            }
-            case 'UseCase:triggeredBy': {
-                return exports.ActiveEvent;
             }
             case 'UseCaseTypeExtendedRef:type': {
                 return exports.UseCaseTypeExtended;
@@ -2180,6 +2215,9 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             }
             case 'UserStoryTypeExtendedRef:type': {
                 return exports.UserStoryTypeExtended;
+            }
+            case 'VariableTypeExtendedRef:type': {
+                return exports.VariableTypeExtended;
             }
             case 'VulnerabilityAttackVectorExtendedRef:type': {
                 return exports.VulnerabilityAttackVectorExtended;
@@ -2221,6 +2259,8 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                 return {
                     name: 'AcceptanceCriteriaTest',
                     mandatory: [
+                        { name: 'criteriaR', type: 'array' },
+                        { name: 'criteriaS', type: 'array' },
                         { name: 'tags', type: 'array' }
                     ]
                 };
@@ -2229,8 +2269,10 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                 return {
                     name: 'ActiveEvent',
                     mandatory: [
+                        { name: 'isCatch', type: 'boolean' },
                         { name: 'isFinal', type: 'boolean' },
                         { name: 'isInitial', type: 'boolean' },
+                        { name: 'isThrow', type: 'boolean' },
                         { name: 'tags', type: 'array' }
                     ]
                 };
@@ -2298,35 +2340,11 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                     ]
                 };
             }
-            case 'DataAttributeRefs': {
-                return {
-                    name: 'DataAttributeRefs',
-                    mandatory: [
-                        { name: 'attributeRef', type: 'array' }
-                    ]
-                };
-            }
             case 'DataAttributeRefsList': {
                 return {
                     name: 'DataAttributeRefsList',
                     mandatory: [
                         { name: 'attributeRef', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataAttributeTableRow': {
-                return {
-                    name: 'DataAttributeTableRow',
-                    mandatory: [
-                        { name: 'attributeValues', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataAttributeValues': {
-                return {
-                    name: 'DataAttributeValues',
-                    mandatory: [
-                        { name: 'tableRows', type: 'array' }
                     ]
                 };
             }
@@ -2374,27 +2392,27 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                     ]
                 };
             }
-            case 'DataVariableRefs': {
+            case 'DataTable': {
                 return {
-                    name: 'DataVariableRefs',
-                    mandatory: [
-                        { name: 'variableRef', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataVariableTableRow': {
-                return {
-                    name: 'DataVariableTableRow',
-                    mandatory: [
-                        { name: 'variableValues', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataVariableValues': {
-                return {
-                    name: 'DataVariableValues',
+                    name: 'DataTable',
                     mandatory: [
                         { name: 'tableRows', type: 'array' }
+                    ]
+                };
+            }
+            case 'DataTableHeader': {
+                return {
+                    name: 'DataTableHeader',
+                    mandatory: [
+                        { name: 'attributeRefs', type: 'array' }
+                    ]
+                };
+            }
+            case 'DataTableRow': {
+                return {
+                    name: 'DataTableRow',
+                    mandatory: [
+                        { name: 'attributeValues', type: 'array' }
                     ]
                 };
             }
@@ -2457,6 +2475,30 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                     name: 'IncludeElement',
                     mandatory: [
                         { name: 'tags', type: 'array' }
+                    ]
+                };
+            }
+            case 'LinguisticFragment': {
+                return {
+                    name: 'LinguisticFragment',
+                    mandatory: [
+                        { name: 'options', type: 'array' }
+                    ]
+                };
+            }
+            case 'LinguisticPattern': {
+                return {
+                    name: 'LinguisticPattern',
+                    mandatory: [
+                        { name: 'parts', type: 'array' }
+                    ]
+                };
+            }
+            case 'LinguisticRule': {
+                return {
+                    name: 'LinguisticRule',
+                    mandatory: [
+                        { name: 'pattern', type: 'array' }
                     ]
                 };
             }
@@ -2534,14 +2576,6 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
             case 'RefRequirements': {
                 return {
                     name: 'RefRequirements',
-                    mandatory: [
-                        { name: 'refs', type: 'array' }
-                    ]
-                };
-            }
-            case 'RefSystems': {
-                return {
-                    name: 'RefSystems',
                     mandatory: [
                         { name: 'refs', type: 'array' }
                     ]
@@ -2655,7 +2689,6 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                     mandatory: [
                         { name: 'isFinal', type: 'boolean' },
                         { name: 'isReusable', type: 'boolean' },
-                        { name: 'isTestSuite', type: 'boolean' },
                         { name: 'systemConcepts', type: 'array' },
                         { name: 'tags', type: 'array' }
                     ]
@@ -2669,21 +2702,11 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                     ]
                 };
             }
-            case 'TestOperationTarget': {
+            case 'TestCase': {
                 return {
-                    name: 'TestOperationTarget',
+                    name: 'TestCase',
                     mandatory: [
-                        { name: 'content', type: 'array' },
-                        { name: 'variable', type: 'array' }
-                    ]
-                };
-            }
-            case 'TestScenario': {
-                return {
-                    name: 'TestScenario',
-                    mandatory: [
-                        { name: 'isAbstract', type: 'boolean' },
-                        { name: 'isConcrete', type: 'boolean' },
+                        { name: 'testParameters', type: 'array' },
                         { name: 'testSteps', type: 'array' }
                     ]
                 };
@@ -2696,11 +2719,30 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                     ]
                 };
             }
-            case 'TestVariable': {
+            case 'TestSuite': {
                 return {
-                    name: 'TestVariable',
+                    name: 'TestSuite',
                     mandatory: [
-                        { name: 'attributes', type: 'array' }
+                        { name: 'elements', type: 'array' },
+                        { name: 'isFinal', type: 'boolean' },
+                        { name: 'isReusable', type: 'boolean' },
+                        { name: 'tags', type: 'array' }
+                    ]
+                };
+            }
+            case 'TestSuiteSetup': {
+                return {
+                    name: 'TestSuiteSetup',
+                    mandatory: [
+                        { name: 'testSteps', type: 'array' }
+                    ]
+                };
+            }
+            case 'TestSuiteTeardown': {
+                return {
+                    name: 'TestSuiteTeardown',
+                    mandatory: [
+                        { name: 'testSteps', type: 'array' }
                     ]
                 };
             }
@@ -2766,9 +2808,11 @@ class RslAstReflection extends langium_1.AbstractAstReflection {
                 return {
                     name: 'UseCaseTest',
                     mandatory: [
-                        { name: 'scenarios', type: 'array' },
+                        { name: 'oneTimeSetupSteps', type: 'array' },
+                        { name: 'oneTimeTeardownSteps', type: 'array' },
+                        { name: 'supportingActors', type: 'array' },
                         { name: 'tags', type: 'array' },
-                        { name: 'variables', type: 'array' }
+                        { name: 'testCases', type: 'array' }
                     ]
                 };
             }

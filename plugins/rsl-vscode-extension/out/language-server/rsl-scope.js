@@ -20,7 +20,7 @@ class RslScopeComputation extends langium_1.DefaultScopeComputation {
         this.services = services;
     }
     computeLocalScopes(document, cancelToken = vscode_jsonrpc_1.CancellationToken.None) {
-        var _a;
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function* () {
             const rootNode = document.parseResult.value;
             const scopes = new langium_1.MultiMap();
@@ -34,28 +34,34 @@ class RslScopeComputation extends langium_1.DefaultScopeComputation {
             //importedNamespace = Package1.Package2.BillingApp_Asl.*
             let filteredNamespace = new Map();
             for (const imp of rootNode.packages[0].imports) {
-                let key = imp.importedNamespace.substring(0, imp.importedNamespace.lastIndexOf('.'));
+                let importIdentifier = imp.importedNamespace.substring(0, imp.importedNamespace.lastIndexOf('.'));
+                let pack = importIdentifier.substring(0, importIdentifier.lastIndexOf('.'));
+                let system = importIdentifier.substring(importIdentifier.lastIndexOf('.') + 1);
+                ;
+                let identifier = pack + "," + system;
                 let value = imp.importedNamespace.substring(imp.importedNamespace.lastIndexOf('.') + 1);
-                if (key in filteredNamespace) {
-                    (_a = filteredNamespace.get(key)) === null || _a === void 0 ? void 0 : _a.push(value);
+                if (identifier in filteredNamespace) {
+                    (_a = filteredNamespace.get(identifier)) === null || _a === void 0 ? void 0 : _a.push(value);
                 }
                 else {
-                    filteredNamespace.set(key, [value,]);
+                    filteredNamespace.set(identifier, [value,]);
                 }
             }
             let imports = this.services.shared.workspace.LangiumDocuments.all
                 .map(doc => { var _a; return (_a = doc.parseResult) === null || _a === void 0 ? void 0 : _a.value; })
                 .filter(node => node && node != rootNode)
                 .filter(node => {
+                var _a;
                 let model = node;
                 for (const [key, _] of filteredNamespace) {
-                    if (key === model.packages[0].name)
+                    let keys = key.split(",");
+                    if (keys[0] === model.packages[0].name && keys[1] === ((_a = model.packages[0].system) === null || _a === void 0 ? void 0 : _a.name))
                         return true;
                 }
                 return false;
             }).toArray();
             for (const headNode of imports) {
-                const filters = filteredNamespace.get(headNode.packages[0].name);
+                const filters = filteredNamespace.get(headNode.packages[0].name + "," + ((_b = headNode.packages[0].system) === null || _b === void 0 ? void 0 : _b.name));
                 if (!filters)
                     continue;
                 if (filters.includes('*')) {

@@ -70,22 +70,6 @@ export function isBehaviorElement(item: unknown): item is BehaviorElement {
     return reflection.isInstance(item, BehaviorElement);
 }
 
-export type CheckType = CheckTypeExtendedRef | CheckTypeOriginal;
-
-export const CheckType = 'CheckType';
-
-export function isCheckType(item: unknown): item is CheckType {
-    return reflection.isInstance(item, CheckType);
-}
-
-export type ConditionalExpression = IfExpression | RepeatExpression;
-
-export const ConditionalExpression = 'ConditionalExpression';
-
-export function isConditionalExpression(item: unknown): item is ConditionalExpression {
-    return reflection.isInstance(item, ConditionalExpression);
-}
-
 export type ConstraintSubType = ConstraintSubTypeExtendedRef | ConstraintSubTypeOriginal;
 
 export const ConstraintSubType = 'ConstraintSubType';
@@ -184,6 +168,48 @@ export function isIncludeElementGeneric(item: unknown): item is IncludeElementGe
     return reflection.isInstance(item, IncludeElementGeneric);
 }
 
+export type LinguisticElement = LinguisticFragment | LinguisticRule;
+
+export const LinguisticElement = 'LinguisticElement';
+
+export function isLinguisticElement(item: unknown): item is LinguisticElement {
+    return reflection.isInstance(item, LinguisticElement);
+}
+
+export type LinguisticFragmentPart = LinguisticFragmentRef | LinguisticRuleElementAndProperty | PartOfSpeech | Word;
+
+export const LinguisticFragmentPart = 'LinguisticFragmentPart';
+
+export function isLinguisticFragmentPart(item: unknown): item is LinguisticFragmentPart {
+    return reflection.isInstance(item, LinguisticFragmentPart);
+}
+
+export type LinguisticRuleElementProperty = 'description' | 'id' | 'name';
+
+export const LinguisticRuleElementProperty = 'LinguisticRuleElementProperty';
+
+export function isLinguisticRuleElementProperty(item: unknown): item is LinguisticRuleElementProperty {
+    return reflection.isInstance(item, LinguisticRuleElementProperty);
+}
+
+export type LinguisticRuleElementProperty_description = 'description';
+
+export type LinguisticRuleElementProperty_id = 'id';
+
+export type LinguisticRuleElementProperty_name = 'name';
+
+export type LinguisticRuleSeverityLevel = 'Error' | 'Warning';
+
+export const LinguisticRuleSeverityLevel = 'LinguisticRuleSeverityLevel';
+
+export function isLinguisticRuleSeverityLevel(item: unknown): item is LinguisticRuleSeverityLevel {
+    return reflection.isInstance(item, LinguisticRuleSeverityLevel);
+}
+
+export type LinguisticRuleSeverityLevel_error = 'Error';
+
+export type LinguisticRuleSeverityLevel_warning = 'Warning';
+
 export type MetricType = MetricTypeExtendedRef | MetricTypeOriginal;
 
 export const MetricType = 'MetricType';
@@ -191,26 +217,6 @@ export const MetricType = 'MetricType';
 export function isMetricType(item: unknown): item is MetricType {
     return reflection.isInstance(item, MetricType);
 }
-
-export type OperationTargetType = 'button' | 'checkbox' | 'element' | 'listByValue' | 'readFrom' | 'writeTo';
-
-export const OperationTargetType = 'OperationTargetType';
-
-export function isOperationTargetType(item: unknown): item is OperationTargetType {
-    return reflection.isInstance(item, OperationTargetType);
-}
-
-export type OperationTargetType_button = 'button';
-
-export type OperationTargetType_checkbox = 'checkbox';
-
-export type OperationTargetType_element = 'element';
-
-export type OperationTargetType_listByValue = 'listByValue';
-
-export type OperationTargetType_readFrom = 'readFrom';
-
-export type OperationTargetType_writeTo = 'writeTo';
 
 export type OtherElement = GlossaryTerm | RiskGeneric | Stereotype | TypeExtended;
 
@@ -227,6 +233,86 @@ export const PackageAbstract = 'PackageAbstract';
 export function isPackageAbstract(item: unknown): item is PackageAbstract {
     return reflection.isInstance(item, PackageAbstract);
 }
+
+export type PartOfSpeechEnum = 'Adjective' | 'AdjectiveComparative' | 'AdjectiveSuperlative' | 'Adverb' | 'AdverbComparative' | 'AdverbSuperlative' | 'CardinalNumber' | 'CoordinatingConjunction' | 'Determiner' | 'ExistentialThere' | 'ForeignWord' | 'Interjection' | 'ListItemMarker' | 'Modal' | 'NounPlural' | 'NounSingular' | 'Particle' | 'PossessiveSnding' | 'PossessiveWhPronoun' | 'Predeterminer' | 'PrepositionOrSubordinatingConjunction' | 'PronounPersonal' | 'PronounPossessive' | 'ProperNounPlural' | 'ProperNounSingular' | 'Symbol' | 'To' | 'Verb3rdPersonSingularPresent' | 'VerbBaseForm' | 'VerbGerundOrPresentParticiple' | 'VerbNon3rdPersonSingularPresent' | 'VerbPastParticiple' | 'VerbPastTense' | 'WhAdverb' | 'WhDeterminer' | 'WhPronoun';
+
+export const PartOfSpeechEnum = 'PartOfSpeechEnum';
+
+export function isPartOfSpeechEnum(item: unknown): item is PartOfSpeechEnum {
+    return reflection.isInstance(item, PartOfSpeechEnum);
+}
+
+export type PartOfSpeechEnum_CC = 'CoordinatingConjunction';
+
+export type PartOfSpeechEnum_CD = 'CardinalNumber';
+
+export type PartOfSpeechEnum_DT = 'Determiner';
+
+export type PartOfSpeechEnum_EX = 'ExistentialThere';
+
+export type PartOfSpeechEnum_FW = 'ForeignWord';
+
+export type PartOfSpeechEnum_IN = 'PrepositionOrSubordinatingConjunction';
+
+export type PartOfSpeechEnum_JJ = 'Adjective';
+
+export type PartOfSpeechEnum_JJR = 'AdjectiveComparative';
+
+export type PartOfSpeechEnum_JJS = 'AdjectiveSuperlative';
+
+export type PartOfSpeechEnum_LS = 'ListItemMarker';
+
+export type PartOfSpeechEnum_MD = 'Modal';
+
+export type PartOfSpeechEnum_NN = 'NounSingular';
+
+export type PartOfSpeechEnum_NNP = 'ProperNounSingular';
+
+export type PartOfSpeechEnum_NNPS = 'ProperNounPlural';
+
+export type PartOfSpeechEnum_NNS = 'NounPlural';
+
+export type PartOfSpeechEnum_PDT = 'Predeterminer';
+
+export type PartOfSpeechEnum_POS = 'PossessiveSnding';
+
+export type PartOfSpeechEnum_PRP = 'PronounPersonal';
+
+export type PartOfSpeechEnum_PRP_DOLLAR = 'PronounPossessive';
+
+export type PartOfSpeechEnum_RB = 'Adverb';
+
+export type PartOfSpeechEnum_RBR = 'AdverbComparative';
+
+export type PartOfSpeechEnum_RBS = 'AdverbSuperlative';
+
+export type PartOfSpeechEnum_RP = 'Particle';
+
+export type PartOfSpeechEnum_SYM = 'Symbol';
+
+export type PartOfSpeechEnum_TO = 'To';
+
+export type PartOfSpeechEnum_UH = 'Interjection';
+
+export type PartOfSpeechEnum_VB = 'VerbBaseForm';
+
+export type PartOfSpeechEnum_VBD = 'VerbPastTense';
+
+export type PartOfSpeechEnum_VBG = 'VerbGerundOrPresentParticiple';
+
+export type PartOfSpeechEnum_VBN = 'VerbPastParticiple';
+
+export type PartOfSpeechEnum_VBP = 'VerbNon3rdPersonSingularPresent';
+
+export type PartOfSpeechEnum_VBZ = 'Verb3rdPersonSingularPresent';
+
+export type PartOfSpeechEnum_WDT = 'WhDeterminer';
+
+export type PartOfSpeechEnum_WP = 'WhPronoun';
+
+export type PartOfSpeechEnum_WP_DOLLAR = 'PossessiveWhPronoun';
+
+export type PartOfSpeechEnum_WRB = 'WhAdverb';
 
 export type PassiveStructureElement = Data | DataEntityGeneric | DataEnumeration;
 
@@ -362,14 +448,6 @@ export function isStates(item: unknown): item is States {
     return reflection.isInstance(item, States);
 }
 
-export type StepSubSubType = StepSubSubTypeExtendedRef | StepSubSubTypeOriginal;
-
-export const StepSubSubType = 'StepSubSubType';
-
-export function isStepSubSubType(item: unknown): item is StepSubSubType {
-    return reflection.isInstance(item, StepSubSubType);
-}
-
 export type StepSubType = StepSubTypeExtendedRef | StepSubTypeOriginal;
 
 export const StepSubType = 'StepSubType';
@@ -402,7 +480,7 @@ export function isStructureElement(item: unknown): item is StructureElement {
     return reflection.isInstance(item, StructureElement);
 }
 
-export type SystemConcept = SystemElement | SystemRelation | SystemSet;
+export type SystemConcept = LinguisticElement | SystemElement | SystemRelation | SystemSet;
 
 export const SystemConcept = 'SystemConcept';
 
@@ -410,7 +488,7 @@ export function isSystemConcept(item: unknown): item is SystemConcept {
     return reflection.isInstance(item, SystemConcept);
 }
 
-export type SystemElement = BehaviorElement | IncludeElementGeneric | OtherElement | Requirement | StructureElement | Test;
+export type SystemElement = BehaviorElement | IncludeElementGeneric | OtherElement | Requirement | StructureElement;
 
 export const SystemElement = 'SystemElement';
 
@@ -474,6 +552,22 @@ export function isTest(item: unknown): item is Test {
     return reflection.isInstance(item, Test);
 }
 
+export type TestData = Data;
+
+export const TestData = 'TestData';
+
+export function isTestData(item: unknown): item is TestData {
+    return reflection.isInstance(item, TestData);
+}
+
+export type TestElement = Test | TestData | TestSuiteSetupTeardown;
+
+export const TestElement = 'TestElement';
+
+export function isTestElement(item: unknown): item is TestElement {
+    return reflection.isInstance(item, TestElement);
+}
+
 export type TestScenarioType = TestScenarioTypeExtendedRef | TestScenarioTypeOriginal;
 
 export const TestScenarioType = 'TestScenarioType';
@@ -490,6 +584,14 @@ export function isTestsRelationType(item: unknown): item is TestsRelationType {
     return reflection.isInstance(item, TestsRelationType);
 }
 
+export type TestSuiteSetupTeardown = TestSuiteSetup | TestSuiteTeardown;
+
+export const TestSuiteSetupTeardown = 'TestSuiteSetupTeardown';
+
+export function isTestSuiteSetupTeardown(item: unknown): item is TestSuiteSetupTeardown {
+    return reflection.isInstance(item, TestSuiteSetupTeardown);
+}
+
 export type TestType = TestTypeExtendedRef | TestTypeOriginal;
 
 export const TestType = 'TestType';
@@ -498,7 +600,7 @@ export function isTestType(item: unknown): item is TestType {
     return reflection.isInstance(item, TestType);
 }
 
-export type TypeExtended = ActionTypeExtended | ActiveEventTypeExtended | ActiveFlowTypeExtended | ActiveTaskTypeExtended | ActorTypeExtended | CheckTypeExtended | ConstraintSubTypeExtended | ConstraintTypeExtended | DataAttributeTypeExtended | DataEntityClusterTypeExtended | DataEntitySubTypeExtended | DataEntityTypeExtended | FRTypeExtended | ForeignKeyOnDeleteTypeExtended | GlossaryTermTypeExtended | GoalSubTypeExtended | GoalTypeExtended | MetricTypeExtended | PriorityTypeExtended | QRSubTypeExtended | QRTypeExtended | RelationTypeExtended | RequirementsRelationTypeExtended | RiskSubTypeExtended | RiskTreatmentTypeExtended | RiskTypeExtended | ScenarioTypeExtended | StakeholderSubTypeExtended | StakeholderTypeExtended | StateMachineTypeExtended | StepSubSubTypeExtended | StepSubTypeExtended | StepTypeExtended | StereotypeTypeExtended | SystemSubTypeExtended | SystemTypeExtended | SystemsRelationCategoryExtended | SystemsRelationTypeExtended | TestScenarioTypeExtended | TestTypeExtended | TestsRelationTypeExtended | UseCaseTypeExtended | UserStoryTypeExtended | VulnerabilityAttackVectorExtended | VulnerabilitySubTypeExtended | VulnerabilityTypeExtended;
+export type TypeExtended = ActionTypeExtended | ActiveEventTypeExtended | ActiveFlowTypeExtended | ActiveTaskTypeExtended | ActorTypeExtended | ConstraintSubTypeExtended | ConstraintTypeExtended | DataAttributeTypeExtended | DataEntityClusterTypeExtended | DataEntitySubTypeExtended | DataEntityTypeExtended | FRTypeExtended | ForeignKeyOnDeleteTypeExtended | GlossaryTermTypeExtended | GoalSubTypeExtended | GoalTypeExtended | MetricTypeExtended | PriorityTypeExtended | QRSubTypeExtended | QRTypeExtended | RelationTypeExtended | RequirementsRelationTypeExtended | RiskSubTypeExtended | RiskTreatmentTypeExtended | RiskTypeExtended | ScenarioTypeExtended | StakeholderSubTypeExtended | StakeholderTypeExtended | StateMachineTypeExtended | StepSubTypeExtended | StepTypeExtended | StereotypeTypeExtended | SystemSubTypeExtended | SystemTypeExtended | SystemsRelationCategoryExtended | SystemsRelationTypeExtended | TestScenarioTypeExtended | TestTypeExtended | TestsRelationTypeExtended | UseCaseTypeExtended | UserStoryTypeExtended | VariableTypeExtended | VulnerabilityAttackVectorExtended | VulnerabilitySubTypeExtended | VulnerabilityTypeExtended;
 
 export const TypeExtended = 'TypeExtended';
 
@@ -544,6 +646,20 @@ export const VulnerabilityType = 'VulnerabilityType';
 
 export function isVulnerabilityType(item: unknown): item is VulnerabilityType {
     return reflection.isInstance(item, VulnerabilityType);
+}
+
+export interface _Date extends AstNode {
+    readonly $container: AttributeValue;
+    readonly $type: '_Date';
+    day: number
+    month: number
+    year: number
+}
+
+export const _Date = '_Date';
+
+export function is_Date(item: unknown): item is _Date {
+    return reflection.isInstance(item, _Date);
 }
 
 export interface AcceptanceCriteria extends AstNode {
@@ -594,10 +710,10 @@ export function isAcceptanceCriteriaScenario(item: unknown): item is AcceptanceC
 }
 
 export interface AcceptanceCriteriaTest extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'AcceptanceCriteriaTest';
-    criteriaR?: AcceptanceCriteriaRule
-    criteriaS?: AcceptanceCriteriaScenario
+    criteriaR: Array<AcceptanceCriteriaRule>
+    criteriaS: Array<AcceptanceCriteriaScenario>
     description?: string
     name: string
     nameAlias?: string
@@ -613,7 +729,7 @@ export function isAcceptanceCriteriaTest(item: unknown): item is AcceptanceCrite
 }
 
 export interface ActionTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActionTypeExtended';
     description?: string
     name: string
@@ -627,7 +743,7 @@ export function isActionTypeExtended(item: unknown): item is ActionTypeExtended 
 }
 
 export interface ActionTypeExtendedRef extends AstNode {
-    readonly $container: IfExpression | RefUCAction | UCActions;
+    readonly $container: RefUCAction | UCActions;
     readonly $type: 'ActionTypeExtendedRef';
     type: Reference<ActionTypeExtended>
 }
@@ -639,7 +755,7 @@ export function isActionTypeExtendedRef(item: unknown): item is ActionTypeExtend
 }
 
 export interface ActionTypeOriginal extends AstNode {
-    readonly $container: IfExpression | RefUCAction | UCActions;
+    readonly $container: RefUCAction | UCActions;
     readonly $type: 'ActionTypeOriginal';
     type: 'aCreate' | 'aDelete' | 'aRead' | 'aUpdate'
 }
@@ -651,11 +767,13 @@ export function isActionTypeOriginal(item: unknown): item is ActionTypeOriginal 
 }
 
 export interface ActiveEvent extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActiveEvent';
     description?: string
+    isCatch: boolean
     isFinal: boolean
     isInitial: boolean
+    isThrow: boolean
     name: string
     nameAlias?: string
     stakeholder?: Reference<Stakeholder>
@@ -670,7 +788,7 @@ export function isActiveEvent(item: unknown): item is ActiveEvent {
 }
 
 export interface ActiveEventTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActiveEventTypeExtended';
     description?: string
     name: string
@@ -708,7 +826,7 @@ export function isActiveEventTypeOriginal(item: unknown): item is ActiveEventTyp
 }
 
 export interface ActiveFlow extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActiveFlow';
     activeElements?: RefActiveElement
     condition?: string
@@ -726,7 +844,7 @@ export function isActiveFlow(item: unknown): item is ActiveFlow {
 }
 
 export interface ActiveFlowTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActiveFlowTypeExtended';
     description?: string
     name: string
@@ -764,7 +882,7 @@ export function isActiveFlowTypeOriginal(item: unknown): item is ActiveFlowTypeO
 }
 
 export interface ActiveTask extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActiveTask';
     description?: string
     name: string
@@ -783,7 +901,7 @@ export function isActiveTask(item: unknown): item is ActiveTask {
 }
 
 export interface ActiveTaskTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActiveTaskTypeExtended';
     description?: string
     name: string
@@ -821,7 +939,7 @@ export function isActiveTaskTypeOriginal(item: unknown): item is ActiveTaskTypeO
 }
 
 export interface Actor extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Actor';
     description?: string
     name: string
@@ -839,7 +957,7 @@ export function isActor(item: unknown): item is Actor {
 }
 
 export interface ActorTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ActorTypeExtended';
     description?: string
     name: string
@@ -877,15 +995,33 @@ export function isActorTypeOriginal(item: unknown): item is ActorTypeOriginal {
 }
 
 export interface AttributeValue extends AstNode {
-    readonly $container: DataAttributeTableRow | _Date;
-    readonly $type: 'AttributeValue' | 'Month' | '_Date';
-    value: string
+    readonly $container: DataTableRow;
+    readonly $type: 'AttributeValue';
+    boolean?: Boolean
+    date?: _Date
+    dateTime?: DateTime
+    doubleOrInt?: DoubleOrInt
+    percentage?: Percentage
+    string?: string
+    time?: Time
 }
 
 export const AttributeValue = 'AttributeValue';
 
 export function isAttributeValue(item: unknown): item is AttributeValue {
     return reflection.isInstance(item, AttributeValue);
+}
+
+export interface Boolean extends AstNode {
+    readonly $container: AttributeValue;
+    readonly $type: 'Boolean';
+    type: 'False' | 'True'
+}
+
+export const Boolean = 'Boolean';
+
+export function isBoolean(item: unknown): item is Boolean {
+    return reflection.isInstance(item, Boolean);
 }
 
 export interface Check extends AstNode {
@@ -899,44 +1035,6 @@ export const Check = 'Check';
 
 export function isCheck(item: unknown): item is Check {
     return reflection.isInstance(item, Check);
-}
-
-export interface CheckTypeExtended extends AstNode {
-    readonly $container: System | Threat;
-    readonly $type: 'CheckTypeExtended';
-    description?: string
-    name: string
-    nameAlias?: string
-}
-
-export const CheckTypeExtended = 'CheckTypeExtended';
-
-export function isCheckTypeExtended(item: unknown): item is CheckTypeExtended {
-    return reflection.isInstance(item, CheckTypeExtended);
-}
-
-export interface CheckTypeExtendedRef extends AstNode {
-    readonly $container: TestCheck;
-    readonly $type: 'CheckTypeExtendedRef';
-    type: Reference<CheckTypeExtended>
-}
-
-export const CheckTypeExtendedRef = 'CheckTypeExtendedRef';
-
-export function isCheckTypeExtendedRef(item: unknown): item is CheckTypeExtendedRef {
-    return reflection.isInstance(item, CheckTypeExtendedRef);
-}
-
-export interface CheckTypeOriginal extends AstNode {
-    readonly $container: TestCheck;
-    readonly $type: 'CheckTypeOriginal';
-    type: 'ElementOnScreen' | 'None' | 'Other' | 'ResponseTime' | 'Screen' | 'Script' | 'TextOnElement' | 'TextOnScreen' | 'VariableValue'
-}
-
-export const CheckTypeOriginal = 'CheckTypeOriginal';
-
-export function isCheckTypeOriginal(item: unknown): item is CheckTypeOriginal {
-    return reflection.isInstance(item, CheckTypeOriginal);
 }
 
 export interface ChildDataEntity extends AstNode {
@@ -953,7 +1051,7 @@ export function isChildDataEntity(item: unknown): item is ChildDataEntity {
 }
 
 export interface Constraint extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Constraint';
     acceptanceCriteria: Array<AcceptanceCriteria>
     description?: string
@@ -980,7 +1078,7 @@ export function isConstraint(item: unknown): item is Constraint {
 }
 
 export interface ConstraintSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ConstraintSubTypeExtended';
     description?: string
     name: string
@@ -1018,7 +1116,7 @@ export function isConstraintSubTypeOriginal(item: unknown): item is ConstraintSu
 }
 
 export interface ConstraintTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ConstraintTypeExtended';
     description?: string
     name: string
@@ -1056,14 +1154,14 @@ export function isConstraintTypeOriginal(item: unknown): item is ConstraintTypeO
 }
 
 export interface Data extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Data';
     description?: string
     name: string
     nameAlias?: string
-    table?: DataAttributeValues
+    table?: DataTable
     tags: Array<Tag>
-    type: Reference<DataEntityGeneric>
+    type: Reference<DataEntity>
 }
 
 export const Data = 'Data';
@@ -1073,7 +1171,7 @@ export function isData(item: unknown): item is Data {
 }
 
 export interface DataAttribute extends AstNode {
-    readonly $container: DataEntity | TestVariable;
+    readonly $container: DataEntity;
     readonly $type: 'DataAttribute';
     constraint?: DataAttributeConstraint
     defaultValue?: string
@@ -1116,18 +1214,6 @@ export function isDataAttributeConstraint(item: unknown): item is DataAttributeC
     return reflection.isInstance(item, DataAttributeConstraint);
 }
 
-export interface DataAttributeRefs extends AstNode {
-    readonly $container: DataAttributeValues;
-    readonly $type: 'DataAttributeRefs';
-    attributeRef: Array<Reference<DataAttribute>>
-}
-
-export const DataAttributeRefs = 'DataAttributeRefs';
-
-export function isDataAttributeRefs(item: unknown): item is DataAttributeRefs {
-    return reflection.isInstance(item, DataAttributeRefs);
-}
-
 export interface DataAttributeRefsList extends AstNode {
     readonly $type: 'DataAttributeRefsList';
     attributeRef: Array<Reference<DataAttribute>>
@@ -1137,18 +1223,6 @@ export const DataAttributeRefsList = 'DataAttributeRefsList';
 
 export function isDataAttributeRefsList(item: unknown): item is DataAttributeRefsList {
     return reflection.isInstance(item, DataAttributeRefsList);
-}
-
-export interface DataAttributeTableRow extends AstNode {
-    readonly $container: DataAttributeValues;
-    readonly $type: 'DataAttributeTableRow';
-    attributeValues: Array<AttributeValue>
-}
-
-export const DataAttributeTableRow = 'DataAttributeTableRow';
-
-export function isDataAttributeTableRow(item: unknown): item is DataAttributeTableRow {
-    return reflection.isInstance(item, DataAttributeTableRow);
 }
 
 export interface DataAttributeType extends AstNode {
@@ -1164,7 +1238,7 @@ export function isDataAttributeType(item: unknown): item is DataAttributeType {
 }
 
 export interface DataAttributeTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataAttributeTypeExtended';
     description?: string
     name: string
@@ -1177,21 +1251,8 @@ export function isDataAttributeTypeExtended(item: unknown): item is DataAttribut
     return reflection.isInstance(item, DataAttributeTypeExtended);
 }
 
-export interface DataAttributeValues extends AstNode {
-    readonly $container: Data | DataEntityTest | TestScenario;
-    readonly $type: 'DataAttributeValues';
-    tableHeader: DataAttributeRefs
-    tableRows: Array<DataAttributeTableRow>
-}
-
-export const DataAttributeValues = 'DataAttributeValues';
-
-export function isDataAttributeValues(item: unknown): item is DataAttributeValues {
-    return reflection.isInstance(item, DataAttributeValues);
-}
-
 export interface DataEntity extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataEntity';
     attributes: Array<DataAttribute>
     constraint?: DataEntityConstraint
@@ -1211,7 +1272,7 @@ export function isDataEntity(item: unknown): item is DataEntity {
 }
 
 export interface DataEntityCluster extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataEntityCluster';
     children: Array<ChildDataEntity>
     description?: string
@@ -1230,7 +1291,7 @@ export function isDataEntityCluster(item: unknown): item is DataEntityCluster {
 }
 
 export interface DataEntityClusterTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataEntityClusterTypeExtended';
     description?: string
     name: string
@@ -1283,7 +1344,7 @@ export function isDataEntityConstraint(item: unknown): item is DataEntityConstra
 }
 
 export interface DataEntitySubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataEntitySubTypeExtended';
     description?: string
     name: string
@@ -1321,14 +1382,14 @@ export function isDataEntitySubTypeOriginal(item: unknown): item is DataEntitySu
 }
 
 export interface DataEntityTest extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataEntityTest';
     description?: string
     entity?: Reference<DataEntity>
     message?: string
     name: string
     nameAlias?: string
-    table?: DataAttributeValues
+    table?: DataTable
     tags: Array<Tag>
     testDataAttributes: Array<TestDataAttribute>
     type: TestType
@@ -1341,7 +1402,7 @@ export function isDataEntityTest(item: unknown): item is DataEntityTest {
 }
 
 export interface DataEntityTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataEntityTypeExtended';
     description?: string
     name: string
@@ -1379,13 +1440,13 @@ export function isDataEntityTypeOriginal(item: unknown): item is DataEntityTypeO
 }
 
 export interface DataEnumeration extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'DataEnumeration';
     description?: string
     name: string
     nameAlias?: string
     tags: Array<Tag>
-    values: Array<string>
+    values: Array<DataEnumerationElement>
 }
 
 export const DataEnumeration = 'DataEnumeration';
@@ -1394,45 +1455,75 @@ export function isDataEnumeration(item: unknown): item is DataEnumeration {
     return reflection.isInstance(item, DataEnumeration);
 }
 
-export interface DataVariableRefs extends AstNode {
-    readonly $container: DataVariableValues;
-    readonly $type: 'DataVariableRefs';
-    variableRef: Array<Reference<DataAttribute>>
+export interface DataEnumerationElement extends AstNode {
+    readonly $container: DataEnumeration;
+    readonly $type: 'DataEnumerationElement';
+    name: string
+    nameAlias?: string
 }
 
-export const DataVariableRefs = 'DataVariableRefs';
+export const DataEnumerationElement = 'DataEnumerationElement';
 
-export function isDataVariableRefs(item: unknown): item is DataVariableRefs {
-    return reflection.isInstance(item, DataVariableRefs);
+export function isDataEnumerationElement(item: unknown): item is DataEnumerationElement {
+    return reflection.isInstance(item, DataEnumerationElement);
 }
 
-export interface DataVariableTableRow extends AstNode {
-    readonly $container: DataVariableValues;
-    readonly $type: 'DataVariableTableRow';
-    variableValues: Array<string>
+export interface DataTable extends AstNode {
+    readonly $container: Data | DataEntityTest | TestCase;
+    readonly $type: 'DataTable';
+    tableHeader: DataTableHeader
+    tableRows: Array<DataTableRow>
 }
 
-export const DataVariableTableRow = 'DataVariableTableRow';
+export const DataTable = 'DataTable';
 
-export function isDataVariableTableRow(item: unknown): item is DataVariableTableRow {
-    return reflection.isInstance(item, DataVariableTableRow);
+export function isDataTable(item: unknown): item is DataTable {
+    return reflection.isInstance(item, DataTable);
 }
 
-export interface DataVariableValues extends AstNode {
-    readonly $container: TestScenario;
-    readonly $type: 'DataVariableValues';
-    tableHeader: DataVariableRefs
-    tableRows: Array<DataVariableTableRow>
+export interface DataTableHeader extends AstNode {
+    readonly $container: DataTable;
+    readonly $type: 'DataTableHeader';
+    attributeRefs: Array<Reference<DataAttribute>>
 }
 
-export const DataVariableValues = 'DataVariableValues';
+export const DataTableHeader = 'DataTableHeader';
 
-export function isDataVariableValues(item: unknown): item is DataVariableValues {
-    return reflection.isInstance(item, DataVariableValues);
+export function isDataTableHeader(item: unknown): item is DataTableHeader {
+    return reflection.isInstance(item, DataTableHeader);
+}
+
+export interface DataTableRow extends AstNode {
+    readonly $container: DataTable;
+    readonly $type: 'DataTableRow';
+    attributeValues: Array<AttributeValue>
+}
+
+export const DataTableRow = 'DataTableRow';
+
+export function isDataTableRow(item: unknown): item is DataTableRow {
+    return reflection.isInstance(item, DataTableRow);
+}
+
+export interface DateTime extends AstNode {
+    readonly $container: AttributeValue;
+    readonly $type: 'DateTime';
+    day: number
+    hh?: number
+    mm?: number
+    month: number
+    ss?: number
+    year: number
+}
+
+export const DateTime = 'DateTime';
+
+export function isDateTime(item: unknown): item is DateTime {
+    return reflection.isInstance(item, DateTime);
 }
 
 export interface ElementsRelation extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ElementsRelation';
     description?: string
     name: string
@@ -1504,7 +1595,7 @@ export function isForeignKey(item: unknown): item is ForeignKey {
 }
 
 export interface ForeignKeyOnDeleteTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ForeignKeyOnDeleteTypeExtended';
     description?: string
     name: string
@@ -1542,7 +1633,7 @@ export function isForeignKeyOnDeleteTypeOriginal(item: unknown): item is Foreign
 }
 
 export interface FR extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'FR';
     acceptanceCriteria: Array<AcceptanceCriteria>
     description?: string
@@ -1568,7 +1659,7 @@ export function isFR(item: unknown): item is FR {
 }
 
 export interface FRTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'FRTypeExtended';
     description?: string
     name: string
@@ -1606,7 +1697,7 @@ export function isFRTypeOriginal(item: unknown): item is FRTypeOriginal {
 }
 
 export interface GlossaryTerm extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'GlossaryTerm';
     acronym?: string
     applicableTo?: RefTermApplicableTo
@@ -1627,7 +1718,7 @@ export function isGlossaryTerm(item: unknown): item is GlossaryTerm {
 }
 
 export interface GlossaryTermTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'GlossaryTermTypeExtended';
     description?: string
     name: string
@@ -1665,7 +1756,7 @@ export function isGlossaryTermTypeOriginal(item: unknown): item is GlossaryTermT
 }
 
 export interface Goal extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Goal';
     acceptanceCriteria: Array<AcceptanceCriteria>
     description?: string
@@ -1692,7 +1783,7 @@ export function isGoal(item: unknown): item is Goal {
 }
 
 export interface GoalSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'GoalSubTypeExtended';
     description?: string
     name: string
@@ -1730,7 +1821,7 @@ export function isGoalSubTypeOriginal(item: unknown): item is GoalSubTypeOrigina
 }
 
 export interface GoalTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'GoalTypeExtended';
     description?: string
     name: string
@@ -1767,18 +1858,6 @@ export function isGoalTypeOriginal(item: unknown): item is GoalTypeOriginal {
     return reflection.isInstance(item, GoalTypeOriginal);
 }
 
-export interface IfExpression extends AstNode {
-    readonly $type: 'IfExpression';
-    action?: ActionType
-    condition?: string
-}
-
-export const IfExpression = 'IfExpression';
-
-export function isIfExpression(item: unknown): item is IfExpression {
-    return reflection.isInstance(item, IfExpression);
-}
-
 export interface ImpactLevel extends AstNode {
     readonly $container: RiskAssessment;
     readonly $type: 'ImpactLevel';
@@ -1804,7 +1883,7 @@ export function isImport(item: unknown): item is Import {
 }
 
 export interface IncludeAll extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'IncludeAll';
     description?: string
     system: Reference<System>
@@ -1818,7 +1897,7 @@ export function isIncludeAll(item: unknown): item is IncludeAll {
 }
 
 export interface IncludeElement extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'IncludeElement';
     description?: string
     element: Reference<SystemElement>
@@ -1844,6 +1923,101 @@ export const IncludeSystemElementType = 'IncludeSystemElementType';
 
 export function isIncludeSystemElementType(item: unknown): item is IncludeSystemElementType {
     return reflection.isInstance(item, IncludeSystemElementType);
+}
+
+export interface LinguisticFragment extends AstNode {
+    readonly $container: System | TestSuite | Threat;
+    readonly $type: 'LinguisticFragment';
+    description?: string
+    name: string
+    nameAlias?: string
+    options: Array<LinguisticFragmentPart>
+}
+
+export const LinguisticFragment = 'LinguisticFragment';
+
+export function isLinguisticFragment(item: unknown): item is LinguisticFragment {
+    return reflection.isInstance(item, LinguisticFragment);
+}
+
+export interface LinguisticFragmentRef extends AstNode {
+    readonly $container: LinguisticFragment | LinguisticPattern;
+    readonly $type: 'LinguisticFragmentRef';
+    option: Reference<LinguisticFragment>
+}
+
+export const LinguisticFragmentRef = 'LinguisticFragmentRef';
+
+export function isLinguisticFragmentRef(item: unknown): item is LinguisticFragmentRef {
+    return reflection.isInstance(item, LinguisticFragmentRef);
+}
+
+export interface LinguisticPattern extends AstNode {
+    readonly $container: LinguisticRule;
+    readonly $type: 'LinguisticPattern';
+    parts: Array<LinguisticFragmentPart>
+}
+
+export const LinguisticPattern = 'LinguisticPattern';
+
+export function isLinguisticPattern(item: unknown): item is LinguisticPattern {
+    return reflection.isInstance(item, LinguisticPattern);
+}
+
+export interface LinguisticRule extends AstNode {
+    readonly $container: System | TestSuite | Threat;
+    readonly $type: 'LinguisticRule';
+    description?: string
+    element: LinguisticRuleElement
+    name: string
+    nameAlias?: string
+    pattern: Array<LinguisticPattern>
+    property: LinguisticRuleElementProperty
+    severity: LinguisticRuleSeverityLevel
+    type: LinguisticRuleType
+}
+
+export const LinguisticRule = 'LinguisticRule';
+
+export function isLinguisticRule(item: unknown): item is LinguisticRule {
+    return reflection.isInstance(item, LinguisticRule);
+}
+
+export interface LinguisticRuleElement extends AstNode {
+    readonly $container: LinguisticRule | LinguisticRuleElementAndProperty;
+    readonly $type: 'LinguisticRuleElement';
+    element: StereotypeType
+}
+
+export const LinguisticRuleElement = 'LinguisticRuleElement';
+
+export function isLinguisticRuleElement(item: unknown): item is LinguisticRuleElement {
+    return reflection.isInstance(item, LinguisticRuleElement);
+}
+
+export interface LinguisticRuleElementAndProperty extends AstNode {
+    readonly $container: LinguisticFragment | LinguisticPattern;
+    readonly $type: 'LinguisticRuleElementAndProperty';
+    element: LinguisticRuleElement
+    property: LinguisticRuleElementProperty
+}
+
+export const LinguisticRuleElementAndProperty = 'LinguisticRuleElementAndProperty';
+
+export function isLinguisticRuleElementAndProperty(item: unknown): item is LinguisticRuleElementAndProperty {
+    return reflection.isInstance(item, LinguisticRuleElementAndProperty);
+}
+
+export interface LinguisticRuleType extends AstNode {
+    readonly $container: LinguisticRule;
+    readonly $type: 'LinguisticRuleType';
+    type: 'Morphology' | 'Semantics' | 'Syntax'
+}
+
+export const LinguisticRuleType = 'LinguisticRuleType';
+
+export function isLinguisticRuleType(item: unknown): item is LinguisticRuleType {
+    return reflection.isInstance(item, LinguisticRuleType);
 }
 
 export interface MainScenario extends AstNode {
@@ -1877,7 +2051,7 @@ export function isManyToMany(item: unknown): item is ManyToMany {
 }
 
 export interface MetricTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'MetricTypeExtended';
     description?: string
     name: string
@@ -1891,7 +2065,7 @@ export function isMetricTypeExtended(item: unknown): item is MetricTypeExtended 
 }
 
 export interface MetricTypeExtendedRef extends AstNode {
-    readonly $container: Expression | TestCheck;
+    readonly $container: Expression;
     readonly $type: 'MetricTypeExtendedRef';
     type: Reference<MetricTypeExtended>
 }
@@ -1903,7 +2077,7 @@ export function isMetricTypeExtendedRef(item: unknown): item is MetricTypeExtend
 }
 
 export interface MetricTypeOriginal extends AstNode {
-    readonly $container: Expression | TestCheck;
+    readonly $container: Expression;
     readonly $type: 'MetricTypeOriginal';
     type: 'Capacity_EByte' | 'Capacity_GByte' | 'Capacity_KByte' | 'Capacity_MByte' | 'Capacity_PByte' | 'Capacity_TByte' | 'Click' | 'Error' | 'Error_PerTask' | 'Frequency_Hz' | 'Frequency_KHz' | 'Frequency_MHz' | 'Other' | 'Range_Binary' | 'Range_LikertScale' | 'Range_Other' | 'Task' | 'Time_Day' | 'Time_Hour' | 'Time_Min' | 'Time_Sec' | 'Time_mSec'
 }
@@ -1925,6 +2099,17 @@ export function isModel(item: unknown): item is Model {
     return reflection.isInstance(item, Model);
 }
 
+export interface Month extends AstNode {
+    readonly $type: 'Month';
+    type: 'Apr' | 'Aug' | 'Dec' | 'Feb' | 'Jan' | 'Jul' | 'Jun' | 'Mar' | 'May' | 'Nov' | 'Oct' | 'Sep'
+}
+
+export const Month = 'Month';
+
+export function isMonth(item: unknown): item is Month {
+    return reflection.isInstance(item, Month);
+}
+
 export interface Multiplicity extends AstNode {
     readonly $container: DataAttributeConstraint;
     readonly $type: 'Multiplicity';
@@ -1937,26 +2122,13 @@ export function isMultiplicity(item: unknown): item is Multiplicity {
     return reflection.isInstance(item, Multiplicity);
 }
 
-export interface OperationExtension extends AstNode {
-    readonly $container: TestStep;
-    readonly $type: 'OperationExtension';
-    check?: TestCheck
-    subSubType: StepSubSubType
-    target?: TestOperationTarget
-}
-
-export const OperationExtension = 'OperationExtension';
-
-export function isOperationExtension(item: unknown): item is OperationExtension {
-    return reflection.isInstance(item, OperationExtension);
-}
-
 export interface PackageSystem extends AstNode {
     readonly $container: Model;
     readonly $type: 'PackageSystem';
     imports: Array<Import>
     name: QualifiedName
-    system: System
+    system?: System
+    testSuite?: TestSuite
 }
 
 export const PackageSystem = 'PackageSystem';
@@ -1965,8 +2137,20 @@ export function isPackageSystem(item: unknown): item is PackageSystem {
     return reflection.isInstance(item, PackageSystem);
 }
 
+export interface PartOfSpeech extends AstNode {
+    readonly $container: LinguisticFragment | LinguisticPattern;
+    readonly $type: 'PartOfSpeech';
+    posTag: PartOfSpeechEnum
+}
+
+export const PartOfSpeech = 'PartOfSpeech';
+
+export function isPartOfSpeech(item: unknown): item is PartOfSpeech {
+    return reflection.isInstance(item, PartOfSpeech);
+}
+
 export interface PriorityTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'PriorityTypeExtended';
     description?: string
     name: string
@@ -2004,7 +2188,7 @@ export function isPriorityTypeOriginal(item: unknown): item is PriorityTypeOrigi
 }
 
 export interface QR extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'QR';
     acceptanceCriteria: Array<AcceptanceCriteria>
     description?: string
@@ -2032,7 +2216,7 @@ export function isQR(item: unknown): item is QR {
 }
 
 export interface QRSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'QRSubTypeExtended';
     description?: string
     name: string
@@ -2070,7 +2254,7 @@ export function isQRSubTypeOriginal(item: unknown): item is QRSubTypeOriginal {
 }
 
 export interface QRTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'QRTypeExtended';
     description?: string
     name: string
@@ -2120,7 +2304,7 @@ export function isRefActiveElement(item: unknown): item is RefActiveElement {
 }
 
 export interface RefActor extends AstNode {
-    readonly $container: UseCase;
+    readonly $container: UseCase | UseCaseTest;
     readonly $type: 'RefActor';
     refs: Array<Reference<Actor>>
 }
@@ -2167,17 +2351,6 @@ export function isRefRequirements(item: unknown): item is RefRequirements {
     return reflection.isInstance(item, RefRequirements);
 }
 
-export interface RefSystems extends AstNode {
-    readonly $type: 'RefSystems';
-    refs: Array<Reference<System>>
-}
-
-export const RefSystems = 'RefSystems';
-
-export function isRefSystems(item: unknown): item is RefSystems {
-    return reflection.isInstance(item, RefSystems);
-}
-
 export interface RefTermApplicableTo extends AstNode {
     readonly $container: GlossaryTerm;
     readonly $type: 'RefTermApplicableTo';
@@ -2216,7 +2389,7 @@ export function isRefUCAction(item: unknown): item is RefUCAction {
 }
 
 export interface RelationTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'RelationTypeExtended';
     description?: string
     name: string
@@ -2251,19 +2424,8 @@ export function isRelationTypeOriginal(item: unknown): item is RelationTypeOrigi
     return reflection.isInstance(item, RelationTypeOriginal);
 }
 
-export interface RepeatExpression extends AstNode {
-    readonly $type: 'RepeatExpression';
-    condition: string
-}
-
-export const RepeatExpression = 'RepeatExpression';
-
-export function isRepeatExpression(item: unknown): item is RepeatExpression {
-    return reflection.isInstance(item, RepeatExpression);
-}
-
 export interface RequirementsRelation extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'RequirementsRelation';
     description?: string
     name: string
@@ -2281,7 +2443,7 @@ export function isRequirementsRelation(item: unknown): item is RequirementsRelat
 }
 
 export interface RequirementsRelationTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'RequirementsRelationTypeExtended';
     description?: string
     name: string
@@ -2319,7 +2481,7 @@ export function isRequirementsRelationTypeOriginal(item: unknown): item is Requi
 }
 
 export interface Risk extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Risk';
     acceptanceCriteria: Array<AcceptanceCriteria>
     assessment?: RiskAssessment
@@ -2370,7 +2532,7 @@ export function isRiskStatus(item: unknown): item is RiskStatus {
 }
 
 export interface RiskSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'RiskSubTypeExtended';
     description?: string
     name: string
@@ -2425,7 +2587,7 @@ export function isRiskTreatment(item: unknown): item is RiskTreatment {
 }
 
 export interface RiskTreatmentTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'RiskTreatmentTypeExtended';
     description?: string
     name: string
@@ -2463,7 +2625,7 @@ export function isRiskTreatmentTypeOriginal(item: unknown): item is RiskTreatmen
 }
 
 export interface RiskTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'RiskTypeExtended';
     description?: string
     name: string
@@ -2518,7 +2680,7 @@ export function isScenario(item: unknown): item is Scenario {
 }
 
 export interface ScenarioTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'ScenarioTypeExtended';
     description?: string
     name: string
@@ -2555,24 +2717,8 @@ export function isScenarioTypeOriginal(item: unknown): item is ScenarioTypeOrigi
     return reflection.isInstance(item, ScenarioTypeOriginal);
 }
 
-export interface SimpleTestStep extends AstNode {
-    readonly $type: 'SimpleTestStep';
-    actor?: Reference<Actor>
-    description?: string
-    nameAlias: string
-    next?: Reference<TestStep>
-    postcondition?: string
-    precondition?: string
-}
-
-export const SimpleTestStep = 'SimpleTestStep';
-
-export function isSimpleTestStep(item: unknown): item is SimpleTestStep {
-    return reflection.isInstance(item, SimpleTestStep);
-}
-
 export interface Stakeholder extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Stakeholder';
     description?: string
     name: string
@@ -2591,7 +2737,7 @@ export function isStakeholder(item: unknown): item is Stakeholder {
 }
 
 export interface StakeholderSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StakeholderSubTypeExtended';
     description?: string
     name: string
@@ -2629,7 +2775,7 @@ export function isStakeholderSubTypeOriginal(item: unknown): item is Stakeholder
 }
 
 export interface StakeholderTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StakeholderTypeExtended';
     description?: string
     name: string
@@ -2686,7 +2832,7 @@ export function isState(item: unknown): item is State {
 }
 
 export interface StateMachine extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StateMachine';
     description?: string
     entity?: Reference<DataEntityGeneric>
@@ -2704,7 +2850,7 @@ export function isStateMachine(item: unknown): item is StateMachine {
 }
 
 export interface StateMachineTest extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StateMachineTest';
     description?: string
     message?: string
@@ -2723,7 +2869,7 @@ export function isStateMachineTest(item: unknown): item is StateMachineTest {
 }
 
 export interface StateMachineTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StateMachineTypeExtended';
     description?: string
     name: string
@@ -2777,12 +2923,12 @@ export interface Step extends AstNode {
     readonly $type: 'Step';
     actor?: Reference<Actor>
     description?: string
+    event?: Reference<ActiveEvent>
     name: string
     nameAlias: string
     next?: Reference<Step>
     repeat?: string
     scenarios: Array<Scenario>
-    subSubType?: StepSubSubType
     subType?: StepSubType
     type?: StepType
     typeUC?: StepOperationUCType
@@ -2798,7 +2944,7 @@ export function isStep(item: unknown): item is Step {
 export interface StepOperationUCType extends AstNode {
     readonly $container: Step;
     readonly $type: 'StepOperationUCType';
-    type: 'extendedBy' | 'include'
+    type: 'ExtendedBy' | 'Include'
 }
 
 export const StepOperationUCType = 'StepOperationUCType';
@@ -2807,46 +2953,8 @@ export function isStepOperationUCType(item: unknown): item is StepOperationUCTyp
     return reflection.isInstance(item, StepOperationUCType);
 }
 
-export interface StepSubSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
-    readonly $type: 'StepSubSubTypeExtended';
-    description?: string
-    name: string
-    nameAlias?: string
-}
-
-export const StepSubSubTypeExtended = 'StepSubSubTypeExtended';
-
-export function isStepSubSubTypeExtended(item: unknown): item is StepSubSubTypeExtended {
-    return reflection.isInstance(item, StepSubSubTypeExtended);
-}
-
-export interface StepSubSubTypeExtendedRef extends AstNode {
-    readonly $container: OperationExtension | Step;
-    readonly $type: 'StepSubSubTypeExtendedRef';
-    type: Reference<StepSubSubTypeExtended>
-}
-
-export const StepSubSubTypeExtendedRef = 'StepSubSubTypeExtendedRef';
-
-export function isStepSubSubTypeExtendedRef(item: unknown): item is StepSubSubTypeExtendedRef {
-    return reflection.isInstance(item, StepSubSubTypeExtendedRef);
-}
-
-export interface StepSubSubTypeOriginal extends AstNode {
-    readonly $container: OperationExtension | Step;
-    readonly $type: 'StepSubSubTypeOriginal';
-    type: 'CancelAction' | 'Check' | 'Click' | 'CloseBrowser' | 'Fill' | 'GetData' | 'OpenBrowser' | 'Other' | 'Over' | 'PostData' | 'Reload' | 'Select' | 'ShowData' | 'Submit' | 'SubmitAction' | 'TerminateAction'
-}
-
-export const StepSubSubTypeOriginal = 'StepSubSubTypeOriginal';
-
-export function isStepSubSubTypeOriginal(item: unknown): item is StepSubSubTypeOriginal {
-    return reflection.isInstance(item, StepSubSubTypeOriginal);
-}
-
 export interface StepSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StepSubTypeExtended';
     description?: string
     name: string
@@ -2860,7 +2968,7 @@ export function isStepSubTypeExtended(item: unknown): item is StepSubTypeExtende
 }
 
 export interface StepSubTypeExtendedRef extends AstNode {
-    readonly $container: Step;
+    readonly $container: Step | TestStep;
     readonly $type: 'StepSubTypeExtendedRef';
     type: Reference<StepSubTypeExtended>
 }
@@ -2872,9 +2980,9 @@ export function isStepSubTypeExtendedRef(item: unknown): item is StepSubTypeExte
 }
 
 export interface StepSubTypeOriginal extends AstNode {
-    readonly $container: Step;
+    readonly $container: Step | TestStep;
     readonly $type: 'StepSubTypeOriginal';
-    type: 'CallSystem' | 'Execute' | 'Other' | 'PrepareData' | 'ReturnResult'
+    type: 'Ask' | 'Cancel' | 'CheckElementInPage' | 'CheckOnElement' | 'CheckOnPage' | 'ClickOnButton' | 'ClickOnElement' | 'CloseApp' | 'Conditional' | 'Display' | 'Error' | 'Execute' | 'Open' | 'OpenApp' | 'Other' | 'Read' | 'Receive' | 'ReceiveMail' | 'SendMail' | 'Show' | 'Signal' | 'Timer' | 'Validate' | 'Write' | 'WriteSecret'
 }
 
 export const StepSubTypeOriginal = 'StepSubTypeOriginal';
@@ -2884,7 +2992,7 @@ export function isStepSubTypeOriginal(item: unknown): item is StepSubTypeOrigina
 }
 
 export interface StepTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StepTypeExtended';
     description?: string
     name: string
@@ -2912,7 +3020,7 @@ export function isStepTypeExtendedRef(item: unknown): item is StepTypeExtendedRe
 export interface StepTypeOriginal extends AstNode {
     readonly $container: Step | TestStep;
     readonly $type: 'StepTypeOriginal';
-    type: 'Actor' | 'Other' | 'System'
+    type: 'Actor' | 'Event' | 'Other' | 'System'
 }
 
 export const StepTypeOriginal = 'StepTypeOriginal';
@@ -2922,7 +3030,7 @@ export function isStepTypeOriginal(item: unknown): item is StepTypeOriginal {
 }
 
 export interface Stereotype extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Stereotype';
     description?: string
     name: string
@@ -2938,7 +3046,7 @@ export function isStereotype(item: unknown): item is Stereotype {
 }
 
 export interface StereotypeTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'StereotypeTypeExtended';
     description?: string
     name: string
@@ -2952,7 +3060,7 @@ export function isStereotypeTypeExtended(item: unknown): item is StereotypeTypeE
 }
 
 export interface StereotypeTypeExtendedRef extends AstNode {
-    readonly $container: Stereotype;
+    readonly $container: LinguisticRuleElement | Stereotype;
     readonly $type: 'StereotypeTypeExtendedRef';
     type: Reference<StereotypeTypeExtended>
 }
@@ -2964,9 +3072,9 @@ export function isStereotypeTypeExtendedRef(item: unknown): item is StereotypeTy
 }
 
 export interface StereotypeTypeOriginal extends AstNode {
-    readonly $container: Stereotype;
+    readonly $container: LinguisticRuleElement | Stereotype;
     readonly $type: 'StereotypeTypeOriginal';
-    type: 'AcceptanceCriteriaTestView' | 'ActiveEvent' | 'ActiveTask' | 'Actor' | 'Constraint' | 'DataEntity' | 'DataEntityCluster' | 'DataEntityTestView' | 'FR' | 'GlossaryTerm' | 'Goal' | 'Other' | 'QR' | 'Risk' | 'Stakeholder' | 'StateMachine' | 'StatemachineTestView' | 'System' | 'UseCase' | 'UseCaseTestView' | 'UserStory' | 'Vulnerability'
+    type: 'AcceptanceCriteriaScenario' | 'AcceptanceCriteriaTest' | 'AcceptanceCriteriaTestView' | 'ActiveEvent' | 'ActiveFlow' | 'ActiveTask' | 'Actor' | 'Constraint' | 'Data' | 'DataAttribute' | 'DataEntity' | 'DataEntityCluster' | 'DataEntityTest' | 'DataEntityTestView' | 'DataEnumeration' | 'FR' | 'GlossaryTerm' | 'Goal' | 'MainScenario' | 'Other' | 'QR' | 'Risk' | 'Scenario' | 'Stakeholder' | 'StateMachine' | 'StateMachineTest' | 'StatemachineTestView' | 'Step' | 'System' | 'TestData' | 'TestSuite' | 'UseCase' | 'UseCaseTest' | 'UseCaseTestView' | 'UserStory' | 'Vulnerability'
 }
 
 export const StereotypeTypeOriginal = 'StereotypeTypeOriginal';
@@ -2981,12 +3089,10 @@ export interface System extends AstNode {
     description?: string
     isFinal: boolean
     isReusable: boolean
-    isTestSuite: boolean
     name: string
     nameAlias?: string
     partOf?: Reference<System>
     subType?: SystemSubType
-    sut?: Reference<System>
     systemConcepts: Array<SystemConcept>
     tags: Array<Tag>
     type: SystemType
@@ -3001,7 +3107,7 @@ export function isSystem(item: unknown): item is System {
 }
 
 export interface SystemsRelation extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'SystemsRelation';
     category?: SystemsRelationCategory
     description?: string
@@ -3020,7 +3126,7 @@ export function isSystemsRelation(item: unknown): item is SystemsRelation {
 }
 
 export interface SystemsRelationCategoryExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'SystemsRelationCategoryExtended';
     description?: string
     name: string
@@ -3058,7 +3164,7 @@ export function isSystemsRelationCategoryOriginal(item: unknown): item is System
 }
 
 export interface SystemsRelationTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'SystemsRelationTypeExtended';
     description?: string
     name: string
@@ -3096,7 +3202,7 @@ export function isSystemsRelationTypeOriginal(item: unknown): item is SystemsRel
 }
 
 export interface SystemSubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'SystemSubTypeExtended';
     description?: string
     name: string
@@ -3110,7 +3216,7 @@ export function isSystemSubTypeExtended(item: unknown): item is SystemSubTypeExt
 }
 
 export interface SystemSubTypeExtendedRef extends AstNode {
-    readonly $container: System;
+    readonly $container: System | TestSuite;
     readonly $type: 'SystemSubTypeExtendedRef';
     type: Reference<SystemSubTypeExtended>
 }
@@ -3122,7 +3228,7 @@ export function isSystemSubTypeExtendedRef(item: unknown): item is SystemSubType
 }
 
 export interface SystemSubTypeOriginal extends AstNode {
-    readonly $container: System;
+    readonly $container: System | TestSuite;
     readonly $type: 'SystemSubTypeOriginal';
     type: 'Application_Actuator' | 'Application_Desktop' | 'Application_Mobile' | 'Application_Other' | 'Application_Sensor' | 'Application_Web' | 'Business_IT' | 'Business_Other' | 'Business_PublicSector' | 'HardwareSystem_Actuator' | 'HardwareSystem_Desktop' | 'HardwareSystem_Laptop' | 'HardwareSystem_Network' | 'HardwareSystem_Other' | 'HardwareSystem_Printer' | 'HardwareSystem_Sensor' | 'HardwareSystem_Server' | 'HardwareSystem_Smartphone' | 'HardwareSystem_Smartwatch' | 'HardwareSystem_Storage' | 'SoftwareSystem_DBMS' | 'SoftwareSystem_EmailClient' | 'SoftwareSystem_EmailServer' | 'SoftwareSystem_OS' | 'SoftwareSystem_OfficeTool' | 'SoftwareSystem_Other' | 'SoftwareSystem_OtherClient' | 'SoftwareSystem_OtherServer' | 'SoftwareSystem_VM' | 'SoftwareSystem_WebClient' | 'SoftwareSystem_WebServer'
 }
@@ -3134,7 +3240,7 @@ export function isSystemSubTypeOriginal(item: unknown): item is SystemSubTypeOri
 }
 
 export interface SystemTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'SystemTypeExtended';
     description?: string
     name: string
@@ -3148,7 +3254,7 @@ export function isSystemTypeExtended(item: unknown): item is SystemTypeExtended 
 }
 
 export interface SystemTypeExtendedRef extends AstNode {
-    readonly $container: System;
+    readonly $container: System | TestSuite;
     readonly $type: 'SystemTypeExtendedRef';
     type: Reference<SystemTypeExtended>
 }
@@ -3160,7 +3266,7 @@ export function isSystemTypeExtendedRef(item: unknown): item is SystemTypeExtend
 }
 
 export interface SystemTypeOriginal extends AstNode {
-    readonly $container: System;
+    readonly $container: System | TestSuite;
     readonly $type: 'SystemTypeOriginal';
     type: 'Application' | 'Business' | 'HardwareSystem' | 'Other' | 'SoftwareSystem'
 }
@@ -3172,7 +3278,7 @@ export function isSystemTypeOriginal(item: unknown): item is SystemTypeOriginal 
 }
 
 export interface Tag extends AstNode {
-    readonly $container: AcceptanceCriteria | AcceptanceCriteriaTest | ActiveEvent | ActiveFlow | ActiveTask | Actor | Constraint | Data | DataAttribute | DataEntity | DataEntityCluster | DataEntityTest | DataEnumeration | ElementsRelation | FR | GlossaryTerm | Goal | IncludeAll | IncludeElement | QR | RequirementsRelation | Risk | Stakeholder | StateMachine | StateMachineTest | Stereotype | System | SystemsRelation | TestsRelation | Theme | UseCase | UseCaseTest | UserStory | View | Vulnerability;
+    readonly $container: AcceptanceCriteria | AcceptanceCriteriaTest | ActiveEvent | ActiveFlow | ActiveTask | Actor | Constraint | Data | DataAttribute | DataEntity | DataEntityCluster | DataEntityTest | DataEnumeration | ElementsRelation | FR | GlossaryTerm | Goal | IncludeAll | IncludeElement | QR | RequirementsRelation | Risk | Stakeholder | StateMachine | StateMachineTest | Stereotype | System | SystemsRelation | TestSuite | TestsRelation | Theme | UseCase | UseCaseTest | UserStory | View | Vulnerability;
     readonly $type: 'Tag';
     nameAlias: string
     value?: string
@@ -3196,36 +3302,35 @@ export function isTermApplicableTo(item: unknown): item is TermApplicableTo {
     return reflection.isInstance(item, TermApplicableTo);
 }
 
-export interface TestCheck extends AstNode {
-    readonly $container: OperationExtension;
-    readonly $type: 'TestCheck';
-    codeString?: string
-    codeVariable?: Reference<DataAttribute>
-    expected?: Reference<DataAttribute>
-    limitINT?: number
-    limitVariable?: Reference<DataAttribute>
-    metric?: MetricType
-    textString?: string
-    textVariable?: Reference<DataAttribute>
-    timeoutINT?: DoubleOrInt
-    timeoutVariable?: Reference<DataAttribute>
-    type: CheckType
-    urlString?: string
-    urlVariable?: Reference<DataAttribute>
-    variable?: Reference<DataAttribute>
+export interface TestCase extends AstNode {
+    readonly $container: UseCaseTest;
+    readonly $type: 'TestCase';
+    description?: string
+    entity?: Reference<DataEntity>
+    entityTable?: DataTable
+    name: string
+    nameAlias?: string
+    testParameters: Array<TestParameter>
+    testSteps: Array<TestStep>
 }
 
-export const TestCheck = 'TestCheck';
+export const TestCase = 'TestCase';
 
-export function isTestCheck(item: unknown): item is TestCheck {
-    return reflection.isInstance(item, TestCheck);
+export function isTestCase(item: unknown): item is TestCase {
+    return reflection.isInstance(item, TestCase);
 }
 
 export interface TestDataAttribute extends AstNode {
     readonly $container: DataEntityTest;
     readonly $type: 'TestDataAttribute';
     attribute: Reference<DataAttribute>
+    isDerived?: 'isDerived'
+    isEncrypted?: 'isEncrypted'
+    isNotNull?: 'isNotNull'
+    isReadOnly?: 'isReadOnly'
+    isUnique?: 'isUnique'
     message?: string
+    size?: DoubleOrInt
     type?: DataAttributeType
     values?: string
 }
@@ -3236,44 +3341,20 @@ export function isTestDataAttribute(item: unknown): item is TestDataAttribute {
     return reflection.isInstance(item, TestDataAttribute);
 }
 
-export interface TestOperationTarget extends AstNode {
-    readonly $container: OperationExtension;
-    readonly $type: 'TestOperationTarget';
-    content: Array<string>
-    type: OperationTargetType
-    variable: Array<Reference<DataAttribute>>
-}
-
-export const TestOperationTarget = 'TestOperationTarget';
-
-export function isTestOperationTarget(item: unknown): item is TestOperationTarget {
-    return reflection.isInstance(item, TestOperationTarget);
-}
-
-export interface TestScenario extends AstNode {
-    readonly $container: UseCaseTest;
-    readonly $type: 'TestScenario';
-    description?: string
-    entity?: Reference<DataEntity>
-    entityTable?: DataAttributeValues
-    isAbstract: boolean
-    isConcrete: boolean
+export interface TestParameter extends AstNode {
+    readonly $container: TestCase;
+    readonly $type: 'TestParameter';
     name: string
-    nameAlias?: string
-    testSteps: Array<TestStep>
-    type: TestScenarioType
-    variable?: Reference<TestVariable>
-    variableTable?: DataVariableValues
 }
 
-export const TestScenario = 'TestScenario';
+export const TestParameter = 'TestParameter';
 
-export function isTestScenario(item: unknown): item is TestScenario {
-    return reflection.isInstance(item, TestScenario);
+export function isTestParameter(item: unknown): item is TestParameter {
+    return reflection.isInstance(item, TestParameter);
 }
 
 export interface TestScenarioTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'TestScenarioTypeExtended';
     description?: string
     name: string
@@ -3287,7 +3368,6 @@ export function isTestScenarioTypeExtended(item: unknown): item is TestScenarioT
 }
 
 export interface TestScenarioTypeExtendedRef extends AstNode {
-    readonly $container: TestScenario;
     readonly $type: 'TestScenarioTypeExtendedRef';
     type: Reference<TestScenarioTypeExtended>
 }
@@ -3299,7 +3379,6 @@ export function isTestScenarioTypeExtendedRef(item: unknown): item is TestScenar
 }
 
 export interface TestScenarioTypeOriginal extends AstNode {
-    readonly $container: TestScenario;
     readonly $type: 'TestScenarioTypeOriginal';
     type: 'Alternative' | 'Exception' | 'Main'
 }
@@ -3311,7 +3390,7 @@ export function isTestScenarioTypeOriginal(item: unknown): item is TestScenarioT
 }
 
 export interface TestsRelation extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'TestsRelation';
     description?: string
     name: string
@@ -3329,7 +3408,7 @@ export function isTestsRelation(item: unknown): item is TestsRelation {
 }
 
 export interface TestsRelationTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'TestsRelationTypeExtended';
     description?: string
     name: string
@@ -3367,16 +3446,15 @@ export function isTestsRelationTypeOriginal(item: unknown): item is TestsRelatio
 }
 
 export interface TestStep extends AstNode {
-    readonly $container: TestScenario;
+    readonly $container: TestCase | TestSuiteSetup | TestSuiteTeardown | UseCaseTest;
     readonly $type: 'TestStep';
     actor?: Reference<Actor>
     description?: string
-    extension?: OperationExtension
-    name: string
-    nameAlias: string
-    next?: Reference<Step>
-    repeat?: string
-    type: StepType
+    event?: Reference<ActiveEvent>
+    nameAlias?: string
+    subType?: StepSubType
+    testCase?: Reference<TestCase>
+    type?: StepType
 }
 
 export const TestStep = 'TestStep';
@@ -3385,8 +3463,53 @@ export function isTestStep(item: unknown): item is TestStep {
     return reflection.isInstance(item, TestStep);
 }
 
+export interface TestSuite extends AstNode {
+    readonly $container: PackageSystem;
+    readonly $type: 'TestSuite';
+    description?: string
+    elements: Array<TestElement>
+    isFinal: boolean
+    isReusable: boolean
+    name: string
+    nameAlias?: string
+    subType?: SystemSubType
+    sut: Reference<System>
+    tags: Array<Tag>
+    type: SystemType
+}
+
+export const TestSuite = 'TestSuite';
+
+export function isTestSuite(item: unknown): item is TestSuite {
+    return reflection.isInstance(item, TestSuite);
+}
+
+export interface TestSuiteSetup extends AstNode {
+    readonly $container: System | TestSuite | Threat;
+    readonly $type: 'TestSuiteSetup';
+    testSteps: Array<TestStep>
+}
+
+export const TestSuiteSetup = 'TestSuiteSetup';
+
+export function isTestSuiteSetup(item: unknown): item is TestSuiteSetup {
+    return reflection.isInstance(item, TestSuiteSetup);
+}
+
+export interface TestSuiteTeardown extends AstNode {
+    readonly $container: System | TestSuite | Threat;
+    readonly $type: 'TestSuiteTeardown';
+    testSteps: Array<TestStep>
+}
+
+export const TestSuiteTeardown = 'TestSuiteTeardown';
+
+export function isTestSuiteTeardown(item: unknown): item is TestSuiteTeardown {
+    return reflection.isInstance(item, TestSuiteTeardown);
+}
+
 export interface TestTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'TestTypeExtended';
     description?: string
     name: string
@@ -3400,7 +3523,7 @@ export function isTestTypeExtended(item: unknown): item is TestTypeExtended {
 }
 
 export interface TestTypeExtendedRef extends AstNode {
-    readonly $container: AcceptanceCriteria | AcceptanceCriteriaTest | DataEntityTest | StateMachineTest | UseCaseTest;
+    readonly $container: AcceptanceCriteria | AcceptanceCriteriaTest | DataEntityTest | StateMachineTest;
     readonly $type: 'TestTypeExtendedRef';
     type: Reference<TestTypeExtended>
 }
@@ -3412,7 +3535,7 @@ export function isTestTypeExtendedRef(item: unknown): item is TestTypeExtendedRe
 }
 
 export interface TestTypeOriginal extends AstNode {
-    readonly $container: AcceptanceCriteria | AcceptanceCriteriaTest | DataEntityTest | StateMachineTest | UseCaseTest;
+    readonly $container: AcceptanceCriteria | AcceptanceCriteriaTest | DataEntityTest | StateMachineTest;
     readonly $type: 'TestTypeOriginal';
     type: 'Invalid' | 'Valid'
 }
@@ -3423,23 +3546,8 @@ export function isTestTypeOriginal(item: unknown): item is TestTypeOriginal {
     return reflection.isInstance(item, TestTypeOriginal);
 }
 
-export interface TestVariable extends AstNode {
-    readonly $container: UseCaseTest;
-    readonly $type: 'TestVariable';
-    attributes: Array<DataAttribute>
-    description?: string
-    name: string
-    nameAlias?: string
-}
-
-export const TestVariable = 'TestVariable';
-
-export function isTestVariable(item: unknown): item is TestVariable {
-    return reflection.isInstance(item, TestVariable);
-}
-
 export interface Theme extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Theme';
     description?: string
     elements: ReferenceElements
@@ -3476,6 +3584,20 @@ export const Threat = 'Threat';
 
 export function isThreat(item: unknown): item is Threat {
     return reflection.isInstance(item, Threat);
+}
+
+export interface Time extends AstNode {
+    readonly $container: AttributeValue;
+    readonly $type: 'Time';
+    hh: number
+    mm: number
+    ss?: number
+}
+
+export const Time = 'Time';
+
+export function isTime(item: unknown): item is Time {
+    return reflection.isInstance(item, Time);
 }
 
 export interface Transition extends AstNode {
@@ -3579,7 +3701,7 @@ export function isUpdateFields(item: unknown): item is UpdateFields {
 }
 
 export interface UseCase extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'UseCase';
     acceptanceCriteria: Array<AcceptanceCriteria>
     actions?: UCActions
@@ -3615,16 +3737,18 @@ export function isUseCase(item: unknown): item is UseCase {
 }
 
 export interface UseCaseTest extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'UseCaseTest';
     description?: string
     name: string
     nameAlias?: string
-    scenarios: Array<TestScenario>
+    oneTimeSetupSteps: Array<TestStep>
+    oneTimeTeardownSteps: Array<TestStep>
+    primaryActor?: Reference<Actor>
+    supportingActors: Array<RefActor>
     tags: Array<Tag>
-    type: TestType
+    testCases: Array<TestCase>
     useCase?: Reference<UseCase>
-    variables: Array<TestVariable>
 }
 
 export const UseCaseTest = 'UseCaseTest';
@@ -3634,7 +3758,7 @@ export function isUseCaseTest(item: unknown): item is UseCaseTest {
 }
 
 export interface UseCaseTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'UseCaseTypeExtended';
     description?: string
     name: string
@@ -3662,7 +3786,7 @@ export function isUseCaseTypeExtendedRef(item: unknown): item is UseCaseTypeExte
 export interface UseCaseTypeOriginal extends AstNode {
     readonly $container: UseCase;
     readonly $type: 'UseCaseTypeOriginal';
-    type: 'EntitiesBrowse' | 'EntitiesDashboard' | 'EntitiesInteropExport' | 'EntitiesInteropImport' | 'EntitiesInteropSendMessage' | 'EntitiesInteropServiceInvocation' | 'EntitiesInteropSync' | 'EntitiesManage' | 'EntitiesMapInteract' | 'EntitiesMapShow' | 'EntitiesOther' | 'EntitiesReport' | 'EntitiesSearch' | 'EntityCreate' | 'EntityDashboard' | 'EntityDelete' | 'EntityOther' | 'EntityRead' | 'EntityReport' | 'EntityUpdate' | 'Other'
+    type: 'EntitiesBrowse' | 'EntitiesDashboard' | 'EntitiesInteropExport' | 'EntitiesInteropImport' | 'EntitiesInteropSendMessage' | 'EntitiesInteropServiceInvocation' | 'EntitiesInteropSync' | 'EntitiesManage' | 'EntitiesMapInteract' | 'EntitiesMapShow' | 'EntitiesOther' | 'EntitiesReport' | 'EntitiesSearch' | 'EntityCreate' | 'EntityDashboard' | 'EntityDelete' | 'EntityOther' | 'EntityRead' | 'EntityReport' | 'EntityUpdate' | 'Login' | 'Logout' | 'Other'
 }
 
 export const UseCaseTypeOriginal = 'UseCaseTypeOriginal';
@@ -3672,7 +3796,7 @@ export function isUseCaseTypeOriginal(item: unknown): item is UseCaseTypeOrigina
 }
 
 export interface UserStory extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'UserStory';
     acceptanceCriteria: Array<AcceptanceCriteria>
     actor?: Reference<Actor>
@@ -3702,7 +3826,7 @@ export function isUserStory(item: unknown): item is UserStory {
 }
 
 export interface UserStoryTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'UserStoryTypeExtended';
     description?: string
     name: string
@@ -3739,8 +3863,35 @@ export function isUserStoryTypeOriginal(item: unknown): item is UserStoryTypeOri
     return reflection.isInstance(item, UserStoryTypeOriginal);
 }
 
+export interface VariableType extends AstNode {
+    readonly $container: DataAttribute | TestDataAttribute;
+    readonly $type: 'DataEnumerationRef' | 'VariableType' | 'VariableTypeExtendedRef' | 'VariableTypeOriginal';
+    dataEntity: Reference<DataEntity>
+    size: DoubleOrInt
+}
+
+export const VariableType = 'VariableType';
+
+export function isVariableType(item: unknown): item is VariableType {
+    return reflection.isInstance(item, VariableType);
+}
+
+export interface VariableTypeExtended extends AstNode {
+    readonly $container: System | TestSuite | Threat;
+    readonly $type: 'VariableTypeExtended';
+    description?: string
+    name: string
+    nameAlias?: string
+}
+
+export const VariableTypeExtended = 'VariableTypeExtended';
+
+export function isVariableTypeExtended(item: unknown): item is VariableTypeExtended {
+    return reflection.isInstance(item, VariableTypeExtended);
+}
+
 export interface View extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'View';
     description?: string
     elements: ReferenceElements
@@ -3769,7 +3920,7 @@ export function isViewType(item: unknown): item is ViewType {
 }
 
 export interface Vulnerability extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'Vulnerability';
     attack?: string
     attackVector?: VulnerabilityAttackVector
@@ -3792,7 +3943,7 @@ export function isVulnerability(item: unknown): item is Vulnerability {
 }
 
 export interface VulnerabilityAttackVectorExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'VulnerabilityAttackVectorExtended';
     description?: string
     name: string
@@ -3830,7 +3981,7 @@ export function isVulnerabilityAttackVectorOriginal(item: unknown): item is Vuln
 }
 
 export interface VulnerabilitySubTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'VulnerabilitySubTypeExtended';
     description?: string
     name: string
@@ -3868,7 +4019,7 @@ export function isVulnerabilitySubTypeOriginal(item: unknown): item is Vulnerabi
 }
 
 export interface VulnerabilityTypeExtended extends AstNode {
-    readonly $container: System | Threat;
+    readonly $container: System | TestSuite | Threat;
     readonly $type: 'VulnerabilityTypeExtended';
     description?: string
     name: string
@@ -3905,33 +4056,16 @@ export function isVulnerabilityTypeOriginal(item: unknown): item is Vulnerabilit
     return reflection.isInstance(item, VulnerabilityTypeOriginal);
 }
 
-export interface _Date extends AttributeValue {
-    readonly $container: DataAttributeTableRow | _Date;
-    readonly $type: '_Date';
-    day: number
-    month: Month
-    year: number
+export interface Word extends AstNode {
+    readonly $container: LinguisticFragment | LinguisticPattern;
+    readonly $type: 'Word';
+    word: string
 }
 
-export const _Date = '_Date';
-export const DoubleOrInt = 'DoubleOrInt';
-export const Percentage = 'Percentage';
+export const Word = 'Word';
 
-
-export function is_Date(item: unknown): item is _Date {
-    return reflection.isInstance(item, _Date);
-}
-
-export interface Month extends AttributeValue {
-    readonly $container: DataAttributeTableRow | _Date;
-    readonly $type: 'Month';
-    type: 'Apr' | 'Aug' | 'Dec' | 'Feb' | 'Jan' | 'Jul' | 'Jun' | 'Mar' | 'May' | 'Nov' | 'Oct' | 'Sep'
-}
-
-export const Month = 'Month';
-
-export function isMonth(item: unknown): item is Month {
-    return reflection.isInstance(item, Month);
+export function isWord(item: unknown): item is Word {
+    return reflection.isInstance(item, Word);
 }
 
 export interface DataAttributeTypeExtendedRef extends DataAttributeType {
@@ -3958,7 +4092,7 @@ export function isDataAttributeTypeOriginal(item: unknown): item is DataAttribut
     return reflection.isInstance(item, DataAttributeTypeOriginal);
 }
 
-export interface DataEnumerationRef extends DataAttributeType {
+export interface DataEnumerationRef extends DataAttributeType, VariableType {
     readonly $container: DataAttribute | TestDataAttribute;
     readonly $type: 'DataEnumerationRef';
     type: Reference<DataEnumeration>
@@ -3968,6 +4102,30 @@ export const DataEnumerationRef = 'DataEnumerationRef';
 
 export function isDataEnumerationRef(item: unknown): item is DataEnumerationRef {
     return reflection.isInstance(item, DataEnumerationRef);
+}
+
+export interface VariableTypeExtendedRef extends VariableType {
+    readonly $container: DataAttribute | TestDataAttribute;
+    readonly $type: 'VariableTypeExtendedRef';
+    type: Reference<VariableTypeExtended>
+}
+
+export const VariableTypeExtendedRef = 'VariableTypeExtendedRef';
+
+export function isVariableTypeExtendedRef(item: unknown): item is VariableTypeExtendedRef {
+    return reflection.isInstance(item, VariableTypeExtendedRef);
+}
+
+export interface VariableTypeOriginal extends VariableType {
+    readonly $container: DataAttribute | TestDataAttribute;
+    readonly $type: 'VariableTypeOriginal';
+    type: 'Binary' | 'Bit' | 'Boolean' | 'Currency' | 'Data' | 'Date' | 'Datetime' | 'Decimal' | 'Double' | 'Email' | 'File' | 'FilePath' | 'Image' | 'Integer' | 'Regex' | 'String' | 'Text' | 'Time' | 'URL' | 'XML'
+}
+
+export const VariableTypeOriginal = 'VariableTypeOriginal';
+
+export function isVariableTypeOriginal(item: unknown): item is VariableTypeOriginal {
+    return reflection.isInstance(item, VariableTypeOriginal);
 }
 
 export interface RslAstType {
@@ -4003,13 +4161,9 @@ export interface RslAstType {
     ActorTypeOriginal: ActorTypeOriginal
     AttributeValue: AttributeValue
     BehaviorElement: BehaviorElement
+    Boolean: Boolean
     Check: Check
-    CheckType: CheckType
-    CheckTypeExtended: CheckTypeExtended
-    CheckTypeExtendedRef: CheckTypeExtendedRef
-    CheckTypeOriginal: CheckTypeOriginal
     ChildDataEntity: ChildDataEntity
-    ConditionalExpression: ConditionalExpression
     Constraint: Constraint
     ConstraintSubType: ConstraintSubType
     ConstraintSubTypeExtended: ConstraintSubTypeExtended
@@ -4022,14 +4176,11 @@ export interface RslAstType {
     Data: Data
     DataAttribute: DataAttribute
     DataAttributeConstraint: DataAttributeConstraint
-    DataAttributeRefs: DataAttributeRefs
     DataAttributeRefsList: DataAttributeRefsList
-    DataAttributeTableRow: DataAttributeTableRow
     DataAttributeType: DataAttributeType
     DataAttributeTypeExtended: DataAttributeTypeExtended
     DataAttributeTypeExtendedRef: DataAttributeTypeExtendedRef
     DataAttributeTypeOriginal: DataAttributeTypeOriginal
-    DataAttributeValues: DataAttributeValues
     DataEntity: DataEntity
     DataEntityCluster: DataEntityCluster
     DataEntityClusterType: DataEntityClusterType
@@ -4048,10 +4199,12 @@ export interface RslAstType {
     DataEntityTypeExtendedRef: DataEntityTypeExtendedRef
     DataEntityTypeOriginal: DataEntityTypeOriginal
     DataEnumeration: DataEnumeration
+    DataEnumerationElement: DataEnumerationElement
     DataEnumerationRef: DataEnumerationRef
-    DataVariableRefs: DataVariableRefs
-    DataVariableTableRow: DataVariableTableRow
-    DataVariableValues: DataVariableValues
+    DataTable: DataTable
+    DataTableHeader: DataTableHeader
+    DataTableRow: DataTableRow
+    DateTime: DateTime
     ElementsRelation: ElementsRelation
     ElementsRelationType: ElementsRelationType
     Expression: Expression
@@ -4080,13 +4233,23 @@ export interface RslAstType {
     GoalTypeExtended: GoalTypeExtended
     GoalTypeExtendedRef: GoalTypeExtendedRef
     GoalTypeOriginal: GoalTypeOriginal
-    IfExpression: IfExpression
     ImpactLevel: ImpactLevel
     Import: Import
     IncludeAll: IncludeAll
     IncludeElement: IncludeElement
     IncludeElementGeneric: IncludeElementGeneric
     IncludeSystemElementType: IncludeSystemElementType
+    LinguisticElement: LinguisticElement
+    LinguisticFragment: LinguisticFragment
+    LinguisticFragmentPart: LinguisticFragmentPart
+    LinguisticFragmentRef: LinguisticFragmentRef
+    LinguisticPattern: LinguisticPattern
+    LinguisticRule: LinguisticRule
+    LinguisticRuleElement: LinguisticRuleElement
+    LinguisticRuleElementAndProperty: LinguisticRuleElementAndProperty
+    LinguisticRuleElementProperty: LinguisticRuleElementProperty
+    LinguisticRuleSeverityLevel: LinguisticRuleSeverityLevel
+    LinguisticRuleType: LinguisticRuleType
     MainScenario: MainScenario
     ManyToMany: ManyToMany
     MetricType: MetricType
@@ -4096,11 +4259,11 @@ export interface RslAstType {
     Model: Model
     Month: Month
     Multiplicity: Multiplicity
-    OperationExtension: OperationExtension
-    OperationTargetType: OperationTargetType
     OtherElement: OtherElement
     PackageAbstract: PackageAbstract
     PackageSystem: PackageSystem
+    PartOfSpeech: PartOfSpeech
+    PartOfSpeechEnum: PartOfSpeechEnum
     PassiveStructureElement: PassiveStructureElement
     PriorityType: PriorityType
     PriorityTypeExtended: PriorityTypeExtended
@@ -4119,7 +4282,6 @@ export interface RslAstType {
     RefActor: RefActor
     RefDataEntity: RefDataEntity
     RefRequirements: RefRequirements
-    RefSystems: RefSystems
     RefTermApplicableTo: RefTermApplicableTo
     RefUC: RefUC
     RefUCAction: RefUCAction
@@ -4128,7 +4290,6 @@ export interface RslAstType {
     RelationTypeExtended: RelationTypeExtended
     RelationTypeExtendedRef: RelationTypeExtendedRef
     RelationTypeOriginal: RelationTypeOriginal
-    RepeatExpression: RepeatExpression
     Requirement: Requirement
     RequirementsRelation: RequirementsRelation
     RequirementsRelationType: RequirementsRelationType
@@ -4157,7 +4318,6 @@ export interface RslAstType {
     ScenarioTypeExtended: ScenarioTypeExtended
     ScenarioTypeExtendedRef: ScenarioTypeExtendedRef
     ScenarioTypeOriginal: ScenarioTypeOriginal
-    SimpleTestStep: SimpleTestStep
     Stakeholder: Stakeholder
     StakeholderSubType: StakeholderSubType
     StakeholderSubTypeExtended: StakeholderSubTypeExtended
@@ -4178,10 +4338,6 @@ export interface RslAstType {
     States: States
     Step: Step
     StepOperationUCType: StepOperationUCType
-    StepSubSubType: StepSubSubType
-    StepSubSubTypeExtended: StepSubSubTypeExtended
-    StepSubSubTypeExtendedRef: StepSubSubTypeExtendedRef
-    StepSubSubTypeOriginal: StepSubSubTypeOriginal
     StepSubType: StepSubType
     StepSubTypeExtended: StepSubTypeExtended
     StepSubTypeExtendedRef: StepSubTypeExtendedRef
@@ -4221,20 +4377,24 @@ export interface RslAstType {
     Tag: Tag
     TermApplicableTo: TermApplicableTo
     Test: Test
-    TestCheck: TestCheck
+    TestCase: TestCase
+    TestData: TestData
     TestDataAttribute: TestDataAttribute
-    TestOperationTarget: TestOperationTarget
-    TestScenario: TestScenario
+    TestElement: TestElement
+    TestParameter: TestParameter
     TestScenarioType: TestScenarioType
     TestScenarioTypeExtended: TestScenarioTypeExtended
     TestScenarioTypeExtendedRef: TestScenarioTypeExtendedRef
     TestScenarioTypeOriginal: TestScenarioTypeOriginal
     TestStep: TestStep
+    TestSuite: TestSuite
+    TestSuiteSetup: TestSuiteSetup
+    TestSuiteSetupTeardown: TestSuiteSetupTeardown
+    TestSuiteTeardown: TestSuiteTeardown
     TestType: TestType
     TestTypeExtended: TestTypeExtended
     TestTypeExtendedRef: TestTypeExtendedRef
     TestTypeOriginal: TestTypeOriginal
-    TestVariable: TestVariable
     TestsRelation: TestsRelation
     TestsRelationType: TestsRelationType
     TestsRelationTypeExtended: TestsRelationTypeExtended
@@ -4243,6 +4403,7 @@ export interface RslAstType {
     Theme: Theme
     ThemeType: ThemeType
     Threat: Threat
+    Time: Time
     Transition: Transition
     TypeExtended: TypeExtended
     UCActions: UCActions
@@ -4263,6 +4424,10 @@ export interface RslAstType {
     UserStoryTypeExtended: UserStoryTypeExtended
     UserStoryTypeExtendedRef: UserStoryTypeExtendedRef
     UserStoryTypeOriginal: UserStoryTypeOriginal
+    VariableType: VariableType
+    VariableTypeExtended: VariableTypeExtended
+    VariableTypeExtendedRef: VariableTypeExtendedRef
+    VariableTypeOriginal: VariableTypeOriginal
     View: View
     ViewType: ViewType
     Vulnerability: Vulnerability
@@ -4278,23 +4443,18 @@ export interface RslAstType {
     VulnerabilityTypeExtended: VulnerabilityTypeExtended
     VulnerabilityTypeExtendedRef: VulnerabilityTypeExtendedRef
     VulnerabilityTypeOriginal: VulnerabilityTypeOriginal
+    Word: Word
     _Date: _Date
 }
 
 export class RslAstReflection extends AbstractAstReflection {
 
     getAllTypes(): string[] {
-        return ['AcceptanceCriteria', 'AcceptanceCriteriaRule', 'AcceptanceCriteriaScenario', 'AcceptanceCriteriaTest', 'ActionType', 'ActionTypeExtended', 'ActionTypeExtendedRef', 'ActionTypeOriginal', 'ActiveElement', 'ActiveEvent', 'ActiveEventType', 'ActiveEventTypeExtended', 'ActiveEventTypeExtendedRef', 'ActiveEventTypeOriginal', 'ActiveFlow', 'ActiveFlowType', 'ActiveFlowTypeExtended', 'ActiveFlowTypeExtendedRef', 'ActiveFlowTypeOriginal', 'ActiveStructureElement', 'ActiveTask', 'ActiveTaskType', 'ActiveTaskTypeExtended', 'ActiveTaskTypeExtendedRef', 'ActiveTaskTypeOriginal', 'Actor', 'ActorType', 'ActorTypeExtended', 'ActorTypeExtendedRef', 'ActorTypeOriginal', 'AttributeValue', 'BehaviorElement', 'Check', 'CheckType', 'CheckTypeExtended', 'CheckTypeExtendedRef', 'CheckTypeOriginal', 'ChildDataEntity', 'ConditionalExpression', 'Constraint', 'ConstraintSubType', 'ConstraintSubTypeExtended', 'ConstraintSubTypeExtendedRef', 'ConstraintSubTypeOriginal', 'ConstraintType', 'ConstraintTypeExtended', 'ConstraintTypeExtendedRef', 'ConstraintTypeOriginal', 'Data', 'DataAttribute', 'DataAttributeConstraint', 'DataAttributeRefs', 'DataAttributeRefsList', 'DataAttributeTableRow', 'DataAttributeType', 'DataAttributeTypeExtended', 'DataAttributeTypeExtendedRef', 'DataAttributeTypeOriginal', 'DataAttributeValues', 'DataEntity', 'DataEntityCluster', 'DataEntityClusterType', 'DataEntityClusterTypeExtended', 'DataEntityClusterTypeExtendedRef', 'DataEntityClusterTypeOriginal', 'DataEntityConstraint', 'DataEntityGeneric', 'DataEntitySubType', 'DataEntitySubTypeExtended', 'DataEntitySubTypeExtendedRef', 'DataEntitySubTypeOriginal', 'DataEntityTest', 'DataEntityType', 'DataEntityTypeExtended', 'DataEntityTypeExtendedRef', 'DataEntityTypeOriginal', 'DataEnumeration', 'DataEnumerationRef', 'DataVariableRefs', 'DataVariableTableRow', 'DataVariableValues', 'ElementsRelation', 'ElementsRelationType', 'Expression', 'ExpressionOperator', 'FR', 'FRType', 'FRTypeExtended', 'FRTypeExtendedRef', 'FRTypeOriginal', 'ForeignKey', 'ForeignKeyOnDeleteType', 'ForeignKeyOnDeleteTypeExtended', 'ForeignKeyOnDeleteTypeExtendedRef', 'ForeignKeyOnDeleteTypeOriginal', 'GlossaryTerm', 'GlossaryTermType', 'GlossaryTermTypeExtended', 'GlossaryTermTypeExtendedRef', 'GlossaryTermTypeOriginal', 'Goal', 'GoalSubType', 'GoalSubTypeExtended', 'GoalSubTypeExtendedRef', 'GoalSubTypeOriginal', 'GoalType', 'GoalTypeExtended', 'GoalTypeExtendedRef', 'GoalTypeOriginal', 'IfExpression', 'ImpactLevel', 'Import', 'IncludeAll', 'IncludeElement', 'IncludeElementGeneric', 'IncludeSystemElementType', 'MainScenario', 'ManyToMany', 'MetricType', 'MetricTypeExtended', 'MetricTypeExtendedRef', 'MetricTypeOriginal', 'Model', 'Month', 'Multiplicity', 'OperationExtension', 'OperationTargetType', 'OtherElement', 'PackageAbstract', 'PackageSystem', 'PassiveStructureElement', 'PriorityType', 'PriorityTypeExtended', 'PriorityTypeExtendedRef', 'PriorityTypeOriginal', 'QR', 'QRSubType', 'QRSubTypeExtended', 'QRSubTypeExtendedRef', 'QRSubTypeOriginal', 'QRType', 'QRTypeExtended', 'QRTypeExtendedRef', 'QRTypeOriginal', 'RefActiveElement', 'RefActor', 'RefDataEntity', 'RefRequirements', 'RefSystems', 'RefTermApplicableTo', 'RefUC', 'RefUCAction', 'ReferenceElements', 'RelationType', 'RelationTypeExtended', 'RelationTypeExtendedRef', 'RelationTypeOriginal', 'RepeatExpression', 'Requirement', 'RequirementsRelation', 'RequirementsRelationType', 'RequirementsRelationTypeExtended', 'RequirementsRelationTypeExtendedRef', 'RequirementsRelationTypeOriginal', 'Risk', 'RiskAssessment', 'RiskGeneric', 'RiskStatus', 'RiskSubType', 'RiskSubTypeExtended', 'RiskSubTypeExtendedRef', 'RiskSubTypeOriginal', 'RiskTreatment', 'RiskTreatmentType', 'RiskTreatmentTypeExtended', 'RiskTreatmentTypeExtendedRef', 'RiskTreatmentTypeOriginal', 'RiskType', 'RiskTypeExtended', 'RiskTypeExtendedRef', 'RiskTypeOriginal', 'Scenario', 'ScenarioType', 'ScenarioTypeExtended', 'ScenarioTypeExtendedRef', 'ScenarioTypeOriginal', 'SimpleTestStep', 'Stakeholder', 'StakeholderSubType', 'StakeholderSubTypeExtended', 'StakeholderSubTypeExtendedRef', 'StakeholderSubTypeOriginal', 'StakeholderType', 'StakeholderTypeExtended', 'StakeholderTypeExtendedRef', 'StakeholderTypeOriginal', 'State', 'StateMachine', 'StateMachineTest', 'StateMachineType', 'StateMachineTypeExtended', 'StateMachineTypeExtendedRef', 'StateMachineTypeOriginal', 'StateSequence', 'States', 'Step', 'StepOperationUCType', 'StepSubSubType', 'StepSubSubTypeExtended', 'StepSubSubTypeExtendedRef', 'StepSubSubTypeOriginal', 'StepSubType', 'StepSubTypeExtended', 'StepSubTypeExtendedRef', 'StepSubTypeOriginal', 'StepType', 'StepTypeExtended', 'StepTypeExtendedRef', 'StepTypeOriginal', 'Stereotype', 'StereotypeType', 'StereotypeTypeExtended', 'StereotypeTypeExtendedRef', 'StereotypeTypeOriginal', 'StructureElement', 'System', 'SystemConcept', 'SystemElement', 'SystemRelation', 'SystemSet', 'SystemSubType', 'SystemSubTypeExtended', 'SystemSubTypeExtendedRef', 'SystemSubTypeOriginal', 'SystemType', 'SystemTypeExtended', 'SystemTypeExtendedRef', 'SystemTypeOriginal', 'SystemsRelation', 'SystemsRelationCategory', 'SystemsRelationCategoryExtended', 'SystemsRelationCategoryExtendedRef', 'SystemsRelationCategoryOriginal', 'SystemsRelationType', 'SystemsRelationTypeExtended', 'SystemsRelationTypeExtendedRef', 'SystemsRelationTypeOriginal', 'Tag', 'TermApplicableTo', 'Test', 'TestCheck', 'TestDataAttribute', 'TestOperationTarget', 'TestScenario', 'TestScenarioType', 'TestScenarioTypeExtended', 'TestScenarioTypeExtendedRef', 'TestScenarioTypeOriginal', 'TestStep', 'TestType', 'TestTypeExtended', 'TestTypeExtendedRef', 'TestTypeOriginal', 'TestVariable', 'TestsRelation', 'TestsRelationType', 'TestsRelationTypeExtended', 'TestsRelationTypeExtendedRef', 'TestsRelationTypeOriginal', 'Theme', 'ThemeType', 'Threat', 'Transition', 'TypeExtended', 'UCActions', 'UCExtends', 'UCExtensionPoint', 'UCExtensionPoints', 'UCIncludes', 'UpdateField', 'UpdateFields', 'UseCase', 'UseCaseTest', 'UseCaseType', 'UseCaseTypeExtended', 'UseCaseTypeExtendedRef', 'UseCaseTypeOriginal', 'UserStory', 'UserStoryType', 'UserStoryTypeExtended', 'UserStoryTypeExtendedRef', 'UserStoryTypeOriginal', 'View', 'ViewType', 'Vulnerability', 'VulnerabilityAttackVector', 'VulnerabilityAttackVectorExtended', 'VulnerabilityAttackVectorExtendedRef', 'VulnerabilityAttackVectorOriginal', 'VulnerabilitySubType', 'VulnerabilitySubTypeExtended', 'VulnerabilitySubTypeExtendedRef', 'VulnerabilitySubTypeOriginal', 'VulnerabilityType', 'VulnerabilityTypeExtended', 'VulnerabilityTypeExtendedRef', 'VulnerabilityTypeOriginal', '_Date'];
+        return ['AcceptanceCriteria', 'AcceptanceCriteriaRule', 'AcceptanceCriteriaScenario', 'AcceptanceCriteriaTest', 'ActionType', 'ActionTypeExtended', 'ActionTypeExtendedRef', 'ActionTypeOriginal', 'ActiveElement', 'ActiveEvent', 'ActiveEventType', 'ActiveEventTypeExtended', 'ActiveEventTypeExtendedRef', 'ActiveEventTypeOriginal', 'ActiveFlow', 'ActiveFlowType', 'ActiveFlowTypeExtended', 'ActiveFlowTypeExtendedRef', 'ActiveFlowTypeOriginal', 'ActiveStructureElement', 'ActiveTask', 'ActiveTaskType', 'ActiveTaskTypeExtended', 'ActiveTaskTypeExtendedRef', 'ActiveTaskTypeOriginal', 'Actor', 'ActorType', 'ActorTypeExtended', 'ActorTypeExtendedRef', 'ActorTypeOriginal', 'AttributeValue', 'BehaviorElement', 'Boolean', 'Check', 'ChildDataEntity', 'Constraint', 'ConstraintSubType', 'ConstraintSubTypeExtended', 'ConstraintSubTypeExtendedRef', 'ConstraintSubTypeOriginal', 'ConstraintType', 'ConstraintTypeExtended', 'ConstraintTypeExtendedRef', 'ConstraintTypeOriginal', 'Data', 'DataAttribute', 'DataAttributeConstraint', 'DataAttributeRefsList', 'DataAttributeType', 'DataAttributeTypeExtended', 'DataAttributeTypeExtendedRef', 'DataAttributeTypeOriginal', 'DataEntity', 'DataEntityCluster', 'DataEntityClusterType', 'DataEntityClusterTypeExtended', 'DataEntityClusterTypeExtendedRef', 'DataEntityClusterTypeOriginal', 'DataEntityConstraint', 'DataEntityGeneric', 'DataEntitySubType', 'DataEntitySubTypeExtended', 'DataEntitySubTypeExtendedRef', 'DataEntitySubTypeOriginal', 'DataEntityTest', 'DataEntityType', 'DataEntityTypeExtended', 'DataEntityTypeExtendedRef', 'DataEntityTypeOriginal', 'DataEnumeration', 'DataEnumerationElement', 'DataEnumerationRef', 'DataTable', 'DataTableHeader', 'DataTableRow', 'DateTime', 'ElementsRelation', 'ElementsRelationType', 'Expression', 'ExpressionOperator', 'FR', 'FRType', 'FRTypeExtended', 'FRTypeExtendedRef', 'FRTypeOriginal', 'ForeignKey', 'ForeignKeyOnDeleteType', 'ForeignKeyOnDeleteTypeExtended', 'ForeignKeyOnDeleteTypeExtendedRef', 'ForeignKeyOnDeleteTypeOriginal', 'GlossaryTerm', 'GlossaryTermType', 'GlossaryTermTypeExtended', 'GlossaryTermTypeExtendedRef', 'GlossaryTermTypeOriginal', 'Goal', 'GoalSubType', 'GoalSubTypeExtended', 'GoalSubTypeExtendedRef', 'GoalSubTypeOriginal', 'GoalType', 'GoalTypeExtended', 'GoalTypeExtendedRef', 'GoalTypeOriginal', 'ImpactLevel', 'Import', 'IncludeAll', 'IncludeElement', 'IncludeElementGeneric', 'IncludeSystemElementType', 'LinguisticElement', 'LinguisticFragment', 'LinguisticFragmentPart', 'LinguisticFragmentRef', 'LinguisticPattern', 'LinguisticRule', 'LinguisticRuleElement', 'LinguisticRuleElementAndProperty', 'LinguisticRuleElementProperty', 'LinguisticRuleSeverityLevel', 'LinguisticRuleType', 'MainScenario', 'ManyToMany', 'MetricType', 'MetricTypeExtended', 'MetricTypeExtendedRef', 'MetricTypeOriginal', 'Model', 'Month', 'Multiplicity', 'OtherElement', 'PackageAbstract', 'PackageSystem', 'PartOfSpeech', 'PartOfSpeechEnum', 'PassiveStructureElement', 'PriorityType', 'PriorityTypeExtended', 'PriorityTypeExtendedRef', 'PriorityTypeOriginal', 'QR', 'QRSubType', 'QRSubTypeExtended', 'QRSubTypeExtendedRef', 'QRSubTypeOriginal', 'QRType', 'QRTypeExtended', 'QRTypeExtendedRef', 'QRTypeOriginal', 'RefActiveElement', 'RefActor', 'RefDataEntity', 'RefRequirements', 'RefTermApplicableTo', 'RefUC', 'RefUCAction', 'ReferenceElements', 'RelationType', 'RelationTypeExtended', 'RelationTypeExtendedRef', 'RelationTypeOriginal', 'Requirement', 'RequirementsRelation', 'RequirementsRelationType', 'RequirementsRelationTypeExtended', 'RequirementsRelationTypeExtendedRef', 'RequirementsRelationTypeOriginal', 'Risk', 'RiskAssessment', 'RiskGeneric', 'RiskStatus', 'RiskSubType', 'RiskSubTypeExtended', 'RiskSubTypeExtendedRef', 'RiskSubTypeOriginal', 'RiskTreatment', 'RiskTreatmentType', 'RiskTreatmentTypeExtended', 'RiskTreatmentTypeExtendedRef', 'RiskTreatmentTypeOriginal', 'RiskType', 'RiskTypeExtended', 'RiskTypeExtendedRef', 'RiskTypeOriginal', 'Scenario', 'ScenarioType', 'ScenarioTypeExtended', 'ScenarioTypeExtendedRef', 'ScenarioTypeOriginal', 'Stakeholder', 'StakeholderSubType', 'StakeholderSubTypeExtended', 'StakeholderSubTypeExtendedRef', 'StakeholderSubTypeOriginal', 'StakeholderType', 'StakeholderTypeExtended', 'StakeholderTypeExtendedRef', 'StakeholderTypeOriginal', 'State', 'StateMachine', 'StateMachineTest', 'StateMachineType', 'StateMachineTypeExtended', 'StateMachineTypeExtendedRef', 'StateMachineTypeOriginal', 'StateSequence', 'States', 'Step', 'StepOperationUCType', 'StepSubType', 'StepSubTypeExtended', 'StepSubTypeExtendedRef', 'StepSubTypeOriginal', 'StepType', 'StepTypeExtended', 'StepTypeExtendedRef', 'StepTypeOriginal', 'Stereotype', 'StereotypeType', 'StereotypeTypeExtended', 'StereotypeTypeExtendedRef', 'StereotypeTypeOriginal', 'StructureElement', 'System', 'SystemConcept', 'SystemElement', 'SystemRelation', 'SystemSet', 'SystemSubType', 'SystemSubTypeExtended', 'SystemSubTypeExtendedRef', 'SystemSubTypeOriginal', 'SystemType', 'SystemTypeExtended', 'SystemTypeExtendedRef', 'SystemTypeOriginal', 'SystemsRelation', 'SystemsRelationCategory', 'SystemsRelationCategoryExtended', 'SystemsRelationCategoryExtendedRef', 'SystemsRelationCategoryOriginal', 'SystemsRelationType', 'SystemsRelationTypeExtended', 'SystemsRelationTypeExtendedRef', 'SystemsRelationTypeOriginal', 'Tag', 'TermApplicableTo', 'Test', 'TestCase', 'TestData', 'TestDataAttribute', 'TestElement', 'TestParameter', 'TestScenarioType', 'TestScenarioTypeExtended', 'TestScenarioTypeExtendedRef', 'TestScenarioTypeOriginal', 'TestStep', 'TestSuite', 'TestSuiteSetup', 'TestSuiteSetupTeardown', 'TestSuiteTeardown', 'TestType', 'TestTypeExtended', 'TestTypeExtendedRef', 'TestTypeOriginal', 'TestsRelation', 'TestsRelationType', 'TestsRelationTypeExtended', 'TestsRelationTypeExtendedRef', 'TestsRelationTypeOriginal', 'Theme', 'ThemeType', 'Threat', 'Time', 'Transition', 'TypeExtended', 'UCActions', 'UCExtends', 'UCExtensionPoint', 'UCExtensionPoints', 'UCIncludes', 'UpdateField', 'UpdateFields', 'UseCase', 'UseCaseTest', 'UseCaseType', 'UseCaseTypeExtended', 'UseCaseTypeExtendedRef', 'UseCaseTypeOriginal', 'UserStory', 'UserStoryType', 'UserStoryTypeExtended', 'UserStoryTypeExtendedRef', 'UserStoryTypeOriginal', 'VariableType', 'VariableTypeExtended', 'VariableTypeExtendedRef', 'VariableTypeOriginal', 'View', 'ViewType', 'Vulnerability', 'VulnerabilityAttackVector', 'VulnerabilityAttackVectorExtended', 'VulnerabilityAttackVectorExtendedRef', 'VulnerabilityAttackVectorOriginal', 'VulnerabilitySubType', 'VulnerabilitySubTypeExtended', 'VulnerabilitySubTypeExtendedRef', 'VulnerabilitySubTypeOriginal', 'VulnerabilityType', 'VulnerabilityTypeExtended', 'VulnerabilityTypeExtendedRef', 'VulnerabilityTypeOriginal', 'Word', '_Date'];
     }
 
     protected override computeIsSubtype(subtype: string, supertype: string): boolean {
         switch (subtype) {
-            case _Date:
-            case DoubleOrInt:
-            case Month:
-            case Percentage: {
-                return this.isSubtype(AttributeValue, supertype);
-            }
             case AcceptanceCriteriaTest:
             case DataEntityTest:
             case StateMachineTest:
@@ -4306,7 +4466,6 @@ export class RslAstReflection extends AbstractAstReflection {
             case ActiveFlowTypeExtended:
             case ActiveTaskTypeExtended:
             case ActorTypeExtended:
-            case CheckTypeExtended:
             case ConstraintSubTypeExtended:
             case ConstraintTypeExtended:
             case DataAttributeTypeExtended:
@@ -4331,7 +4490,6 @@ export class RslAstReflection extends AbstractAstReflection {
             case StakeholderSubTypeExtended:
             case StakeholderTypeExtended:
             case StateMachineTypeExtended:
-            case StepSubSubTypeExtended:
             case StepSubTypeExtended:
             case StepTypeExtended:
             case StereotypeTypeExtended:
@@ -4344,6 +4502,7 @@ export class RslAstReflection extends AbstractAstReflection {
             case TestTypeExtended:
             case UseCaseTypeExtended:
             case UserStoryTypeExtended:
+            case VariableTypeExtended:
             case VulnerabilityAttackVectorExtended:
             case VulnerabilitySubTypeExtended:
             case VulnerabilityTypeExtended: {
@@ -4390,13 +4549,8 @@ export class RslAstReflection extends AbstractAstReflection {
             case IncludeElementGeneric:
             case OtherElement:
             case Requirement:
-            case StructureElement:
-            case Test: {
+            case StructureElement: {
                 return this.isSubtype(SystemElement, supertype);
-            }
-            case CheckTypeExtendedRef:
-            case CheckTypeOriginal: {
-                return this.isSubtype(CheckType, supertype);
             }
             case Constraint:
             case FR:
@@ -4414,14 +4568,11 @@ export class RslAstReflection extends AbstractAstReflection {
             case ConstraintTypeOriginal: {
                 return this.isSubtype(ConstraintType, supertype);
             }
-            case Data:
-            case DataEntityGeneric:
-            case DataEnumeration: {
-                return this.isSubtype(PassiveStructureElement, supertype);
+            case Data: {
+                return this.isSubtype(PassiveStructureElement, supertype) || this.isSubtype(TestData, supertype);
             }
             case DataAttributeTypeExtendedRef:
-            case DataAttributeTypeOriginal:
-            case DataEnumerationRef: {
+            case DataAttributeTypeOriginal: {
                 return this.isSubtype(DataAttributeType, supertype);
             }
             case DataEntity:
@@ -4432,6 +4583,10 @@ export class RslAstReflection extends AbstractAstReflection {
             case DataEntityClusterTypeOriginal: {
                 return this.isSubtype(DataEntityClusterType, supertype);
             }
+            case DataEntityGeneric:
+            case DataEnumeration: {
+                return this.isSubtype(PassiveStructureElement, supertype);
+            }
             case DataEntitySubTypeExtendedRef:
             case DataEntitySubTypeOriginal: {
                 return this.isSubtype(DataEntitySubType, supertype);
@@ -4439,6 +4594,9 @@ export class RslAstReflection extends AbstractAstReflection {
             case DataEntityTypeExtendedRef:
             case DataEntityTypeOriginal: {
                 return this.isSubtype(DataEntityType, supertype);
+            }
+            case DataEnumerationRef: {
+                return this.isSubtype(DataAttributeType, supertype) || this.isSubtype(VariableType, supertype);
             }
             case ElementsRelation:
             case RequirementsRelation:
@@ -4472,13 +4630,25 @@ export class RslAstReflection extends AbstractAstReflection {
             case GoalTypeOriginal: {
                 return this.isSubtype(GoalType, supertype);
             }
-            case IfExpression:
-            case RepeatExpression: {
-                return this.isSubtype(ConditionalExpression, supertype);
-            }
             case IncludeAll:
             case IncludeElement: {
                 return this.isSubtype(IncludeElementGeneric, supertype);
+            }
+            case LinguisticElement:
+            case SystemElement:
+            case SystemRelation:
+            case SystemSet: {
+                return this.isSubtype(SystemConcept, supertype);
+            }
+            case LinguisticFragment:
+            case LinguisticRule: {
+                return this.isSubtype(LinguisticElement, supertype);
+            }
+            case LinguisticFragmentRef:
+            case LinguisticRuleElementAndProperty:
+            case PartOfSpeech:
+            case Word: {
+                return this.isSubtype(LinguisticFragmentPart, supertype);
             }
             case MetricTypeExtendedRef:
             case MetricTypeOriginal: {
@@ -4542,10 +4712,6 @@ export class RslAstReflection extends AbstractAstReflection {
             case StateMachineTypeOriginal: {
                 return this.isSubtype(StateMachineType, supertype);
             }
-            case StepSubSubTypeExtendedRef:
-            case StepSubSubTypeOriginal: {
-                return this.isSubtype(StepSubSubType, supertype);
-            }
             case StepSubTypeExtendedRef:
             case StepSubTypeOriginal: {
                 return this.isSubtype(StepSubType, supertype);
@@ -4557,11 +4723,6 @@ export class RslAstReflection extends AbstractAstReflection {
             case StereotypeTypeExtendedRef:
             case StereotypeTypeOriginal: {
                 return this.isSubtype(StereotypeType, supertype);
-            }
-            case SystemElement:
-            case SystemRelation:
-            case SystemSet: {
-                return this.isSubtype(SystemConcept, supertype);
             }
             case SystemsRelationCategoryExtendedRef:
             case SystemsRelationCategoryOriginal: {
@@ -4579,6 +4740,11 @@ export class RslAstReflection extends AbstractAstReflection {
             case SystemTypeOriginal: {
                 return this.isSubtype(SystemType, supertype);
             }
+            case Test:
+            case TestData:
+            case TestSuiteSetupTeardown: {
+                return this.isSubtype(TestElement, supertype);
+            }
             case TestScenarioTypeExtendedRef:
             case TestScenarioTypeOriginal: {
                 return this.isSubtype(TestScenarioType, supertype);
@@ -4586,6 +4752,10 @@ export class RslAstReflection extends AbstractAstReflection {
             case TestsRelationTypeExtendedRef:
             case TestsRelationTypeOriginal: {
                 return this.isSubtype(TestsRelationType, supertype);
+            }
+            case TestSuiteSetup:
+            case TestSuiteTeardown: {
+                return this.isSubtype(TestSuiteSetupTeardown, supertype);
             }
             case TestTypeExtendedRef:
             case TestTypeOriginal: {
@@ -4602,6 +4772,10 @@ export class RslAstReflection extends AbstractAstReflection {
             case UserStoryTypeExtendedRef:
             case UserStoryTypeOriginal: {
                 return this.isSubtype(UserStoryType, supertype);
+            }
+            case VariableTypeExtendedRef:
+            case VariableTypeOriginal: {
+                return this.isSubtype(VariableType, supertype);
             }
             case VulnerabilityAttackVectorExtendedRef:
             case VulnerabilityAttackVectorOriginal: {
@@ -4663,28 +4837,30 @@ export class RslAstReflection extends AbstractAstReflection {
             }
             case 'Actor:super':
             case 'RefActor:refs':
-            case 'SimpleTestStep:actor':
             case 'Step:actor':
             case 'TestStep:actor':
             case 'UseCase:primaryActor':
+            case 'UseCaseTest:primaryActor':
             case 'UserStory:actor': {
                 return Actor;
             }
             case 'ActorTypeExtendedRef:type': {
                 return ActorTypeExtended;
             }
-            case 'CheckTypeExtendedRef:type': {
-                return CheckTypeExtended;
-            }
             case 'ChildDataEntity:child':
+            case 'Data:type':
             case 'DataEntity:super':
             case 'DataEntityCluster:main':
             case 'DataEntityTest:entity':
+            case 'DataEnumerationRef:dataEntity':
             case 'ForeignKey:targetEntity':
             case 'ManyToMany:targetEntity':
             case 'ManyToMany:throughEntity':
             case 'RefDataEntity:refDataEntity':
-            case 'TestScenario:entity': {
+            case 'TestCase:entity':
+            case 'VariableType:dataEntity':
+            case 'VariableTypeExtendedRef:dataEntity':
+            case 'VariableTypeOriginal:dataEntity': {
                 return DataEntity;
             }
             case 'Constraint:partOf': {
@@ -4696,28 +4872,14 @@ export class RslAstReflection extends AbstractAstReflection {
             case 'ConstraintTypeExtendedRef:type': {
                 return ConstraintTypeExtended;
             }
-            case 'Data:type':
-            case 'StateMachine:entity':
-            case 'UseCase:dataEntity': {
-                return DataEntityGeneric;
-            }
-            case 'DataAttributeRefs:attributeRef':
             case 'DataAttributeRefsList:attributeRef':
             case 'DataEntityConstraint:showAsAttribute':
-            case 'DataVariableRefs:variableRef':
+            case 'DataTableHeader:attributeRefs':
             case 'ForeignKey:showAsField':
             case 'ForeignKey:toField':
             case 'ManyToMany:throughSourceField':
             case 'ManyToMany:throughTargetField':
-            case 'TestCheck:codeVariable':
-            case 'TestCheck:expected':
-            case 'TestCheck:limitVariable':
-            case 'TestCheck:textVariable':
-            case 'TestCheck:timeoutVariable':
-            case 'TestCheck:urlVariable':
-            case 'TestCheck:variable':
-            case 'TestDataAttribute:attribute':
-            case 'TestOperationTarget:variable': {
+            case 'TestDataAttribute:attribute': {
                 return DataAttribute;
             }
             case 'DataAttributeTypeExtendedRef:type': {
@@ -4768,12 +4930,14 @@ export class RslAstReflection extends AbstractAstReflection {
             }
             case 'IncludeAll:system':
             case 'IncludeElement:system':
-            case 'RefSystems:refs':
             case 'System:partOf':
-            case 'System:sut':
             case 'SystemsRelation:source':
-            case 'SystemsRelation:target': {
+            case 'SystemsRelation:target':
+            case 'TestSuite:sut': {
                 return System;
+            }
+            case 'LinguisticFragmentRef:option': {
+                return LinguisticFragment;
             }
             case 'MetricTypeExtendedRef:type': {
                 return MetricTypeExtended;
@@ -4826,14 +4990,15 @@ export class RslAstReflection extends AbstractAstReflection {
             case 'ScenarioTypeExtendedRef:type': {
                 return ScenarioTypeExtended;
             }
-            case 'SimpleTestStep:next': {
-                return TestStep;
-            }
             case 'StakeholderSubTypeExtendedRef:type': {
                 return StakeholderSubTypeExtended;
             }
             case 'StakeholderTypeExtendedRef:type': {
                 return StakeholderTypeExtended;
+            }
+            case 'StateMachine:entity':
+            case 'UseCase:dataEntity': {
+                return DataEntityGeneric;
             }
             case 'StateMachineTest:stateMachine': {
                 return StateMachine;
@@ -4845,12 +5010,13 @@ export class RslAstReflection extends AbstractAstReflection {
             case 'Transition:nextstate': {
                 return State;
             }
-            case 'Step:next':
-            case 'TestStep:next': {
-                return Step;
+            case 'Step:event':
+            case 'TestStep:event':
+            case 'UseCase:triggeredBy': {
+                return ActiveEvent;
             }
-            case 'StepSubSubTypeExtendedRef:type': {
-                return StepSubSubTypeExtended;
+            case 'Step:next': {
+                return Step;
             }
             case 'StepSubTypeExtendedRef:type': {
                 return StepSubTypeExtended;
@@ -4873,9 +5039,6 @@ export class RslAstReflection extends AbstractAstReflection {
             case 'SystemTypeExtendedRef:type': {
                 return SystemTypeExtended;
             }
-            case 'TestScenario:variable': {
-                return TestVariable;
-            }
             case 'TestScenarioTypeExtendedRef:type': {
                 return TestScenarioTypeExtended;
             }
@@ -4886,14 +5049,14 @@ export class RslAstReflection extends AbstractAstReflection {
             case 'TestsRelationTypeExtendedRef:type': {
                 return TestsRelationTypeExtended;
             }
+            case 'TestStep:testCase': {
+                return TestCase;
+            }
             case 'TestTypeExtendedRef:type': {
                 return TestTypeExtended;
             }
             case 'UCExtends:extensionPoint': {
                 return UCExtensionPoint;
-            }
-            case 'UseCase:triggeredBy': {
-                return ActiveEvent;
             }
             case 'UseCaseTypeExtendedRef:type': {
                 return UseCaseTypeExtended;
@@ -4903,6 +5066,9 @@ export class RslAstReflection extends AbstractAstReflection {
             }
             case 'UserStoryTypeExtendedRef:type': {
                 return UserStoryTypeExtended;
+            }
+            case 'VariableTypeExtendedRef:type': {
+                return VariableTypeExtended;
             }
             case 'VulnerabilityAttackVectorExtendedRef:type': {
                 return VulnerabilityAttackVectorExtended;
@@ -4945,6 +5111,8 @@ export class RslAstReflection extends AbstractAstReflection {
                 return {
                     name: 'AcceptanceCriteriaTest',
                     mandatory: [
+                        { name: 'criteriaR', type: 'array' },
+                        { name: 'criteriaS', type: 'array' },
                         { name: 'tags', type: 'array' }
                     ]
                 };
@@ -4953,8 +5121,10 @@ export class RslAstReflection extends AbstractAstReflection {
                 return {
                     name: 'ActiveEvent',
                     mandatory: [
+                        { name: 'isCatch', type: 'boolean' },
                         { name: 'isFinal', type: 'boolean' },
                         { name: 'isInitial', type: 'boolean' },
+                        { name: 'isThrow', type: 'boolean' },
                         { name: 'tags', type: 'array' }
                     ]
                 };
@@ -5022,35 +5192,11 @@ export class RslAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
-            case 'DataAttributeRefs': {
-                return {
-                    name: 'DataAttributeRefs',
-                    mandatory: [
-                        { name: 'attributeRef', type: 'array' }
-                    ]
-                };
-            }
             case 'DataAttributeRefsList': {
                 return {
                     name: 'DataAttributeRefsList',
                     mandatory: [
                         { name: 'attributeRef', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataAttributeTableRow': {
-                return {
-                    name: 'DataAttributeTableRow',
-                    mandatory: [
-                        { name: 'attributeValues', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataAttributeValues': {
-                return {
-                    name: 'DataAttributeValues',
-                    mandatory: [
-                        { name: 'tableRows', type: 'array' }
                     ]
                 };
             }
@@ -5098,27 +5244,27 @@ export class RslAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
-            case 'DataVariableRefs': {
+            case 'DataTable': {
                 return {
-                    name: 'DataVariableRefs',
-                    mandatory: [
-                        { name: 'variableRef', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataVariableTableRow': {
-                return {
-                    name: 'DataVariableTableRow',
-                    mandatory: [
-                        { name: 'variableValues', type: 'array' }
-                    ]
-                };
-            }
-            case 'DataVariableValues': {
-                return {
-                    name: 'DataVariableValues',
+                    name: 'DataTable',
                     mandatory: [
                         { name: 'tableRows', type: 'array' }
+                    ]
+                };
+            }
+            case 'DataTableHeader': {
+                return {
+                    name: 'DataTableHeader',
+                    mandatory: [
+                        { name: 'attributeRefs', type: 'array' }
+                    ]
+                };
+            }
+            case 'DataTableRow': {
+                return {
+                    name: 'DataTableRow',
+                    mandatory: [
+                        { name: 'attributeValues', type: 'array' }
                     ]
                 };
             }
@@ -5181,6 +5327,30 @@ export class RslAstReflection extends AbstractAstReflection {
                     name: 'IncludeElement',
                     mandatory: [
                         { name: 'tags', type: 'array' }
+                    ]
+                };
+            }
+            case 'LinguisticFragment': {
+                return {
+                    name: 'LinguisticFragment',
+                    mandatory: [
+                        { name: 'options', type: 'array' }
+                    ]
+                };
+            }
+            case 'LinguisticPattern': {
+                return {
+                    name: 'LinguisticPattern',
+                    mandatory: [
+                        { name: 'parts', type: 'array' }
+                    ]
+                };
+            }
+            case 'LinguisticRule': {
+                return {
+                    name: 'LinguisticRule',
+                    mandatory: [
+                        { name: 'pattern', type: 'array' }
                     ]
                 };
             }
@@ -5258,14 +5428,6 @@ export class RslAstReflection extends AbstractAstReflection {
             case 'RefRequirements': {
                 return {
                     name: 'RefRequirements',
-                    mandatory: [
-                        { name: 'refs', type: 'array' }
-                    ]
-                };
-            }
-            case 'RefSystems': {
-                return {
-                    name: 'RefSystems',
                     mandatory: [
                         { name: 'refs', type: 'array' }
                     ]
@@ -5379,7 +5541,6 @@ export class RslAstReflection extends AbstractAstReflection {
                     mandatory: [
                         { name: 'isFinal', type: 'boolean' },
                         { name: 'isReusable', type: 'boolean' },
-                        { name: 'isTestSuite', type: 'boolean' },
                         { name: 'systemConcepts', type: 'array' },
                         { name: 'tags', type: 'array' }
                     ]
@@ -5393,21 +5554,11 @@ export class RslAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
-            case 'TestOperationTarget': {
+            case 'TestCase': {
                 return {
-                    name: 'TestOperationTarget',
+                    name: 'TestCase',
                     mandatory: [
-                        { name: 'content', type: 'array' },
-                        { name: 'variable', type: 'array' }
-                    ]
-                };
-            }
-            case 'TestScenario': {
-                return {
-                    name: 'TestScenario',
-                    mandatory: [
-                        { name: 'isAbstract', type: 'boolean' },
-                        { name: 'isConcrete', type: 'boolean' },
+                        { name: 'testParameters', type: 'array' },
                         { name: 'testSteps', type: 'array' }
                     ]
                 };
@@ -5420,11 +5571,30 @@ export class RslAstReflection extends AbstractAstReflection {
                     ]
                 };
             }
-            case 'TestVariable': {
+            case 'TestSuite': {
                 return {
-                    name: 'TestVariable',
+                    name: 'TestSuite',
                     mandatory: [
-                        { name: 'attributes', type: 'array' }
+                        { name: 'elements', type: 'array' },
+                        { name: 'isFinal', type: 'boolean' },
+                        { name: 'isReusable', type: 'boolean' },
+                        { name: 'tags', type: 'array' }
+                    ]
+                };
+            }
+            case 'TestSuiteSetup': {
+                return {
+                    name: 'TestSuiteSetup',
+                    mandatory: [
+                        { name: 'testSteps', type: 'array' }
+                    ]
+                };
+            }
+            case 'TestSuiteTeardown': {
+                return {
+                    name: 'TestSuiteTeardown',
+                    mandatory: [
+                        { name: 'testSteps', type: 'array' }
                     ]
                 };
             }
@@ -5490,9 +5660,11 @@ export class RslAstReflection extends AbstractAstReflection {
                 return {
                     name: 'UseCaseTest',
                     mandatory: [
-                        { name: 'scenarios', type: 'array' },
+                        { name: 'oneTimeSetupSteps', type: 'array' },
+                        { name: 'oneTimeTeardownSteps', type: 'array' },
+                        { name: 'supportingActors', type: 'array' },
                         { name: 'tags', type: 'array' },
-                        { name: 'variables', type: 'array' }
+                        { name: 'testCases', type: 'array' }
                     ]
                 };
             }

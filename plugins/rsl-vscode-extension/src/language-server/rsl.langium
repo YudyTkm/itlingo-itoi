@@ -26,16 +26,28 @@ Percentage returns string:
     DoubleOrInt '%'  
 ;
 
+Boolean infers Boolean:
+    ^type=('True' | 'False' ) 
+;
+
 Month infers Month:
     ^type=('Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec' ) 
 ;
 
 ^Date infers _Date:
-    day=INT  '-' month=Month  '-' year=INT   
+    year=INT  '-' month=INT  '-' day=INT   
+;
+
+Time infers Time:
+    hh=INT  ':' mm=INT  (':' ss=INT  )?  
+;
+
+DateTime infers DateTime:
+    'D' year=INT  '-' month=INT  '-' day=INT  ('T' hh=INT  ':' mm=INT  (':' ss=INT  )? )?  
 ;
 
 AttributeValue infers AttributeValue:
-    value=STRING  | ^Date | Month | { infer AttributeValue} DoubleOrInt  | { infer AttributeValue} Percentage  
+    ^string=STRING  | dateTime=DateTime  | date=^Date  | time=Time  | doubleOrInt=DoubleOrInt  | percentage=Percentage  | ^boolean=Boolean  
 ;
 
 Multiplicity infers Multiplicity:
@@ -79,23 +91,19 @@ PackageAbstract infers PackageAbstract:
 ;
 
 PackageSystem infers PackageSystem:
-    'Package' name=QualifiedName  (imports+=Import )* (system=System )  
+    'Package' name=QualifiedName  (imports+=Import )* ((system=System ) | (testSuite=TestSuite ) ) 
 ;
 
 System infers System:
-    'System' name=ID  (nameAlias=STRING )? ':' ^type=SystemType  (':' subType=SystemSubType  )? ('[' ((isReusable?='isReusable' ) | (isFinal?='isFinal' ) )?(isTestSuite?='isTestSuite'  ('systemUnderTest' sut=[System:ID ] ) )? ('partOf' partOf=[System:ID ] )? ('vendor' vendor=STRING  )? ('version' version=STRING  )? (tags+=Tag )* ('description' description=STRING  )? ']' )? systemConcepts+=SystemConcept *  
-;
-
-RefSystems infers RefSystems:
-    refs+=[System:ID ] (',' refs+=[System:ID ] )*  
+    'System' name=ID  (nameAlias=STRING )? ':' ^type=SystemType  (':' subType=SystemSubType  )? ('[' ((isReusable?='isReusable' ) | (isFinal?='isFinal' ) )?('partOf' partOf=[System:ID ] )? ('vendor' vendor=STRING  )? ('version' version=STRING  )? (tags+=Tag )* ('description' description=STRING  )? ']' )? systemConcepts+=SystemConcept *  
 ;
 
 SystemConcept infers SystemConcept:
-    SystemElement | SystemRelation | SystemSet 
+    SystemElement | SystemRelation | SystemSet | LinguisticElement 
 ;
 
 SystemElement infers SystemElement:
-    StructureElement | BehaviorElement | Requirement | Test | OtherElement | IncludeElementGeneric 
+    StructureElement | BehaviorElement | Requirement | OtherElement | IncludeElementGeneric 
 ;
 
 StructureElement infers StructureElement:
@@ -139,7 +147,7 @@ SystemSet infers SystemSet:
 ;
 
 TypeExtended infers TypeExtended:
-    SystemTypeExtended | SystemSubTypeExtended | MetricTypeExtended | PriorityTypeExtended | StakeholderTypeExtended | StakeholderSubTypeExtended | ActorTypeExtended | GlossaryTermTypeExtended | ActiveEventTypeExtended | ActiveTaskTypeExtended | ActiveFlowTypeExtended | FRTypeExtended | QRTypeExtended | QRSubTypeExtended | ConstraintTypeExtended | ConstraintSubTypeExtended | GoalTypeExtended | GoalSubTypeExtended | UserStoryTypeExtended | UseCaseTypeExtended | ActionTypeExtended | DataEntityTypeExtended | DataEntitySubTypeExtended | DataEntityClusterTypeExtended | DataAttributeTypeExtended | ForeignKeyOnDeleteTypeExtended | StateMachineTypeExtended | TestTypeExtended | TestScenarioTypeExtended | ScenarioTypeExtended | CheckTypeExtended | StepTypeExtended | StepSubTypeExtended | StepSubSubTypeExtended | VulnerabilityTypeExtended | VulnerabilitySubTypeExtended | VulnerabilityAttackVectorExtended | RiskTypeExtended | RiskSubTypeExtended | RiskTreatmentTypeExtended | RelationTypeExtended | SystemsRelationTypeExtended | SystemsRelationCategoryExtended | RequirementsRelationTypeExtended | TestsRelationTypeExtended | StereotypeTypeExtended 
+    SystemTypeExtended | SystemSubTypeExtended | MetricTypeExtended | PriorityTypeExtended | StakeholderTypeExtended | StakeholderSubTypeExtended | ActorTypeExtended | GlossaryTermTypeExtended | ActiveEventTypeExtended | ActiveTaskTypeExtended | ActiveFlowTypeExtended | FRTypeExtended | QRTypeExtended | QRSubTypeExtended | ConstraintTypeExtended | ConstraintSubTypeExtended | GoalTypeExtended | GoalSubTypeExtended | UserStoryTypeExtended | UseCaseTypeExtended | ActionTypeExtended | DataEntityTypeExtended | DataEntitySubTypeExtended | DataEntityClusterTypeExtended | DataAttributeTypeExtended | ForeignKeyOnDeleteTypeExtended | StateMachineTypeExtended | VariableTypeExtended | TestTypeExtended | TestScenarioTypeExtended | ScenarioTypeExtended | StepTypeExtended | StepSubTypeExtended | VulnerabilityTypeExtended | VulnerabilitySubTypeExtended | VulnerabilityAttackVectorExtended | RiskTypeExtended | RiskSubTypeExtended | RiskTreatmentTypeExtended | RelationTypeExtended | SystemsRelationTypeExtended | SystemsRelationCategoryExtended | RequirementsRelationTypeExtended | TestsRelationTypeExtended | StereotypeTypeExtended 
 ;
 
 SystemType infers SystemType:
@@ -467,7 +475,7 @@ UseCaseTypeExtendedRef infers UseCaseTypeExtendedRef:
 ;
 
 UseCaseTypeOriginal infers UseCaseTypeOriginal:
-    ^type=('EntityCreate' | 'EntityRead' | 'EntityUpdate' | 'EntityDelete' | 'EntityReport' | 'EntityDashboard' | 'EntityOther' | 'EntitiesManage' | 'EntitiesBrowse' | 'EntitiesSearch' | 'EntitiesReport' | 'EntitiesDashboard' | 'EntitiesInteropImport' | 'EntitiesInteropExport' | 'EntitiesInteropSync' | 'EntitiesInteropSendMessage' | 'EntitiesInteropServiceInvocation' | 'EntitiesMapShow' | 'EntitiesMapInteract' | 'EntitiesOther' | 'Other' ) 
+    ^type=('EntityCreate' | 'EntityRead' | 'EntityUpdate' | 'EntityDelete' | 'EntityReport' | 'EntityDashboard' | 'EntityOther' | 'EntitiesManage' | 'EntitiesBrowse' | 'EntitiesSearch' | 'EntitiesReport' | 'EntitiesDashboard' | 'EntitiesInteropImport' | 'EntitiesInteropExport' | 'EntitiesInteropSync' | 'EntitiesInteropSendMessage' | 'EntitiesInteropServiceInvocation' | 'EntitiesMapShow' | 'EntitiesMapInteract' | 'EntitiesOther' | 'Login' | 'Logout' | 'Other' ) 
 ;
 
 ActionType infers ActionType:
@@ -566,6 +574,22 @@ ForeignKeyOnDeleteTypeOriginal infers ForeignKeyOnDeleteTypeOriginal:
     ^type=('CASCADE' | 'PROTECT' | 'SET_NULL' | 'SET_DEFAULT' ) 
 ;
 
+VariableType infers VariableType:
+    VariableTypeOriginal ('(' size=DoubleOrInt  ')' )?  | VariableTypeExtendedRef | 'DataEnumeration' DataEnumerationRef  | 'DataEntity' dataEntity=[DataEntity:QualifiedName ]  
+;
+
+VariableTypeExtended infers VariableTypeExtended:
+    'VariableType' name=ID  (nameAlias=STRING )? ('[' ('description' description=STRING  )? ']' )?  
+;
+
+VariableTypeExtendedRef infers VariableTypeExtendedRef:
+    ^type=[VariableTypeExtended:QualifiedName ] 
+;
+
+VariableTypeOriginal infers VariableTypeOriginal:
+    ^type=('Integer' | 'Double' | 'Decimal' | 'Boolean' | 'Bit' | 'Currency' | 'Date' | 'Time' | 'Datetime' | 'String' | 'Text' | 'Regex' | 'URL' | 'Email' | 'File' | 'Image' | 'XML' | 'Binary' | 'FilePath' | 'Data' ) 
+;
+
 StateMachineType infers StateMachineType:
     StateMachineTypeOriginal | StateMachineTypeExtendedRef 
 ;
@@ -643,7 +667,7 @@ StepTypeExtendedRef infers StepTypeExtendedRef:
 ;
 
 StepTypeOriginal infers StepTypeOriginal:
-    ^type=('Actor' | 'System' | 'Other' ) 
+    ^type=('Actor' | 'System' | 'Event' | 'Other' ) 
 ;
 
 StepSubType infers StepSubType:
@@ -659,39 +683,7 @@ StepSubTypeExtendedRef infers StepSubTypeExtendedRef:
 ;
 
 StepSubTypeOriginal infers StepSubTypeOriginal:
-    ^type=('PrepareData' | 'CallSystem' | 'Execute' | 'ReturnResult' | 'Other' ) 
-;
-
-StepSubSubType infers StepSubSubType:
-    StepSubSubTypeOriginal | StepSubSubTypeExtendedRef 
-;
-
-StepSubSubTypeExtended infers StepSubSubTypeExtended:
-    'StepSubSubType' name=ID  (nameAlias=STRING )? ('[' ('description' description=STRING  )? ']' )?  
-;
-
-StepSubSubTypeExtendedRef infers StepSubSubTypeExtendedRef:
-    ^type=[StepSubSubTypeExtended:QualifiedName ] 
-;
-
-StepSubSubTypeOriginal infers StepSubSubTypeOriginal:
-    ^type=('SubmitAction' | 'ShowData' | 'CancelAction' | 'TerminateAction' | 'OpenBrowser' | 'CloseBrowser' | 'Reload' | 'GetData' | 'PostData' | 'Select' | 'Click' | 'Over' | 'Submit' | 'Fill' | 'Check' | 'Other' ) 
-;
-
-CheckType infers CheckType:
-    CheckTypeOriginal | CheckTypeExtendedRef 
-;
-
-CheckTypeExtended infers CheckTypeExtended:
-    'CheckType' name=ID  (nameAlias=STRING )? ('[' ('description' description=STRING  )? ']' )?  
-;
-
-CheckTypeExtendedRef infers CheckTypeExtendedRef:
-    ^type=[CheckTypeExtended:QualifiedName ] 
-;
-
-CheckTypeOriginal infers CheckTypeOriginal:
-    ^type=('TextOnScreen' | 'TextOnElement' | 'ElementOnScreen' | 'ResponseTime' | 'VariableValue' | 'Script' | 'Screen' | 'Other' | 'None' ) 
+    ^type=('Open' | 'OpenApp' | 'CloseApp' | 'Write' | 'WriteSecret' | 'Read' | 'ClickOnElement' | 'ClickOnButton' | 'CheckOnPage' | 'CheckOnElement' | 'CheckElementInPage' | 'ReceiveMail' | 'Show' | 'Display' | 'Ask' | 'Validate' | 'Execute' | 'SendMail' | 'Timer' | 'Receive' | 'Conditional' | 'Cancel' | 'Error' | 'Signal' | 'Other' ) 
 ;
 
 VulnerabilityType infers VulnerabilityType:
@@ -891,19 +883,15 @@ StereotypeTypeExtendedRef infers StereotypeTypeExtendedRef:
 ;
 
 StereotypeTypeOriginal infers StereotypeTypeOriginal:
-    ^type=('System' | 'GlossaryTerm' | 'Stakeholder' | 'Actor' | 'ActiveTask' | 'ActiveEvent' | 'Goal' | 'QR' | 'FR' | 'Constraint' | 'UserStory' | 'UseCase' | 'AcceptanceCriteriaTestView' | 'UseCaseTestView' | 'DataEntityTestView' | 'StatemachineTestView' | 'DataEntity' | 'DataEntityCluster' | 'StateMachine' | 'Vulnerability' | 'Risk' | 'Other' ) 
-;
-
-ViewType infers ViewType:
-    ^type=('RequirementView' | 'GoalView' | 'QRView' | 'FRView' | 'ConstraintView' | 'UserStoryView' | 'UseCaseView' | 'TestView' | 'StakeholderView' | 'ActorView' | 'GlossaryTermView' | 'DataEntityView' | 'DataEntityClusterView' | 'ActiveElementView' | 'RiskView' | 'VulnerabilityView' ) 
-;
-
-ThemeType infers ThemeType:
-    ^type=('SystemElementTheme' | 'StructureElementTheme' | 'BehaviorElementTheme' | 'RequirementTheme' | 'TestTheme' | 'OtherTheme' ) 
+    ^type=('System' | 'TestSuite' | 'GlossaryTerm' | 'Vulnerability' | 'Risk' | 'Stakeholder' | 'Actor' | 'StateMachine' | 'ActiveTask' | 'ActiveEvent' | 'ActiveFlow' | 'Goal' | 'QR' | 'FR' | 'Constraint' | 'UserStory' | 'UseCase' | 'AcceptanceCriteriaTest' | 'DataEntityTest' | 'UseCaseTest' | 'StateMachineTest' | 'DataEnumeration' | 'DataEntity' | 'DataEntityCluster' | 'Data' | 'TestData' | 'AcceptanceCriteriaTestView' | 'UseCaseTestView' | 'DataEntityTestView' | 'StatemachineTestView' | 'MainScenario' | 'Scenario' | 'Step' | 'AcceptanceCriteriaScenario' | 'DataAttribute' | 'Other' ) 
 ;
 
 IncludeSystemElementType infers IncludeSystemElementType:
     ^type=('Goal' | 'QR' | 'FR' | 'Constraint' | 'UserStory' | 'UseCase' | 'AcceptanceCriteriaTestView' | 'UseCaseTestView' | 'DataEntityTestView' | 'StatemachineTestView' | 'Stakeholder' | 'Actor' | 'GlossaryTerm' | 'DataEnumeration' | 'DataEntity' | 'DataEntityCluster' | 'StateMachine' | 'ActiveEvent' | 'ActiveTask' | 'ActiveFlow' | 'Vulnerability' | 'Risk' ) 
+;
+
+LinguisticRuleType infers LinguisticRuleType:
+    ^type=('Morphology' | 'Syntax' | 'Semantics' ) 
 ;
 
 GlossaryTerm infers GlossaryTerm:
@@ -927,7 +915,7 @@ RefActiveElement infers RefActiveElement:
 ;
 
 ActiveEvent infers ActiveEvent:
-    'Event' name=ID  (nameAlias=STRING )? ':' ^type=ActiveEventType  ('[' (isInitial?='isInitial' )? (isFinal?='isFinal' )? ('participant' stakeholder=[Stakeholder:QualifiedName ] )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
+    'Event' name=ID  (nameAlias=STRING )? ':' ^type=ActiveEventType  ('[' ((isInitial?='isInitial' ) | (isFinal?='isFinal' ) )?((isCatch?='isCatch' ) | (isThrow?='isThrow' ) )?('participant' stakeholder=[Stakeholder:QualifiedName ] )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
 ActiveTask infers ActiveTask:
@@ -958,30 +946,6 @@ DataAttributeConstraint infers DataAttributeConstraint:
     { infer DataAttributeConstraint} 'constraints' '(' ('multiplicity' multiplicity=Multiplicity  )? (isPrimaryKey='PrimaryKey' )? (isNotNull='NotNull' )? (isUnique='Unique' )? (isDerived='Derived'  ('(' expression=STRING  ')' )? )? (isReadOnly='ReadOnly' )? (isNotVisible='NotVisible' )? (isEncrypted='Encrypted' )? (foreignKey=ForeignKey )? (manyToMany=ManyToMany )? (checks+=Check )* ')'  
 ;
 
-DataEnumeration infers DataEnumeration:
-    'DataEnumeration' name=ID  (nameAlias=STRING )? 'values' '(' values+=STRING  (',' values+=STRING  )* ')' ('[' (tags+=Tag )* ('description' description=STRING  )? ']' )?  
-;
-
-DataEnumerationRef infers DataEnumerationRef:
-    ^type=[DataEnumeration:QualifiedName ] 
-;
-
-Data infers Data:
-    'Data' name=ID  (nameAlias=STRING )? ':' ^type=[DataEntityGeneric:QualifiedName ] ('[' ('withValues' table=DataAttributeValues  )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
-;
-
-DataAttributeValues infers DataAttributeValues:
-    (tableHeader=DataAttributeRefs ) tableRows+=DataAttributeTableRow *  
-;
-
-DataAttributeRefs infers DataAttributeRefs:
-    ('|' attributeRef+=[DataAttribute:QualifiedName ] )+ "+|"  
-;
-
-DataAttributeTableRow infers DataAttributeTableRow:
-    ('|' attributeValues+=AttributeValue  )+ "+|"  
-;
-
 ForeignKey infers ForeignKey:
     'ForeignKey' '(' targetEntity=[DataEntity:QualifiedName ] ('toField' toField=[DataAttribute:QualifiedName ] )? ('showAsField' showAsField=[DataAttribute:QualifiedName ] )? ('defaultValue' defaultValue=STRING  )? ('onDelete' onDelete=ForeignKeyOnDeleteType  )? ')'  
 ;
@@ -1004,6 +968,34 @@ ChildDataEntity infers ChildDataEntity:
 
 RefDataEntity infers RefDataEntity:
     refDataEntity+=[DataEntity:QualifiedName ] (',' refDataEntity+=[DataEntity:QualifiedName ] )*  
+;
+
+DataEnumeration infers DataEnumeration:
+    'DataEnumeration' name=ID  (nameAlias=STRING )? 'values' '(' values+=DataEnumerationElement  (',' values+=DataEnumerationElement  )* ')' ('[' (tags+=Tag )* ('description' description=STRING  )? ']' )?  
+;
+
+DataEnumerationElement infers DataEnumerationElement:
+    name=ID  (nameAlias=STRING )?  
+;
+
+DataEnumerationRef infers DataEnumerationRef:
+    ^type=[DataEnumeration:QualifiedName ] 
+;
+
+Data infers Data:
+    'Data' name=ID  (nameAlias=STRING )? ':' ^type=[DataEntity:QualifiedName ] (':=' table=DataTable  )? ('[' (tags+=Tag )* ('description' description=STRING  )? ']' )?  
+;
+
+DataTable infers DataTable:
+    '[' (tableHeader=DataTableHeader ) (tableRows+=DataTableRow )* ']'  
+;
+
+DataTableHeader infers DataTableHeader:
+    '[' (attributeRefs+=[DataAttribute:QualifiedName ]) ("," attributeRefs+=[DataAttribute:QualifiedName ] )* "]"  
+;
+
+DataTableRow infers DataTableRow:
+    '[' (attributeValues+=AttributeValue ) ("," attributeValues+=AttributeValue  )* "]"  
 ;
 
 Actor infers Actor:
@@ -1035,7 +1027,7 @@ UserStory infers UserStory:
 ;
 
 UseCase infers UseCase:
-    'UseCase' name=ID  (nameAlias=STRING )? ':' ^type=UseCaseType  ('[' ((isNegative?='isNegative' ) | (isPositive?='isPositive' ) )?((isConcrete?='isConcrete' ) | (isAbstract?='isAbstract' ) )?((isSolution?='isSolution' ) | (isProblem?='isProblem' ) )?('stakeholder' stakeholder=[Stakeholder:QualifiedName ] )? ('primaryActor' primaryActor=[Actor:QualifiedName ] ) ('supportingActors' supportingActors+=RefActor  )? ('triggeredBy' triggeredBy=[ActiveEvent:QualifiedName ] )? ('dataEntity' dataEntity=[DataEntityGeneric:QualifiedName ] )? ('precondition' precondition=STRING  )? ('postcondition' postcondition=STRING  )? (actions=UCActions )? (extensionPoints=UCExtensionPoints )? (includes=UCIncludes )? (extends+=UCExtends )* (acceptanceCriteria+=AcceptanceCriteria )* ('priority' priority=PriorityType  )? (tags+=Tag )* ('description' description=STRING  )? (mainScenarios+=MainScenario )* ']' )?  
+    'UseCase' name=ID  (nameAlias=STRING )? ':' ^type=UseCaseType  ('[' ((isNegative?='isNegative' ) | (isPositive?='isPositive' ) )?((isConcrete?='isConcrete' ) | (isAbstract?='isAbstract' ) )?((isSolution?='isSolution' ) | (isProblem?='isProblem' ) )?('stakeholder' stakeholder=[Stakeholder:QualifiedName ] )? ('primaryActor' primaryActor=[Actor:QualifiedName ] ) ('supportingActors' supportingActors+=RefActor  )? ('triggeredBy' triggeredBy=[ActiveEvent:QualifiedName ] )? ('dataEntity' dataEntity=[DataEntityGeneric:QualifiedName ] )? ('precondition' precondition=STRING  )? ('postcondition' postcondition=STRING  )? (actions=UCActions )? (extensionPoints=UCExtensionPoints )? (includes=UCIncludes )? (extends+=UCExtends )* (acceptanceCriteria+=AcceptanceCriteria )* ('priority' priority=PriorityType  )? (tags+=Tag )* ('description' description=STRING  )? (mainScenarios+=MainScenario )? ']' )?  
 ;
 
 RefActor infers RefActor:
@@ -1071,27 +1063,15 @@ MainScenario infers MainScenario:
 ;
 
 StepOperationUCType infers StepOperationUCType:
-    ^type=('extendedBy' | 'include' ) 
+    ^type=('ExtendedBy' | 'Include' ) 
 ;
 
 Step infers Step:
-    'step' name=ID  (('(' (^type=StepType  (':' subType=StepSubType  (':' subSubType=StepSubSubType  )? )? ) ')' (nameAlias=STRING ) ) | (('<' typeUC=StepOperationUCType  ) (usecase=[UseCase:QualifiedName ]) '>' (nameAlias=STRING )? ) )('actor' actor=[Actor:QualifiedName ] )? ('repeat' repeat=STRING  )? ('description' description=STRING  )? ('nextStep' next=[Step:QualifiedName ] )? ('[' (scenarios+=Scenario )* ']' )?  
+    name=ID  (('(' (^type=StepType  (':' subType=StepSubType  )? ) ')' (nameAlias=STRING ) ) | (('(' typeUC=StepOperationUCType  ) (usecase=[UseCase:QualifiedName ]) ')' (nameAlias=STRING )? ) )('actor' actor=[Actor:QualifiedName ] )? ('event' event=[ActiveEvent:QualifiedName ] )? ('repeat' repeat=STRING  )? ('description' description=STRING  )? ('nextStep' next=[Step:QualifiedName ] )? ('[' (scenarios+=Scenario )* ']' )?  
 ;
 
 Scenario infers Scenario:
     'scenario' name=ID  '(' ^type=ScenarioType  ')' (nameAlias=STRING ) ('repeat' repeat=STRING  )? ('[' ('description' description=STRING  )? (steps+=Step )* ']' )?  
-;
-
-ConditionalExpression infers ConditionalExpression:
-    IfExpression | RepeatExpression 
-;
-
-IfExpression infers IfExpression:
-    'if' '(' ('action' action=ActionType  )  | (condition=STRING ) ')'  
-;
-
-RepeatExpression infers RepeatExpression:
-    'repeat' '(' (condition=STRING ) ')'  
 ;
 
 StateMachine infers StateMachine:
@@ -1118,12 +1098,36 @@ AcceptanceCriteria infers AcceptanceCriteria:
     'acceptanceCriteria' name=ID  (nameAlias=STRING )? ':' ^type=TestType  ('[' ((isConcrete?='isConcrete' ) | (isAbstract?='isAbstract' ) )?(criteriaS=AcceptanceCriteriaScenario  | criteriaR=AcceptanceCriteriaRule  )(tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
+TestSuite infers TestSuite:
+    'TestSuite' name=ID  (nameAlias=STRING )? ':' ^type=SystemType  (':' subType=SystemSubType  )? ('[' ((isReusable?='isReusable' ) | (isFinal?='isFinal' ) )?('systemUnderTest' sut=[System:QualifiedName ] ) (tags+=Tag )* ('description' description=STRING  )? ']' ) (elements+=TestElement )*  
+;
+
+TestElement infers TestElement:
+    Test | TestData | TestSuiteSetupTeardown 
+;
+
+TestData infers TestData:
+    Data 
+;
+
+TestSuiteSetupTeardown infers TestSuiteSetupTeardown:
+    TestSuiteSetup | TestSuiteTeardown 
+;
+
+TestSuiteSetup infers TestSuiteSetup:
+    { infer TestSuiteSetup} 'Setup' ('[' (testSteps+=TestStep )* ']' )  
+;
+
+TestSuiteTeardown infers TestSuiteTeardown:
+    { infer TestSuiteTeardown} 'Teardown' ('[' (testSteps+=TestStep )* ']' )  
+;
+
 Test infers Test:
     AcceptanceCriteriaTest | DataEntityTest | UseCaseTest | StateMachineTest 
 ;
 
 AcceptanceCriteriaTest infers AcceptanceCriteriaTest:
-    'AcceptanceCriteriaTest' name=ID  (nameAlias=STRING )? ':' ^type=TestType  ('[' ('requirement' requirement=[Requirement:QualifiedName ] ) (criteriaS=AcceptanceCriteriaScenario  | criteriaR=AcceptanceCriteriaRule  )(tags+=Tag )* ('description' description=STRING  )? ']' )?  
+    'AcceptanceCriteriaTest' name=ID  (nameAlias=STRING )? ':' ^type=TestType  ('[' ('requirement' requirement=[Requirement:QualifiedName ] ) (criteriaS+=AcceptanceCriteriaScenario  | criteriaR+=AcceptanceCriteriaRule  )(tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
 AcceptanceCriteriaScenario infers AcceptanceCriteriaScenario:
@@ -1135,11 +1139,11 @@ AcceptanceCriteriaRule infers AcceptanceCriteriaRule:
 ;
 
 DataEntityTest infers DataEntityTest:
-    'DataEntityTest' name=ID  (nameAlias=STRING )? ':' ^type=TestType  ('[' 'dataEntity' entity=[DataEntity:QualifiedName ] ('withValues' table=DataAttributeValues  )? (testDataAttributes+=TestDataAttribute )* ('message' message=STRING  )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
+    'DataEntityTest' name=ID  (nameAlias=STRING )? ':' ^type=TestType  ('[' 'dataEntity' entity=[DataEntity:QualifiedName ] (':=' table=DataTable  )? (testDataAttributes+=TestDataAttribute )* ('message' message=STRING  )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
 TestDataAttribute infers TestDataAttribute:
-    'testAttribute' attribute=[DataAttribute:QualifiedName ] '(' ('partitionClass' ^type=DataAttributeType  )? ('values' values=STRING  )? ('message' message=STRING  )? ')'  
+    'testAttribute' attribute=[DataAttribute:QualifiedName ] '(' ('partitionClass' ^type=DataAttributeType  ('(' size=DoubleOrInt  ')' )? )? ('values' values=STRING  )? (isNotNull='isNotNull' )? (isUnique='isUnique' )? (isDerived='isDerived' )? (isReadOnly='isReadOnly' )? (isEncrypted='isEncrypted' )? ('message' message=STRING  )? ')'  
 ;
 
 StateMachineTest infers StateMachineTest:
@@ -1151,58 +1155,19 @@ StateSequence infers StateSequence:
 ;
 
 UseCaseTest infers UseCaseTest:
-    'UseCaseTest' name=ID  (nameAlias=STRING )? ':' ^type=TestType  ('[' 'useCase' useCase=[UseCase:QualifiedName ] (tags+=Tag )* ('description' description=STRING  )? (variables+=TestVariable )* (scenarios+=TestScenario )* ']' )?  
+    'UseCaseTest' name=ID  (nameAlias=STRING )? ('[' 'useCase' useCase=[UseCase:QualifiedName ] ('primaryActor' primaryActor=[Actor:QualifiedName ] )? ('supportingActors' supportingActors+=RefActor  )? (tags+=Tag )* ('description' description=STRING  )? ('oneTimeSetup' '[' (oneTimeSetupSteps+=TestStep )* ']' )? ('oneTimeTeardown' '[' (oneTimeTeardownSteps+=TestStep )* ']' )? (testCases+=TestCase )* ']' )?  
 ;
 
-TestScenario infers TestScenario:
-    'testScenario' name=ID  (nameAlias=STRING )? ':' ^type=TestScenarioType  ('[' ((isConcrete?='isConcrete' ) | (isAbstract?='isAbstract' ) )?('variable' variable=[TestVariable:QualifiedName ] ('withValues' variableTable=DataVariableValues  ) )? ('dataEntity' entity=[DataEntity:QualifiedName ] ('withValues' entityTable=DataAttributeValues  ) )? ('description' description=STRING  )? (testSteps+=TestStep )* ']' )?  
+TestCase infers TestCase:
+    'testCase' name=ID  (nameAlias=STRING )? ('[' (testParameters+=TestParameter )* ('dataEntity' entity=[DataEntity:QualifiedName ] (':=' entityTable=DataTable  )? )? ('description' description=STRING  )? (testSteps+=TestStep )* ']' )?  
+;
+
+TestParameter infers TestParameter:
+    ('parameter' name=ID  ) 
 ;
 
 TestStep infers TestStep:
-    'step' name=ID  ('(' (^type=StepType  (':' extension=OperationExtension  )? ) ')' (nameAlias=STRING ) ) ('actor' actor=[Actor:QualifiedName ] )? ('repeat' repeat=STRING  )? ('description' description=STRING  )? ('nextStep' next=[Step:QualifiedName ] )?  
-;
-
-OperationExtension infers OperationExtension:
-    (subSubType=StepSubSubType ) ((target=TestOperationTarget ) | (check=TestCheck ) )? 
-;
-
-TestOperationTarget infers TestOperationTarget:
-    (^type=OperationTargetType ) ((variable+=[DataAttribute:QualifiedName ] (',' variable+=[DataAttribute:QualifiedName ] )* ) | ('(' content+=STRING  (',' content+=STRING  )* ')' ) )? 
-;
-
-type OperationTargetType = 'button' | 'element' | 'checkbox' | 'listByValue' | 'readFrom' | 'writeTo';
-OperationTargetType returns string:
-    OperationTargetType_button | OperationTargetType_element | OperationTargetType_checkbox | OperationTargetType_listByValue | OperationTargetType_readFrom | OperationTargetType_writeTo
-;
-OperationTargetType_button returns string: 'button' ;
-OperationTargetType_element returns string: 'element' ;
-OperationTargetType_checkbox returns string: 'checkbox' ;
-OperationTargetType_listByValue returns string: 'listByValue' ;
-OperationTargetType_readFrom returns string: 'readFrom' ;
-OperationTargetType_writeTo returns string: 'writeTo' ;
-
-SimpleTestStep infers SimpleTestStep:
-    (nameAlias=STRING ) ('actor' actor=[Actor:QualifiedName ] )? ('description' description=STRING  )? ('precondition' precondition=STRING  )? ('postcondition' postcondition=STRING  )? ('nextStep' next=[TestStep:ID ] )?  
-;
-
-TestVariable infers TestVariable:
-    'variable' name=ID  (nameAlias=STRING )? ('[' (attributes+=DataAttribute )+ ('description' description=STRING  )? ']' )?  
-;
-
-DataVariableValues infers DataVariableValues:
-    (tableHeader=DataVariableRefs ) tableRows+=DataVariableTableRow *  
-;
-
-DataVariableRefs infers DataVariableRefs:
-    ('|' variableRef+=[DataAttribute:QualifiedName ] )+ "+|"  
-;
-
-DataVariableTableRow infers DataVariableTableRow:
-    { infer DataVariableTableRow} ('|' (variableValues+=STRING )? )+ "+|"  
-;
-
-TestCheck infers TestCheck:
-    ((^type=CheckType ) ('(' (variable=[DataAttribute:QualifiedName ] '=' expected=[DataAttribute:QualifiedName ] )? ('text' (textVariable=[DataAttribute:QualifiedName ] | textString=STRING  ))? ('timeout' (timeoutVariable=[DataAttribute:QualifiedName ] | timeoutINT=DoubleOrInt  )metric=MetricType ? )? ('limit' (limitVariable=[DataAttribute:QualifiedName ] | limitINT=INT  ))? ('url' (urlVariable=[DataAttribute:QualifiedName ] | urlString=STRING  ))? ('code' (codeVariable=[DataAttribute:QualifiedName ] | codeString=STRING  ))? ')' ) ) 
+    { infer TestStep} (('(' (^type=StepType  (':' subType=StepSubType  )? ) ')' ) | ('Execute' testCase=[TestCase:QualifiedName ] ) )(nameAlias=STRING )? ('actor' actor=[Actor:QualifiedName ] )? ('event' event=[ActiveEvent:QualifiedName ] )? ('description' description=STRING  )?  
 ;
 
 Vulnerability infers Vulnerability:
@@ -1256,4 +1221,108 @@ Theme infers Theme:
 ReferenceElements infers ReferenceElements:
     references+=[SystemElement:QualifiedName ] (',' references+=[SystemElement:QualifiedName ] )*  
 ;
+
+ViewType infers ViewType:
+    ^type=('RequirementView' | 'GoalView' | 'QRView' | 'FRView' | 'ConstraintView' | 'UserStoryView' | 'UseCaseView' | 'TestView' | 'StakeholderView' | 'ActorView' | 'GlossaryTermView' | 'DataEntityView' | 'DataEntityClusterView' | 'ActiveElementView' | 'RiskView' | 'VulnerabilityView' ) 
+;
+
+ThemeType infers ThemeType:
+    ^type=('SystemElementTheme' | 'StructureElementTheme' | 'BehaviorElementTheme' | 'RequirementTheme' | 'TestTheme' | 'OtherTheme' ) 
+;
+
+type PartOfSpeechEnum = 'CoordinatingConjunction' | 'CardinalNumber' | 'Determiner' | 'ExistentialThere' | 'ForeignWord' | 'PrepositionOrSubordinatingConjunction' | 'Adjective' | 'AdjectiveComparative' | 'AdjectiveSuperlative' | 'ListItemMarker' | 'Modal' | 'NounSingular' | 'NounPlural' | 'ProperNounSingular' | 'ProperNounPlural' | 'Predeterminer' | 'PossessiveSnding' | 'PronounPersonal' | 'PronounPossessive' | 'Adverb' | 'AdverbComparative' | 'AdverbSuperlative' | 'Particle' | 'Symbol' | 'To' | 'Interjection' | 'VerbBaseForm' | 'VerbPastTense' | 'VerbGerundOrPresentParticiple' | 'VerbPastParticiple' | 'VerbNon3rdPersonSingularPresent' | 'Verb3rdPersonSingularPresent' | 'WhDeterminer' | 'WhPronoun' | 'PossessiveWhPronoun' | 'WhAdverb';
+PartOfSpeechEnum returns string:
+    PartOfSpeechEnum_CC | PartOfSpeechEnum_CD | PartOfSpeechEnum_DT | PartOfSpeechEnum_EX | PartOfSpeechEnum_FW | PartOfSpeechEnum_IN | PartOfSpeechEnum_JJ | PartOfSpeechEnum_JJR | PartOfSpeechEnum_JJS | PartOfSpeechEnum_LS | PartOfSpeechEnum_MD | PartOfSpeechEnum_NN | PartOfSpeechEnum_NNS | PartOfSpeechEnum_NNP | PartOfSpeechEnum_NNPS | PartOfSpeechEnum_PDT | PartOfSpeechEnum_POS | PartOfSpeechEnum_PRP | PartOfSpeechEnum_PRP_DOLLAR | PartOfSpeechEnum_RB | PartOfSpeechEnum_RBR | PartOfSpeechEnum_RBS | PartOfSpeechEnum_RP | PartOfSpeechEnum_SYM | PartOfSpeechEnum_TO | PartOfSpeechEnum_UH | PartOfSpeechEnum_VB | PartOfSpeechEnum_VBD | PartOfSpeechEnum_VBG | PartOfSpeechEnum_VBN | PartOfSpeechEnum_VBP | PartOfSpeechEnum_VBZ | PartOfSpeechEnum_WDT | PartOfSpeechEnum_WP | PartOfSpeechEnum_WP_DOLLAR | PartOfSpeechEnum_WRB
+;
+PartOfSpeechEnum_CC returns string: 'CoordinatingConjunction' ;
+PartOfSpeechEnum_CD returns string: 'CardinalNumber' ;
+PartOfSpeechEnum_DT returns string: 'Determiner' ;
+PartOfSpeechEnum_EX returns string: 'ExistentialThere' ;
+PartOfSpeechEnum_FW returns string: 'ForeignWord' ;
+PartOfSpeechEnum_IN returns string: 'PrepositionOrSubordinatingConjunction' ;
+PartOfSpeechEnum_JJ returns string: 'Adjective' ;
+PartOfSpeechEnum_JJR returns string: 'AdjectiveComparative' ;
+PartOfSpeechEnum_JJS returns string: 'AdjectiveSuperlative' ;
+PartOfSpeechEnum_LS returns string: 'ListItemMarker' ;
+PartOfSpeechEnum_MD returns string: 'Modal' ;
+PartOfSpeechEnum_NN returns string: 'NounSingular' ;
+PartOfSpeechEnum_NNS returns string: 'NounPlural' ;
+PartOfSpeechEnum_NNP returns string: 'ProperNounSingular' ;
+PartOfSpeechEnum_NNPS returns string: 'ProperNounPlural' ;
+PartOfSpeechEnum_PDT returns string: 'Predeterminer' ;
+PartOfSpeechEnum_POS returns string: 'PossessiveSnding' ;
+PartOfSpeechEnum_PRP returns string: 'PronounPersonal' ;
+PartOfSpeechEnum_PRP_DOLLAR returns string: 'PronounPossessive' ;
+PartOfSpeechEnum_RB returns string: 'Adverb' ;
+PartOfSpeechEnum_RBR returns string: 'AdverbComparative' ;
+PartOfSpeechEnum_RBS returns string: 'AdverbSuperlative' ;
+PartOfSpeechEnum_RP returns string: 'Particle' ;
+PartOfSpeechEnum_SYM returns string: 'Symbol' ;
+PartOfSpeechEnum_TO returns string: 'To' ;
+PartOfSpeechEnum_UH returns string: 'Interjection' ;
+PartOfSpeechEnum_VB returns string: 'VerbBaseForm' ;
+PartOfSpeechEnum_VBD returns string: 'VerbPastTense' ;
+PartOfSpeechEnum_VBG returns string: 'VerbGerundOrPresentParticiple' ;
+PartOfSpeechEnum_VBN returns string: 'VerbPastParticiple' ;
+PartOfSpeechEnum_VBP returns string: 'VerbNon3rdPersonSingularPresent' ;
+PartOfSpeechEnum_VBZ returns string: 'Verb3rdPersonSingularPresent' ;
+PartOfSpeechEnum_WDT returns string: 'WhDeterminer' ;
+PartOfSpeechEnum_WP returns string: 'WhPronoun' ;
+PartOfSpeechEnum_WP_DOLLAR returns string: 'PossessiveWhPronoun' ;
+PartOfSpeechEnum_WRB returns string: 'WhAdverb' ;
+
+PartOfSpeech infers PartOfSpeech:
+    posTag=PartOfSpeechEnum  
+;
+
+type LinguisticRuleSeverityLevel = 'Warning' | 'Error';
+LinguisticRuleSeverityLevel returns string:
+    LinguisticRuleSeverityLevel_warning | LinguisticRuleSeverityLevel_error
+;
+LinguisticRuleSeverityLevel_warning returns string: 'Warning' ;
+LinguisticRuleSeverityLevel_error returns string: 'Error' ;
+
+Word infers Word:
+    word=STRING  
+;
+
+LinguisticFragmentPart infers LinguisticFragmentPart:
+    PartOfSpeech | Word | LinguisticRuleElementAndProperty | LinguisticFragmentRef 
+;
+
+LinguisticElement infers LinguisticElement:
+    LinguisticRule | LinguisticFragment 
+;
+
+LinguisticFragment infers LinguisticFragment:
+    'LinguisticFragment' name=ID  (nameAlias=STRING )? '(' options+=LinguisticFragmentPart  (',' options+=LinguisticFragmentPart  )* ')' ('description' description=STRING  )?  
+;
+
+LinguisticFragmentRef infers LinguisticFragmentRef:
+    option=[LinguisticFragment:QualifiedName ] 
+;
+
+LinguisticRule infers LinguisticRule:
+    'LinguisticRule' name=ID  (nameAlias=STRING )? ':' ^type=LinguisticRuleType  ('[' ('property' element=LinguisticRuleElement  '.' property=LinguisticRuleElementProperty  ) ('pattern' pattern+=LinguisticPattern  ('+' pattern+=LinguisticPattern  )* ) ('severity' severity=LinguisticRuleSeverityLevel  ) ('description' description=STRING  )? ']' )  
+;
+
+LinguisticPattern infers LinguisticPattern:
+    parts+=LinguisticFragmentPart  | '(' parts+=LinguisticFragmentPart  ('|' parts+=LinguisticFragmentPart  )* ')'  
+;
+
+LinguisticRuleElementAndProperty infers LinguisticRuleElementAndProperty:
+    element=LinguisticRuleElement  '.' property=LinguisticRuleElementProperty   
+;
+
+LinguisticRuleElement infers LinguisticRuleElement:
+    element=StereotypeType  
+;
+
+type LinguisticRuleElementProperty = 'id' | 'name' | 'description';
+LinguisticRuleElementProperty returns string:
+    LinguisticRuleElementProperty_id | LinguisticRuleElementProperty_name | LinguisticRuleElementProperty_description
+;
+LinguisticRuleElementProperty_id returns string: 'id' ;
+LinguisticRuleElementProperty_name returns string: 'name' ;
+LinguisticRuleElementProperty_description returns string: 'description' ;
 

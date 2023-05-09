@@ -227,7 +227,7 @@ DataEntityTypeExtendedRef infers DataEntityTypeExtendedRef:
 ;
 
 DataEntityTypeOriginal infers DataEntityTypeOriginal:
-    ^type=('Parameter' | 'Reference' | 'Master' | 'Document' | 'Transaction' | 'Other' ) 
+    ^type=('Parameter' | 'Reference' | 'Master' | 'Document' | 'Transaction' | 'Multidimensional' | 'Other' ) 
 ;
 
 DataEntitySubType infers DataEntitySubType:
@@ -243,7 +243,7 @@ DataEntitySubTypeExtendedRef infers DataEntitySubTypeExtendedRef:
 ;
 
 DataEntitySubTypeOriginal infers DataEntitySubTypeOriginal:
-    ^type=('Regular' | 'Weak' | 'Other' ) 
+    ^type=('Regular' | 'Weak' | 'Fact' | 'Dimension' | 'Other' ) 
 ;
 
 DataEntityClusterType infers DataEntityClusterType:
@@ -259,7 +259,7 @@ DataEntityClusterTypeExtendedRef infers DataEntityClusterTypeExtendedRef:
 ;
 
 DataEntityClusterTypeOriginal infers DataEntityClusterTypeOriginal:
-    ^type=('Parameter' | 'Reference' | 'Master' | 'Document' | 'Transaction' | 'Other' ) 
+    ^type=('Parameter' | 'Reference' | 'Master' | 'Document' | 'Transaction' | 'Multidimensional' | 'Other' ) 
 ;
 
 DataAttributeType infers DataAttributeType:
@@ -655,7 +655,7 @@ SystemConcept infers SystemConcept:
 ;
 
 SystemElement infers SystemElement:
-    StructureElement | BehaviorElement | OtherElement | IncludeElementGeneric | UIModelElement 
+    StructureElement | BehaviorElement | OtherElement | IncludeElementGeneric | UIModelElement | SystemSet 
 ;
 
 StructureElement infers StructureElement:
@@ -675,7 +675,7 @@ ActiveStructureElement infers ActiveStructureElement:
 ;
 
 BehaviorElement infers BehaviorElement:
-    ActiveElement 
+    UseCase | ActiveElement 
 ;
 
 OtherElement infers OtherElement:
@@ -684,6 +684,10 @@ OtherElement infers OtherElement:
 
 IncludeElementGeneric infers IncludeElementGeneric:
     IncludeAll | IncludeElement 
+;
+
+SystemSet infers SystemSet:
+    View | Theme 
 ;
 
 UIModelElement infers UIModelElement:
@@ -775,7 +779,7 @@ UIExpression infers UIExpression:
 ;
 
 ActiveElement infers ActiveElement:
-    UseCase | ActiveEvent | ActiveTask | ActiveFlow 
+    ActiveEvent | ActiveTask | ActiveFlow 
 ;
 
 RefActiveElement infers RefActiveElement:
@@ -937,6 +941,26 @@ RefUC infers RefUC:
     refs+=[UseCase:QualifiedName ] (',' refs+=[UseCase:QualifiedName ] )*  
 ;
 
+View infers View:
+    'View' name=ID  (nameAlias=STRING )? ':' ^type=ViewType  ('[' elements=ReferenceElements  (tags+=Tag )* ('description' description=STRING  )? ']' )  
+;
+
+Theme infers Theme:
+    'Theme' name=ID  (nameAlias=STRING )? ':' ^type=ThemeType  ('[' elements=ReferenceElements  (tags+=Tag )* ('description' description=STRING  )? ']' )  
+;
+
+ReferenceElements infers ReferenceElements:
+    references+=[SystemElement:QualifiedName ] (',' references+=[SystemElement:QualifiedName ] )*  
+;
+
+ViewType infers ViewType:
+    ^type=('ActiveStructureView' | 'PassiveStructureView' | 'UIView' | 'ActiveView' | 'UseCaseView' ) 
+;
+
+ThemeType infers ThemeType:
+    ^type=('ActiveStructureTheme' | 'PassiveStructureTheme' | 'UITheme' | 'ActiveTheme' | 'UseCaseTheme' ) 
+;
+
 Formula infers Formula:
     ArithmeticFormula | DetailsFormula 
 ;
@@ -985,7 +1009,7 @@ Equals infers Expression:
 ;
 
 Addition infers Expression:
-    Multiplication ({ infer Plus.left=current} '+'  | { infer Minus.left=current} '-'   right=Multiplication  )*  
+    Multiplication (({ infer Plus.left=current} '+'  | { infer Minus.left=current} '-')   right=Multiplication  )*  
 ;
 
 Multiplication infers Expression:
