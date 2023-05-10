@@ -113,7 +113,7 @@ export class AslScopeComputation extends DefaultScopeComputation {
                 if (!isSystem(node.$container)){
                     scopes.add(model, this.descriptions.createDescription(node, this.qualifiedNameProvider.getQualifiedName(container, name), document));
                 }
-                scopes.add(model, this.descriptions.createDescription(node, name, document));
+                scopes.add(container, this.descriptions.createDescription(node, name, document));
             }
         }
     }
