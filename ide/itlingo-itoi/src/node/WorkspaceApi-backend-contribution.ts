@@ -8,6 +8,9 @@ import * as nsfw from 'nsfw'
 import * as cp from 'child_process'
 import path = require("path");
 import * as uuid from 'uuid';
+import { registerCollab } from './WorkspaceApi-backend-collabInterface';
+import { SharedStringServer } from './SharedStringServer';
+import { inject } from '@theia/core/shared/inversify';
 // const { execFile } = require('node:child_process');
 const { Pool } = require('pg');
 const getDirName = require('path').dirname
@@ -27,6 +30,7 @@ const hostroot = "/home/theia/ide/";
 const staticFolderLength = 73;
 const COM_KEY = "v8y/B?E(H+MbQeThWmZq4t7w!z$C&F)J";
 const itlingoCloudURL = "https://itlingocloud.herokuapp.com/";
+export const hostname = "itlingocloud.herokuapp.com";
 //var itlingoCloudURL = "http://172.26.128.1:8000/";
 const currentEditors: {[ip:string]: Editor} = {};
 const workspaces: Map<string, string[]> = new Map<string, string[]>();
@@ -40,7 +44,16 @@ type Editor = {
 
 @injectable()
 export class SwitchWSBackendContribution implements BackendApplicationContribution {
-    
+
+    @inject(SharedStringServer) 
+    protected readonly sharedStringServer: SharedStringServer;
+
+    initialize() {
+        // setInterval(() => {
+        //   this.sharedStringServer.greet("Hello from backend module");
+        // }, 1000);
+    }
+
     configure(app: express.Application) {
         //setup DB
         const connectionString = process.env.DATABASE_URL;
@@ -232,9 +245,10 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         //      res.send("done!");
         //      res.end();
         // });
-
+        
         cp.execSync("mkdir -p " + hostfs + "tmp/");
         createWatcher(hostfs + 'tmp/')
+        registerCollab(app);
         app.get('/getWorkspace', (req, res) => {
             let ip = requestIp.getClientIp(req);
             console.log(currentEditors);

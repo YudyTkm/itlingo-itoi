@@ -14,7 +14,9 @@
     "log-timestamp": "^0.3.0",
     "pg": "^8.7.3",
     "request-ip": "^2.1.3",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "@fluidframework/tinylicious-client": "^1.3.6",
+    "fluid-framework": "^1.3.6"
   },
   "devDependencies": {
     "rimraf": "latest",
@@ -35,8 +37,38 @@
       "command": "extended.git.push",
       "title": "Push Git Repo",
       "category": "Extended Git"
-  }],
+  }, {
+    "command": "itoicollab.startCollab",
+    "title": "Start Collaboration Session",
+    "category": "Collab"
+  },
+  {
+    "command": "itoicollab.joinCollab",
+    "title": "Join Collaboration Session",
+    "category": "Collab"
+  },
+  {
+    "command": "itoicollab.stopCollab",
+    "title": "Stop Collaboration Session",
+    "category": "Collab"
+  }
+
+],
   "menus": {
+     "editor/title": [
+        {
+          "when": "!editorReadonly && editorFocus && !itoi-collab.showStop",
+          "command": "itoi-collab.startColab"
+        },
+        {
+          "when": "!itoi-collab.showStop",
+          "command": "itoi-collab.joinColab"
+        },
+        {
+          "when": "!editorReadonly && editorFocus && itoi-collab.showStop",
+          "command": "itoi-collab.stopColab"
+        }
+    ],
     "scm/title": [
         {
           "command": "extended.git.clone",

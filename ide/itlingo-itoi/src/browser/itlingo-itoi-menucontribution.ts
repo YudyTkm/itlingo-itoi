@@ -1,8 +1,9 @@
 import { injectable, inject } from '@theia/core/shared/inversify';
-import { CommandContribution,MessageService, CommandHandler, CommandRegistry, MenuContribution, MenuModelRegistry } from '@theia/core/lib/common';
+import { CommandContribution,MessageService, CommandHandler, CommandRegistry, MenuContribution, MenuModelRegistry, Command } from '@theia/core/lib/common';
 import { KeybindingContribution, KeybindingRegistry, QuickInputService } from '@theia/core/lib/browser';
 import { GIT_COMMANDS, GIT_MENUS } from '@theia/git/lib/browser/git-contribution';
-import { } from '@theia/core/lib/browser'
+import { EditorManager } from '@theia/editor/lib/browser'
+import { MonacoEditor } from "@theia/monaco/lib/browser/monaco-editor";
 import {
     TabBarToolbarContribution,
     TabBarToolbarItem,
@@ -12,6 +13,7 @@ import {
 
 // import {  CommonCommands } from '@theia/core/lib/browser';
 import axios from 'axios';
+import { SharedStringServer } from '../node/SharedStringServer';
 
 //var g_readOnly:boolean | undefined = undefined;
 
@@ -28,6 +30,23 @@ const gitUser: GitUser = {
     accessCode: localStorage.getItem("gitAccessCode") ?? '',
     repository: localStorage.getItem("gitRepo") ?? ''
 };
+
+export const StartCollab: Command = {
+    id: 'itoicollab.startCollab',
+    label: 'Start Collaboration'
+};
+
+export const JoinCollab : Command = {
+    id: 'itoicollab.joinCollab',
+    label: 'Join Collaboration'
+};
+
+export const StopCollab : Command = {
+    id: 'itoicollab.stopCollab',
+    label: 'Stop Collaboration'
+};
+
+
 
 
 @injectable()
@@ -66,13 +85,14 @@ export class TheiaExampleMenuContribution implements MenuContribution, TabBarToo
 
     }
     async registerMenus(menus: MenuModelRegistry): Promise<void> {
+
     }
 }
 
 
 
 @injectable()
-export class TheiaExampleCommandContribution implements  CommandContribution {
+export class TheiaExampleCommandContribution implements CommandContribution {
 
     @inject(QuickInputService)
     protected readonly quickInputService: QuickInputService;
@@ -80,35 +100,22 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
     protected readonly  messageService: MessageService;
     @inject(CommandRegistry) 
     protected readonly  commands: CommandRegistry;
+    @inject(SharedStringServer)
+    protected readonly sharedStringServer: SharedStringServer;
+    @inject(EditorManager)
+    protected readonly editorManager: EditorManager;
+    
+    private editor: MonacoEditor | undefined = undefined;
 
     constructor(
-        
+                
     ){
+        
     }
 
 
    async registerCommands(commands: CommandRegistry): Promise<void> {
         
-        // const readOnly = await getReadonly();
-        //     if(readOnly){
-        //         commands.unregisterCommand(WorkspaceCommands.FILE_DELETE);
-        //         commands.unregisterCommand(WorkspaceCommands.NEW_FILE);
-        //         commands.unregisterCommand(WorkspaceCommands.ADD_FOLDER);
-        //         commands.unregisterCommand(WorkspaceCommands.NEW_FOLDER);
-        //         commands.unregisterCommand(WorkspaceCommands.FILE_DUPLICATE);
-        //         commands.unregisterCommand(WorkspaceCommands.FILE_RENAME);
-        //         commands.unregisterCommand(CommonCommands.PASTE);
-        //         commands.unregisterCommand(CommonCommands.COPY);
-        //     } else {
-        //         commands.registerCommand(WorkspaceCommands.FILE_DELETE);
-        //         commands.registerCommand(WorkspaceCommands.NEW_FILE);
-        //         commands.registerCommand(WorkspaceCommands.ADD_FOLDER);
-        //         commands.registerCommand(WorkspaceCommands.NEW_FOLDER);
-        //         commands.registerCommand(WorkspaceCommands.FILE_DUPLICATE);
-        //         commands.registerCommand(WorkspaceCommands.FILE_RENAME);
-        //         commands.registerCommand(CommonCommands.PASTE);
-        //         commands.registerCommand(CommonCommands.COPY);
-        //     }
         commands.unregisterCommand(GIT_COMMANDS.PULL);
         commands.unregisterCommand(GIT_COMMANDS.PULL_DEFAULT);
         commands.unregisterCommand(GIT_COMMANDS.PULL_DEFAULT_FAVORITE);
@@ -131,8 +138,84 @@ export class TheiaExampleCommandContribution implements  CommandContribution {
         commands.registerCommand(GIT_COMMANDS.PULL, {
             execute: () => { this.myGitPull(); } 
         } as CommandHandler);
+        commands.registerCommand(StartCollab, {
+            execute: () => { 
+                this.messageService.info("Start!");
+                commands.executeCommand('setContext', 'itoi-collab.showStop', true);
+                this.startCollab(); }
+        });
+        commands.registerCommand(StopCollab, {
+            execute: () => {
+                this.messageService.info("Stop!");
+                commands.executeCommand('setContext', 'itoi-collab.showStop', false);
+                this.stopCollab(); }
+        });
+        commands.registerCommand(JoinCollab, {
+            execute: () => { 
+                this.messageService.info("Join!");
+                commands.executeCommand('setContext', 'itoi-collab.showStop', true);
+                this.joinCollab(); 
+            }
+        });
+
+        
+
+    }
+    startCollab(){
+        const editor = MonacoEditor.getCurrent(this.editorManager);
+        if(editor){
+            this.messageService.info("we got editor");
+            this.setEditor(editor);
+            this.messageService.info(editor.getControl().getModel()?.getValue() ?? "no data");
+            this.sharedStringServer.startCollab(editor.getControl().getModel()?.getValue() ?? "no data")
+            .then(result => {
+                this.messageService.info(result);
+                editor.getControl().getModel()?.onDidChangeContent(e => {
+                    if (!e.isFlush) {
+                        for (const change of e.changes) {
+                            this.sharedStringServer.getDocumentChange(change.text, change.rangeOffset, change.rangeLength);
+                        }
+                    }
+                });
+            }).catch(error => console.log("startCollab error: " + error));
+        }
+    }
+
+    joinCollab(){
+        const editor = MonacoEditor.getCurrent(this.editorManager);
+        const inputbox1 = this.quickInputService.createInputBox();
+        inputbox1.description = "yo ID"
+        inputbox1.onDidAccept(async ()=>{
+            if (editor){
+                this.setEditor(editor);
+                const collabText = await this.sharedStringServer.joinCollab(inputbox1.value ?? "nah");
+                editor.getControl().setValue(collabText);
+                editor.getControl().getModel()?.onDidChangeContent(e => {
+                    if (!e.isFlush) {
+                        for (const change of e.changes) {
+                            this.sharedStringServer.getDocumentChange(change.text, change.rangeOffset, change.rangeLength);
+                        }
+                    }
+                });
+            }
+            inputbox1.hide();
+        });
+        inputbox1.show();
         
     }
+    stopCollab(){
+        
+    }
+    
+    public getEditor(){
+        return this.editor;
+    }
+
+
+    private setEditor(editor: MonacoEditor){
+        this.editor = editor;
+    }
+
 
     myGitPull(){
         let repo = localStorage.getItem("gituser.repo");

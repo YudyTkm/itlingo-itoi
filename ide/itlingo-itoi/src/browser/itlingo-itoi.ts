@@ -12,6 +12,7 @@ import { ApplicationShell } from '@theia/core/lib/browser/shell/application-shel
 import  TheiaURI from '@theia/core/lib/common/uri';
 
 import axios from 'axios';
+// import { SharedStringServer } from '../node/SharedStringServer';
 
 
 
@@ -39,7 +40,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
     // @inject(CommandService) private readonly commandService: CommandService,
     //@inject(CommandService) private readonly commandService: CommandService,
     @inject(ILogger) protected readonly logger: ILogger;
-    
+    // @inject(SharedStringServer) sharedStringServer: SharedStringServer;
     constructor(
         
     ) { 
@@ -118,6 +119,17 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
      private compareFoldernames(path1: string, path2: string){
          return path1.substring(path1.length-77) === path2.substring(path2.length - 77);
      }
+
+    //  initialize() {
+    //     setInterval(
+    //       () =>
+    //         this.sharedStringServer
+    //           .getGreeterName()
+    //           .then(result => console.log("GreeterServer.name=" + result))
+    //           .catch(error => console.log("Failed to get greeter name", error)),
+    //       2000
+    //     );
+    //   }
     configure(app: FrontendApplication): void{
         
     }
