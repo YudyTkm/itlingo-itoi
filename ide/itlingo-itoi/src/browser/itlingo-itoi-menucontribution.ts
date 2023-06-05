@@ -3,19 +3,14 @@ import { CommandContribution,MessageService, CommandHandler, CommandRegistry, Me
 import { KeybindingContribution, KeybindingRegistry, QuickInputService } from '@theia/core/lib/browser';
 import { GIT_COMMANDS, GIT_MENUS } from '@theia/git/lib/browser/git-contribution';
 import { EditorManager } from '@theia/editor/lib/browser'
-import { MonacoEditor } from "@theia/monaco/lib/browser/monaco-editor";
 import {
     TabBarToolbarContribution,
     TabBarToolbarItem,
     TabBarToolbarRegistry
 } from '@theia/core/lib/browser/shell/tab-bar-toolbar';
-
-
-// import {  CommonCommands } from '@theia/core/lib/browser';
 import axios from 'axios';
-import { SharedStringServer } from '../node/SharedStringServer';
-
-//var g_readOnly:boolean | undefined = undefined;
+// import { SharedStringServer } from '../node/SharedStringServer';
+// import { SharedStringClientImpl } from './SharedStringClientImpl';
 
 type GitUser = {
     email: string,
@@ -100,18 +95,14 @@ export class TheiaExampleCommandContribution implements CommandContribution {
     protected readonly  messageService: MessageService;
     @inject(CommandRegistry) 
     protected readonly  commands: CommandRegistry;
-    @inject(SharedStringServer)
-    protected readonly sharedStringServer: SharedStringServer;
+    // @inject(SharedStringServer)
+    // protected readonly sharedStringServer: SharedStringServer;
     @inject(EditorManager)
     protected readonly editorManager: EditorManager;
-    
-    private editor: MonacoEditor | undefined = undefined;
+    // @inject(SharedStringClientImpl)
+    // protected readonly sharedStringClientImpl: SharedStringClientImpl;
 
-    constructor(
-                
-    ){
-        
-    }
+    constructor(){}
 
 
    async registerCommands(commands: CommandRegistry): Promise<void> {
@@ -138,84 +129,36 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         commands.registerCommand(GIT_COMMANDS.PULL, {
             execute: () => { this.myGitPull(); } 
         } as CommandHandler);
-        commands.registerCommand(StartCollab, {
-            execute: () => { 
-                this.messageService.info("Start!");
-                commands.executeCommand('setContext', 'itoi-collab.showStop', true);
-                this.startCollab(); }
-        });
-        commands.registerCommand(StopCollab, {
-            execute: () => {
-                this.messageService.info("Stop!");
-                commands.executeCommand('setContext', 'itoi-collab.showStop', false);
-                this.stopCollab(); }
-        });
-        commands.registerCommand(JoinCollab, {
-            execute: () => { 
-                this.messageService.info("Join!");
-                commands.executeCommand('setContext', 'itoi-collab.showStop', true);
-                this.joinCollab(); 
-            }
-        });
+        // commands.registerCommand(StartCollab, {
+        //     execute: () => { 
+        //         this.messageService.info("Start!");
+        //         commands.executeCommand('setContext', 'itoi-collab.showStop', true);
+        //         this.sharedStringClientImpl.startCollab() }
+        // });
+        // commands.registerCommand(StopCollab, {
+        //     execute: () => {
+        //         this.messageService.info("Stop!");
+        //         commands.executeCommand('setContext', 'itoi-collab.showStop', false);
+        //         this.stopCollab(); }
+        // });
+        // commands.registerCommand(JoinCollab, {
+        //     execute: () => { 
+        //         this.messageService.info("Join!");
+        //         commands.executeCommand('setContext', 'itoi-collab.showStop', true);
+        //         this.sharedStringClientImpl.joinCollab(); 
+        //     }
+        // });
 
         
 
     }
-    startCollab(){
-        const editor = MonacoEditor.getCurrent(this.editorManager);
-        if(editor){
-            this.messageService.info("we got editor");
-            this.setEditor(editor);
-            this.messageService.info(editor.getControl().getModel()?.getValue() ?? "no data");
-            this.sharedStringServer.startCollab(editor.getControl().getModel()?.getValue() ?? "no data")
-            .then(result => {
-                this.messageService.info(result);
-                editor.getControl().getModel()?.onDidChangeContent(e => {
-                    if (!e.isFlush) {
-                        for (const change of e.changes) {
-                            this.sharedStringServer.getDocumentChange(change.text, change.rangeOffset, change.rangeLength);
-                        }
-                    }
-                });
-            }).catch(error => console.log("startCollab error: " + error));
-        }
-    }
 
-    joinCollab(){
-        const editor = MonacoEditor.getCurrent(this.editorManager);
-        const inputbox1 = this.quickInputService.createInputBox();
-        inputbox1.description = "yo ID"
-        inputbox1.onDidAccept(async ()=>{
-            if (editor){
-                this.setEditor(editor);
-                const collabText = await this.sharedStringServer.joinCollab(inputbox1.value ?? "nah");
-                editor.getControl().setValue(collabText);
-                editor.getControl().getModel()?.onDidChangeContent(e => {
-                    if (!e.isFlush) {
-                        for (const change of e.changes) {
-                            this.sharedStringServer.getDocumentChange(change.text, change.rangeOffset, change.rangeLength);
-                        }
-                    }
-                });
-            }
-            inputbox1.hide();
-        });
-        inputbox1.show();
-        
-    }
+
+
+    
     stopCollab(){
         
     }
-    
-    public getEditor(){
-        return this.editor;
-    }
-
-
-    private setEditor(editor: MonacoEditor){
-        this.editor = editor;
-    }
-
 
     myGitPull(){
         let repo = localStorage.getItem("gituser.repo");

@@ -8,9 +8,9 @@ import * as nsfw from 'nsfw'
 import * as cp from 'child_process'
 import path = require("path");
 import * as uuid from 'uuid';
-import { registerCollab } from './WorkspaceApi-backend-collabInterface';
-import { SharedStringServer } from './SharedStringServer';
-import { inject } from '@theia/core/shared/inversify';
+// import { registerCollab } from './WorkspaceApi-backend-collabInterface';
+// import { SharedStringServer } from './SharedStringServer';
+// import { inject } from '@theia/core/shared/inversify';
 // const { execFile } = require('node:child_process');
 const { Pool } = require('pg');
 const getDirName = require('path').dirname
@@ -27,7 +27,7 @@ let requestIp = require('request-ip');
 
 const hostfs = "/tmp/theia/workspaces/";
 const hostroot = "/home/theia/ide/";
-const staticFolderLength = 73;
+const staticFolderLength = 63;
 const COM_KEY = "v8y/B?E(H+MbQeThWmZq4t7w!z$C&F)J";
 const itlingoCloudURL = "https://itlingocloud.herokuapp.com/";
 export const hostname = "itlingocloud.herokuapp.com";
@@ -45,9 +45,8 @@ type Editor = {
 @injectable()
 export class SwitchWSBackendContribution implements BackendApplicationContribution {
 
-    @inject(SharedStringServer) 
-    protected readonly sharedStringServer: SharedStringServer;
-
+    // @inject(SharedStringServer) 
+    // protected readonly sharedStringServer: SharedStringServer;
     initialize() {
         // setInterval(() => {
         //   this.sharedStringServer.greet("Hello from backend module");
@@ -75,7 +74,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         //
         function fetchParamsFromEvent(event: nsfw.FileChangeEvent){
             let splitPaths = event.directory.split(path.sep);
-            let params = workspaces.get(splitPaths[5]) as string[];
+            let params = workspaces.get(splitPaths[6]) as string[];
             return params;
         }
         
@@ -248,7 +247,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         
         cp.execSync("mkdir -p " + hostfs + "tmp/");
         createWatcher(hostfs + 'tmp/')
-        registerCollab(app);
+        // registerCollab(app);
         app.get('/getWorkspace', (req, res) => {
             let ip = requestIp.getClientIp(req);
             console.log(currentEditors);
@@ -390,6 +389,22 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             res.end(); 
         });
 
+        app.get("/isfileopened", (req,res)=>{
+            console.log("isfileopened");
+            console.log(req.body);
+            
+        });
+        app.get("/openedFile", (req,res)=>{
+            console.log("openedFile");
+            console.log(req.body);
+        });
+        app.get("/closedFile", (req,res)=>{
+            console.log("closedFile");
+            console.log(req.body);
+        });
+    
+
+
 
         async function setupCustomFiles(editor:Editor){
             let requestURL = itlingoCloudURL + 'token_api/get-file-list/' + editor.workspaceid;
@@ -433,8 +448,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         }
 
 function createWorkspace(ip:string, params:string[]){
+    if (workspaceExists(params[0])) return;
     let wuuid = uuid.v4();
-    var randomFoldername = hostfs + 'tmp/' + wuuid + '/Workspace-'+ params[0];
+    var randomFoldername = hostfs + 'tmp/' + wuuid + '/'+ params[0];
 
      fs.mkdir(randomFoldername, {recursive: true},(err:any) => {
          if (err) throw err;
@@ -445,8 +461,15 @@ function createWorkspace(ip:string, params:string[]){
             workspaceid: Number.parseInt(params[4]),
          };
      });
-    workspaces.set(wuuid, params);
+    workspaces.set(params[0], params);
     pullFilesFromDb(randomFoldername,params);
+}
+
+function workspaceExists(workspace: string){
+    for(const key of workspaces.keys()){
+        if(key === workspace) return true;
+    }
+    return false;
 }
 
 

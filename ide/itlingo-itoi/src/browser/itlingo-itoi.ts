@@ -1,17 +1,19 @@
 
 import { injectable, inject } from '@theia/core/shared/inversify';
 import { Command, MessageService} from '@theia/core/lib/common';
-import {  FrontendApplication, AbstractViewContribution, FrontendApplicationContribution } from '@theia/core/lib/browser';
+import { FrontendApplication, AbstractViewContribution, FrontendApplicationContribution } from '@theia/core/lib/browser';
 import { WorkspaceService } from "@theia/workspace/lib/browser/workspace-service";
 import { GettingStartedWidget } from './itlingo-itoi-widget';
 import { FrontendApplicationStateService } from '@theia/core/lib/browser/frontend-application-state';
 import * as monaco from '@theia/monaco-editor-core';
+import { MonacoWorkspace } from "@theia/monaco/lib/browser/monaco-workspace";
 import { Widget } from '@theia/core/lib/browser/widgets';
 import { ILogger } from "@theia/core/lib/common";
 import { ApplicationShell } from '@theia/core/lib/browser/shell/application-shell';
 import  TheiaURI from '@theia/core/lib/common/uri';
 
 import axios from 'axios';
+import { ItoiServer } from '../node/ItoiServer';
 // import { SharedStringServer } from '../node/SharedStringServer';
 
 
@@ -33,14 +35,14 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
     @inject(FrontendApplicationStateService)
     protected readonly stateService: FrontendApplicationStateService;
     @inject(WorkspaceService) private readonly workspaceService: WorkspaceService;
-    // @inject(MonacoEditorService) private readonly monacoEditorService: MonacoEditorService,
-    //@inject(MonacoWorkspace) private readonly monacoWorkspace: MonacoWorkspace,
+    //@inject(MonacoEditorService) private readonly monacoEditorService: MonacoEditorService,
+    @inject(MonacoWorkspace) private readonly monacoWorkspace: MonacoWorkspace;
     @inject(MessageService) private readonly messageService: MessageService;
     // @inject(WorkspaceCommandContribution) private readonly workspaceCommandContribution: WorkspaceCommandContribution,
     // @inject(CommandService) private readonly commandService: CommandService,
     //@inject(CommandService) private readonly commandService: CommandService,
     @inject(ILogger) protected readonly logger: ILogger;
-    // @inject(SharedStringServer) sharedStringServer: SharedStringServer;
+    @inject(ItoiServer) itoiServer: ItoiServer;
     constructor(
         
     ) { 
@@ -64,8 +66,22 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
 
     private setReadOnly(){
         monaco.editor.onDidCreateEditor((codeEditor) =>{
-            codeEditor.updateOptions({readOnly: this.readonly});
+            if(this.readonly) {
+                codeEditor.updateOptions({readOnly: this.readonly});
+            } else {
+                codeEditor.onDidChangeModel(async e=>{
+                    if (!e.newModelUrl) return 
+                    if (e.newModelUrl.scheme == 'file'){
+                        let res = await this.itoiServer.isFileOpen(e.newModelUrl?.toString()?? "");
+                        console.log(res);
+                        if(res > 1){
+                            codeEditor.updateOptions({readOnly: true});
+                        }
+                    }
+                });
+            }
         });
+        
         
         if(this.readonly){
             this.shell.widgets.forEach((widget: Widget) => {
@@ -156,18 +172,21 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                     this.readonly = response.data.readonly;
                     console.log(this.readonly);
                     this.setReadOnly();
+
+                    this.monacoWorkspace.onDidOpenTextDocument((e)=> {
+                        //e.uri
+                        this.itoiServer.fileOpened(e.uri);
+                    });
+                    this.monacoWorkspace.onDidCloseTextDocument((e)=> {
+                        //e.uri
+                        this.itoiServer.fileClosed(e.uri);
+                    });
                  }
              ).catch((error) => {
                 //window.location.href = itlingoCloudURL;
              });
-
-        //  setInterval(() =>
-        //  {
-        //      axios.get<String>('/ping',{},);
-        // }, 60*1000);
-
-
         this.messageService.info("Welcome to ITLingo online IDE!");
+        
     }
 }
 
