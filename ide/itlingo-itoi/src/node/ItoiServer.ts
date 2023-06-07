@@ -1,3 +1,9 @@
+import { JsonRpcServer } from '@theia/core';
+import {  injectable } from '@theia/core/shared/inversify';
+//import * as cp from 'child_process'
+// import { SwitchWSBackendContribution } from './WorkspaceApi-backend-contribution';
+//import path = require("path");
+//import path = require("path");
 //Nos queremos agarrar no text change events e enviar isso para cada user
 //Cada user terá o ficheiro no workspace 
 //e vai recebendo alterações directamente de outros users para o seu ficheiro
@@ -12,10 +18,6 @@
 // import { SequenceDeltaEvent, SharedString } from 'fluid-framework'
 // import { MergeTreeDeltaType, TextSegment } from "@fluidframework/merge-tree";
 // import { TinyliciousClient } from "@fluidframework/tinylicious-client";
-import { JsonRpcServer } from '@theia/core';
-import { injectable } from '@theia/core/shared/inversify';
-
-
 
 const openedFile: Map<string, number> = new Map<string, number>();
 
@@ -27,11 +29,21 @@ export interface ItoiServer extends JsonRpcServer<ItoiClient> {
     fileOpened(fileUri: string): void;
     fileClosed(fileUri: string): void;
     isFileOpen(fileUri: string): Promise<number>;
+    // gitClone(foldername: string, email: string, username: string, repository: string): void;
+    // gitPush(foldername: string, repo: string): void;
+    // gitPull(foldername: string, repo: string): void;
 }
+// console.log(jsonData.email);
+// console.log(jsonData.username);
+// console.log(jsonData.accessCode);
+// console.log(jsonData.repository);
+
 
 
 @injectable()
 export class ItoiServerNode implements ItoiServer {
+  // @inject(SwitchWSBackendContribution)
+  // protected readonly backendContrib: SwitchWSBackendContribution;
 
   client: ItoiClient | undefined;
   getClient?(): ItoiClient | undefined {
@@ -69,7 +81,6 @@ export class ItoiServerNode implements ItoiServer {
     }
     return 0;
   }
-
 }
 //   clientTiny = new TinyliciousClient();
 //   sharedString : SharedString;

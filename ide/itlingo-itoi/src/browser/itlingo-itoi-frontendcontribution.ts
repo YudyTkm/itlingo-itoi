@@ -69,11 +69,10 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
             if(this.readonly) {
                 codeEditor.updateOptions({readOnly: this.readonly});
             } else {
-                codeEditor.onDidChangeModel(async e=>{
+                codeEditor.onDidChangeModel(async (e) => {
                     if (!e.newModelUrl) return 
-                    if (e.newModelUrl.scheme == 'file'){
+                    if (e.newModelUrl.scheme === 'file'){
                         let res = await this.itoiServer.isFileOpen(e.newModelUrl?.toString()?? "");
-                        console.log(res);
                         if(res > 1){
                             codeEditor.updateOptions({readOnly: true});
                         }

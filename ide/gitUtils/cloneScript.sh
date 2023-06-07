@@ -12,16 +12,16 @@ mkdir -p $destDir
 rm -rf "$workspaceDir/.git"
 rm -rf "$workspaceDir/git"
 cp "$workspaceDir/"* $destDir
-rm -rf "$workspaceDir/"{*,.*}
+rm -rf $workspaceDir/*
 
 ##Perform git clone
-cd $workspaceDir
-git clone $repo "$workspaceDir/git"
+#cd $workspaceDir
+git clone $repo $workspaceDir
 
 
 
 ##Setup local git user
-cd $workspaceDir/git
+cd $workspaceDir
 git config user.name "$username"
 git config user.email "$username@itoi.com"
 

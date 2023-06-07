@@ -2,7 +2,7 @@
  * Generated using theia-extension-generator
  */
 import { ContainerModule } from '@theia/core/shared/inversify';
-import { TheiaSendBdFileUpdates } from './itlingo-itoi';
+import { TheiaSendBdFileUpdates } from './itlingo-itoi-frontendcontribution';
 import { GettingStartedWidget } from './itlingo-itoi-widget';
 import {  TheiaExampleCommandContribution } from './itlingo-itoi-menucontribution';
 import { WidgetFactory, FrontendApplicationContribution, bindViewContribution, WebSocketConnectionProvider  } from '@theia/core/lib/browser';

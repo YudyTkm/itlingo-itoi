@@ -8,30 +8,17 @@ import * as nsfw from 'nsfw'
 import * as cp from 'child_process'
 import path = require("path");
 import * as uuid from 'uuid';
-// import { registerCollab } from './WorkspaceApi-backend-collabInterface';
-// import { SharedStringServer } from './SharedStringServer';
-// import { inject } from '@theia/core/shared/inversify';
-// const { execFile } = require('node:child_process');
-const { Pool } = require('pg');
+import { Pool, QueryResult }  from 'pg';
 const getDirName = require('path').dirname
-const crypto = require('crypto')
-
-
-//var getDirName = require('path').dirname;
+const crypto = require('crypto');
 let requestIp = require('request-ip');
 
-
-// import { FileNavigatorWidget, FILE_NAVIGATOR_ID } from '@theia/navigator/lib/browser/navigator-widget';
-// import { WorkspaceNode } from '@theia/navigator/lib/browser/navigator-tree';
-// import URI from '@theia/core/lib/common/uri';
-
 const hostfs = "/tmp/theia/workspaces/";
-const hostroot = "/home/theia/ide/";
+export const hostroot = "/home/theia/ide/";
 const staticFolderLength = 63;
 const COM_KEY = "v8y/B?E(H+MbQeThWmZq4t7w!z$C&F)J";
 const itlingoCloudURL = "https://itlingocloud.herokuapp.com/";
 export const hostname = "itlingocloud.herokuapp.com";
-//var itlingoCloudURL = "http://172.26.128.1:8000/";
 const currentEditors: {[ip:string]: Editor} = {};
 const workspaces: Map<string, string[]> = new Map<string, string[]>();
 
@@ -45,8 +32,6 @@ type Editor = {
 @injectable()
 export class SwitchWSBackendContribution implements BackendApplicationContribution {
 
-    // @inject(SharedStringServer) 
-    // protected readonly sharedStringServer: SharedStringServer;
     initialize() {
         // setInterval(() => {
         //   this.sharedStringServer.greet("Hello from backend module");
@@ -68,49 +53,45 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 ssl: false
             };
         }
+
         const pgPool = new Pool(pgPoolOptions);
 
-
-        //
         function fetchParamsFromEvent(event: nsfw.FileChangeEvent){
             let splitPaths = event.directory.split(path.sep);
             let params = workspaces.get(splitPaths[6]) as string[];
             return params;
         }
         
-        function pullFilesFromDb(destinationFolder: string, params: string[]) {
+        async function pullFilesFromDb(destinationFolder: string, params: string[]) {
             console.log("PullFiles to:");
             console.log(destinationFolder);
             console.log(params[0]);
             console.log("write permissions: " + params[3]);
-            const selectQuery = "SELECT filename, file FROM t_files WHERE workspace=$1";
-            pgPool.query(selectQuery, [params[0]], (err:Error, res:any) => {
-                console.log("SELECT")
-                if (err) return;
+            const selectQuery = "SELECT filename, file FROM public.fn_pullfiles($1::varchar);";
+            const client = await pgPool.connect();
+            client.query(selectQuery, [params[0]], async (err:Error, res:any) => {
+                if(err) {
+                    console.error("PullFiles ERROR");
+                    console.error(err.stack);
+                    return;
+                }
+                console.log("SELECT");
                 console.log(res); 
                 res.rows.forEach((element:any) => {
                     fs.mkdirSync(getDirName(destinationFolder + '/' + element.filename), {recursive: true});
                     fs.writeFileSync(destinationFolder + '/' + element.filename, element.file);
-                    //if(params[3]==="false"){
-                    //fs.chmodSync(destinationFolder + '/' + element.filename, 0o444);
-                    //} 
                 });
-                //verificar se a pasta .git existe
-                // if (!fs.existsSync(destinationFolder + '/.git') && !fs.existsSync(destinationFolder + '/git')){
-                //     let gitInitCommand = `cd ${destinationFolder} && git init && git config user.email "${params[1]}" && git config user.name "${params[1]}"`;
-                //     console.log("Init git with:" + gitInitCommand)
-                //     cp.execSync(gitInitCommand);
-                // }
-                // let scriptPath = path.join(hostroot, "gitUtils", "gitPermissionsFix.sh");
-                // if (fs.existsSync(destinationFolder + '/.git')){
-                //     cp.execSync(scriptPath + ' ' + destinationFolder);
-                // }
-                // if (fs.existsSync(destinationFolder + '/git')){
-                //     cp.execSync(scriptPath + ' ' + destinationFolder + '/git');
-                // }
-                //fazer git init
-                // fazer git config user no mesmo comando...
+                const clientGit = await pgPool.connect();
+                const gitQuery = "SELECT repo FROM fn_getgitrepo($1::varchar);";
+                clientGit.query(gitQuery, [params[0]], (err:Error, result:QueryResult)=>{
+                    if (result.rows.length >0){
+                        let scriptPath = path.join(hostroot, "gitUtils", "cloneScript.sh");
+                        cp.execSync(`${scriptPath} ${destinationFolder} ${params[1]} ${result.rows[0].repo}`);
+                    }
+                });
             });
+
+
         }
 
 
@@ -126,27 +107,13 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             if (fs.lstatSync(fullfilepath).isDirectory()) return 
             console.log("woot: " + onlyFile + " " + fullfilepath);
             const client = await pgPool.connect();
-            await client.query("SELECT filename, workspace FROM t_files WHERE filename=$1 AND workspace=$2", [onlyFile,params[0]], (err:any, res:any) =>
+            let rawData = fs.readFileSync(fullfilepath);
+            await client.query("CALL public.sp_insertfiles($1::varchar,$2::varchar,$3::bytea);", [onlyFile,params[0], rawData], (err:any, res:any) =>
             {
                 if(err) {
                     console.error("AddFileToDB ERROR");
                     console.error(err.stack);
                     return;
-                }
-                if(res.rowCount > 0){
-                    console.log("File Already Exists");
-                } else {
-                    var rawData = fs.readFileSync(fullfilepath);
-                    console.log(params);
-                    client.query("INSERT INTO t_files (filename, workspace, file) VALUES ($1, $2, $3)",
-                    [onlyFile,params[0], rawData], (err:Error,resI:any) => {
-                        if(err) {
-                            console.error("AddFileToDB Insert ERROR");
-                            console.error(err.stack);
-                            return;
-                        }
-                        //console.log("Inserted " + resI.row[0]);
-                    });
                 }
             });
             client.release();
@@ -168,12 +135,8 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 var rawData = fs.readFileSync(fullfilepath);
 
                 await client.query("BEGIN");
-                const deleteQuery = "DELETE FROM t_files WHERE filename = $1 AND workspace = $2;"
-                await client.query(deleteQuery,[onlyFile, params[0]]);
-
-                const insertQuery = "INSERT INTO t_files(filename, workspace, file) VALUES ($1, $2, $3)"
+                const insertQuery = "CALL public.sp_changefile($1::varchar, $2::varchar, $3::bytea);"
                 client.query(insertQuery, [onlyFile,params[0], rawData]);
-
                 await client.query("COMMIT");
             } catch (e) {
                 await client.query("ROLLBACK");
@@ -192,7 +155,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             const onlyFile = fullfilepath.substring(removeNameLength);
             console.log("woot: " + onlyFile + " " + fullfilepath);
             let deleteQuery;
-            deleteQuery = "DELETE FROM t_files WHERE filename LIKE $1 AND workspace = $2;"
+            deleteQuery = "CALL public.sp_deleteFile($1::varchar, $2::varchar);"
             pgPool.query(deleteQuery,[onlyFile + '%', params[0]]);
         }
 
@@ -210,8 +173,8 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             const oldFile = fullfilepath.substring(removeNameLength);
             const newFile = newfullfilepath.substring(removeNameLength);
 
-            const updateQuery = "UPDATE t_files SET filename=$1 WHERE filename=$2 AND workspace=$3";
-            pgPool.query(updateQuery, [newFile, oldFile, params[0]]);
+            const updateQuery = "CALL public.sp_updatefilename($1::varchar,$2::varchar,$3::varchar);";
+            pgPool.query(updateQuery, [oldFile,newFile, params[0]]);
         }
 
         function decrypt(iv: string, t: string): string[] {
@@ -226,24 +189,6 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             let result = JSON.parse(deciphered.substr(0, deciphered.search('}')+1));
             return [result['workspace'], result['user'], result['organization'],result['write']?"true":"false",result['wsid']]
         }
-
-        // app.post('/setWorkspace', (req, res) => {
-        //     // const widget = this.shell.getWidgetById(FILE_NAVIGATOR_ID) as FileNavigatorWidget | undefined;
-        //     // if (!widget) {
-        //     //     return;
-        //     // }
-            
-        //     path = req.body.path;
-        //     path = path.replace("\\", "/");
-        //     console.log('setWorkspace :' + path);
-        //     // let uri = Uri.file('/some/path/to/folder');
-        //     // let success = await commands.executeCommand('vscode.openFolder', uri);
-        //     // if (WorkspaceNode.is(widget.model.root)) {
-        //     //     widget.model.selectNode(widget.model.getNodesByUri(new URI(path)).next().value);
-        //     // }
-        //      res.send("done!");
-        //      res.end();
-        // });
         
         cp.execSync("mkdir -p " + hostfs + "tmp/");
         createWatcher(hostfs + 'tmp/')
@@ -279,10 +224,6 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 let params = decrypt(iv, token);
                 console.log("after decrypt");
                 console.log(params);
-                // var params = token ? getRemoteParams(token.toString()): ['itoi'];
-                // if (req.query.ws) params = [req.query.ws.toString()];
-                // if (req.query.user) params = params.concat( [req.query.user.toString()]);
-                // if (req.query.cp) params = params.concat( [req.query.cp.toString()]);
                 createWorkspace(ip, params);
                 res.statusCode = 301;
                 res.redirect('/');
@@ -347,17 +288,23 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             res.end();
         });
 
-        app.get('/cloneRepo', (req, res) => {
+
+        app.get('/cloneRepo', async (req, res) => {
             let ip = requestIp.getClientIp(req);
             if(currentEditors[ip]) {
+                let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
                 let jsonData = JSON.parse(Buffer.from(req.query.data as string, "base64").toString());
-                console.log("cloneRepoBackend");
-                console.log(jsonData.email);
-                console.log(jsonData.username);
-                console.log(jsonData.accessCode);
-                console.log(jsonData.repository);
                 let scriptPath = path.join(hostroot, "gitUtils", "cloneScript.sh");
-                cp.execSync(`${scriptPath} ${currentEditors[ip].foldername} ${jsonData.username} ${jsonData.repository}`)
+                cp.execSync(`${scriptPath} ${currentEditors[ip].foldername} ${jsonData.username} ${jsonData.repository}`);
+                let query = 'CALL public.sp_assignGit($1::varchar, $2::varchar)';
+                await pgPool.query(query, [workspaceName,jsonData.repository] , (err:any, res:any) =>
+                {
+                    if(err) {
+                        console.error("gitCloneDB ERROR");
+                        console.error(err.stack);
+                        return;
+                    }
+                });
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
@@ -369,20 +316,28 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             let ip = requestIp.getClientIp(req);
             if(currentEditors[ip]) {
                 console.log("PULL!!");
-                console.log(`${req.query.repoUrl} `);
-                cp.execSync(`cd ${currentEditors[ip].foldername}/git && git pull ${req.query.repoUrl}`);
+                //console.log(`${req.query.repoUrl} `);
+                let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
+                pgPool.query('SELECT repo FROM public.fn_getgitrepo($1::varchar)', [workspaceName], (err:any, qres:QueryResult) => {
+                    console.log(qres.rows[0].repo);
+                    cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${qres.rows[0].repo}`);
+                });                
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
             res.end(); 
         });
 
-        app.get('/gitPush', (req, res) => {
+        app.get('/gitPush',(req, res) => {
             let ip = requestIp.getClientIp(req);
             if(currentEditors[ip]) {
                 console.log("PUSSHHH!!");
-                console.log(`${req.query.repoUrl} `);
-                cp.execSync(`cd ${currentEditors[ip].foldername}/git  && git push ${req.query.repoUrl}`);
+                let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
+                //console.log(`${req.query.repoUrl} `);
+                pgPool.query('SELECT repo FROM public.fn_getgitrepo($1::varchar)', [workspaceName], (err:any, qres:any) => {
+                    console.log(qres.rows[0].repo);
+                    cp.execSync(`cd ${currentEditors[ip].foldername} && git push ${qres.rows[0].repo}`);
+                });                
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
@@ -505,5 +460,10 @@ function workspaceExists(workspace: string){
     }
 
     }
+}
+
+function getWorkspaceFromPath(foldername: string) : string{
+    let arr = foldername.split('/');
+    return arr[arr.length-1];
 }
 

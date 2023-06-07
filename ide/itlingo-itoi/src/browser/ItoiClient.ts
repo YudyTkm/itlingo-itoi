@@ -1,13 +1,17 @@
-import { injectable } from "@theia/core/shared/inversify";
+import {  injectable } from "@theia/core/shared/inversify";
 import { ItoiClient } from "../node/ItoiServer";
-// import { SharedStringClient, SharedStringServer } from "../node/SharedStringServer";
-// import * as monaco from '@theia/monaco-editor-core';
-// import { MonacoEditor } from "@theia/monaco/lib/browser/monaco-editor";
-// import { EditorManager } from '@theia/editor/lib/browser'
-// import { MessageService, QuickInputService } from "@theia/core";
+// import { MessageService } from "@theia/core";
+
 
  @injectable()
 export class ItoiClientNode implements ItoiClient {
+    // @inject(MessageService)
+    // protected readonly messageService: MessageService;
+
+    onMessageUser(message: string): void {
+        console.log(message);
+    }
+}
 
 
 //     @inject(SharedStringServer)
@@ -160,5 +164,3 @@ export class ItoiClientNode implements ItoiClient {
 //         );
 //         return range;
 //     };
-
-}
