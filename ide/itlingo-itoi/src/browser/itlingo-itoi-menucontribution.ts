@@ -152,7 +152,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
     myGitPull(){
         axios.get("/gitPull", {params:{ }})
         .then((e) =>{
-            console.log(e.data);
+            this.messageService.info("Pulled Successfully!");
         });
         // let repo = localStorage.getItem("gituser.repo");
         // let accessCode = localStorage.getItem("gituser.accesscode");
@@ -181,7 +181,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
     myGitPush(){
         axios.get("/gitPush", {params:{ }})
         .then((e) =>{
-            console.log(e.data);
+                this.messageService.info("Pushed Successfully!");
         });
         // let repo = localStorage.getItem("gituser.repo");
         // let accessCode = localStorage.getItem("gituser.accesscode");
@@ -251,7 +251,9 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         let encoded = Buffer.from(JSON.stringify(gitUser)).toString("base64");
         axios.get("/cloneRepo", {params:{
             data:encoded
-        }});
+        }}).then(()=>{
+            this.messageService.info("Clonned Successfully!");
+        });
     }
 
 

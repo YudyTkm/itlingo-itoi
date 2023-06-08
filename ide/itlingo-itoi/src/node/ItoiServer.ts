@@ -1,37 +1,36 @@
 import { JsonRpcServer } from '@theia/core';
 import {  injectable } from '@theia/core/shared/inversify';
-//import * as cp from 'child_process'
-// import { SwitchWSBackendContribution } from './WorkspaceApi-backend-contribution';
-//import path = require("path");
-//import path = require("path");
-//Nos queremos agarrar no text change events e enviar isso para cada user
-//Cada user terá o ficheiro no workspace 
-//e vai recebendo alterações directamente de outros users para o seu ficheiro
 
-//O server vai ser uma queue que cada cliente 
-//vai guardando o ultimo ID do evento que já recebeu
+const timeoutMS = 10*1000;
 
-// SharedMap
-// uuid para a sessao com um SharedSequence
-// uuid+chat para a sessão com chat
+const openedFile: Map<string, string[]> = new Map<string, string[]>();
+const userOpenedFiles: Map<string, string[]> = new Map<string, string[]>();
+const usersAlive: Map<string, Date> = new Map<string, Date>();
 
-// import { SequenceDeltaEvent, SharedString } from 'fluid-framework'
-// import { MergeTreeDeltaType, TextSegment } from "@fluidframework/merge-tree";
-// import { TinyliciousClient } from "@fluidframework/tinylicious-client";
 
-const openedFile: Map<string, number> = new Map<string, number>();
+setInterval(()=>{
+  for(const [user, datetime] of usersAlive){
+    const msBetweenDates = (new Date()).getTime() - datetime.getTime();
+    if(msBetweenDates>timeoutMS){
+      console.log("user timed out" + user);
+      timeoutUser(user);
+    }
+  }
+}, 10*1000);
+
 
 export interface ItoiClient {
     
 }
+
+
 export const ItoiServer = Symbol("ItoiServer");
 export interface ItoiServer extends JsonRpcServer<ItoiClient> {
     fileOpened(fileUri: string): void;
     fileClosed(fileUri: string): void;
-    isFileOpen(fileUri: string): Promise<number>;
-    // gitClone(foldername: string, email: string, username: string, repository: string): void;
-    // gitPush(foldername: string, repo: string): void;
-    // gitPull(foldername: string, repo: string): void;
+    setUsername(username: string): void;
+    getUsersWithFileOpen(fileUri: string): Promise<string[]>;
+    userPing(): void;
 }
 // console.log(jsonData.email);
 // console.log(jsonData.username);
@@ -39,13 +38,31 @@ export interface ItoiServer extends JsonRpcServer<ItoiClient> {
 // console.log(jsonData.repository);
 
 
+//revamp  concurrency
+//Passar o username para o client (no get workspace) FEITO
+//on open document mandar o doc para o ItoiServer
+//  - Na resposta enviar a lista de user que também tem o doc aberto FEITO
+
+//Ter um sistem de ImAlive para cada user e dado timeout de 10segundos remover da lista FEITO
+
+//On open document mostrar ao user que users têm o doc aberto
+
+//Map de doc -> lista de users
+//Map de user -> lista de docs
+//lista de pairs user/last timeout
+//metodo de ping
+//ter uma rotina que 10 em 10 segundos ve se algum user está timedout
+
 
 @injectable()
 export class ItoiServerNode implements ItoiServer {
+
+
   // @inject(SwitchWSBackendContribution)
   // protected readonly backendContrib: SwitchWSBackendContribution;
 
   client: ItoiClient | undefined;
+  username: string = "";
   getClient?(): ItoiClient | undefined {
         return this.client;
     }
@@ -56,32 +73,101 @@ export class ItoiServerNode implements ItoiServer {
   }
 
   fileOpened(fileUri: string): void {
-    console.log("file opened"+ fileUri);
+    // console.log("file opened"+ fileUri);
     let readers = openedFile.get(fileUri);
-    if (readers){
-      openedFile.set(fileUri, readers + 1)
-    } else {
-      openedFile.set(fileUri, 1)
-    }
+     if (readers){
+      readers
+      if (!(readers.includes(this.username))){
+        readers.push(this.username);
+        openedFile.set(fileUri, readers);
+        addFileToUser(this.username, fileUri);
+      }
+     } else {
+      openedFile.set(fileUri, [this.username]);
+     }
   }
 
   fileClosed(fileUri: string): void {
-    console.log("file closed " + fileUri);
+    // console.log("file closed " + fileUri);
     let readers = openedFile.get(fileUri);
-    if (readers){
-      openedFile.set(fileUri, readers -1)
-    }
+     if (readers){
+      if (( readers.includes(this.username))){
+        let removeIndex = readers.indexOf(this.username);
+        console.log("REMOVE USER: " + this.username + removeIndex + " from readers: " + readers.join(','));
+        readers.splice(removeIndex, 1);
+        console.log("after splice" + readers.join(','));
+        openedFile.set(fileUri, readers);
+        removeFileToUser(this.username, fileUri);
+      }
+     }
   }
 
   async isFileOpen(fileUri: string): Promise<number> {
-    console.log("isFileOpen?" + fileUri + openedFile.get(fileUri));
-    let readers = openedFile.get(fileUri);
-    if (readers){
-      return readers;
-    }
+    // console.log("isFileOpen?" + fileUri + openedFile.get(fileUri));
+    // let readers = openedFile.get(fileUri);
+    // if (readers){
+    //   return readers;
+    // }
     return 0;
+
+
+
+  }
+  setUsername(username: string): void{
+   this.username = username;   
+  }
+
+  userPing(): void {
+    console.log("USER PING " + this.username);
+    usersAlive.set(this.username, new Date());
+  }
+
+  async getUsersWithFileOpen(fileUri: string): Promise<string[]> {
+    let users = openedFile.get(fileUri);
+    if(users) return users
+    return [];
   }
 }
+
+function addFileToUser(username: string, fileUri: string) {
+  let files = userOpenedFiles.get(username);
+  if(files){
+    if(!(files.includes(fileUri))){
+      files.push(fileUri);
+      userOpenedFiles.set(username, files);
+    }
+  } else {
+    userOpenedFiles.set(username, [fileUri]);
+  }
+}
+
+function removeFileToUser(username: string, fileUri: string) {
+  let files = userOpenedFiles.get(username);
+  if(files){
+    if((files.includes(fileUri))){
+      let removeIndex = files.indexOf(fileUri);
+      files.splice(removeIndex, 1);
+      userOpenedFiles.set(fileUri, files);
+    }
+  }
+}
+
+function timeoutUser(username: string){
+  let files = userOpenedFiles.get(username);
+  if(files){
+    for(const file in files){
+      let listofUsers = openedFile.get(file);
+      if (listofUsers){
+        let removeindex = listofUsers.indexOf(username);
+        listofUsers.splice(removeindex, 1);
+        openedFile.set(file, listofUsers);
+      }
+    }
+    userOpenedFiles.delete(username);
+    usersAlive.delete(username);
+  }
+}
+
 //   clientTiny = new TinyliciousClient();
 //   sharedString : SharedString;
 //   fileUri: string;

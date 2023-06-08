@@ -104,8 +104,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             const fullfilepath = event.directory + '/' + event.file;
             const removeNameLength = staticFolderLength + params[0].length + 1;
             const onlyFile = fullfilepath.substring(removeNameLength);
-            if (fs.lstatSync(fullfilepath).isDirectory()) return 
-            console.log("woot: " + onlyFile + " " + fullfilepath);
+            console.log("woot: " + onlyFile + " " + onlyFile.substring(0,4));
+            if (fs.lstatSync(fullfilepath).isDirectory()) return;
+            if (onlyFile.substring(0,4)==='.git') return;
             const client = await pgPool.connect();
             let rawData = fs.readFileSync(fullfilepath);
             await client.query("CALL public.sp_insertfiles($1::varchar,$2::varchar,$3::bytea);", [onlyFile,params[0], rawData], (err:any, res:any) =>
@@ -133,7 +134,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 const onlyFile = fullfilepath.substring(removeNameLength);
                 console.log("woot: " + onlyFile + " " + fullfilepath);
                 var rawData = fs.readFileSync(fullfilepath);
-
+                if (onlyFile.substring(0,4)==='.git') return;
                 await client.query("BEGIN");
                 const insertQuery = "CALL public.sp_changefile($1::varchar, $2::varchar, $3::bytea);"
                 client.query(insertQuery, [onlyFile,params[0], rawData]);
@@ -202,11 +203,19 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 res.end();
                 return
             }
+
+            let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
+            let username: string = "";
+            let params = workspaces.get(workspaceName);
+            if(params){
+                username=params[1];
+            }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'json/application');
             res.json({
                 foldername: currentEditors[ip].foldername,  
-                readonly: !currentEditors[ip].write
+                readonly: !currentEditors[ip].write,
+                username: username
             });
             res.end();
         });
@@ -297,7 +306,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 let scriptPath = path.join(hostroot, "gitUtils", "cloneScript.sh");
                 cp.execSync(`${scriptPath} ${currentEditors[ip].foldername} ${jsonData.username} ${jsonData.repository}`);
                 let query = 'CALL public.sp_assignGit($1::varchar, $2::varchar)';
-                await pgPool.query(query, [workspaceName,jsonData.repository] , (err:any, res:any) =>
+                pgPool.query(query, [workspaceName,jsonData.repository] , (err:any, res:any) =>
                 {
                     if(err) {
                         console.error("gitCloneDB ERROR");
@@ -342,20 +351,6 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
             res.end(); 
-        });
-
-        app.get("/isfileopened", (req,res)=>{
-            console.log("isfileopened");
-            console.log(req.body);
-            
-        });
-        app.get("/openedFile", (req,res)=>{
-            console.log("openedFile");
-            console.log(req.body);
-        });
-        app.get("/closedFile", (req,res)=>{
-            console.log("closedFile");
-            console.log(req.body);
         });
     
 

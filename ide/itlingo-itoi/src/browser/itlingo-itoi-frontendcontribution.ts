@@ -68,17 +68,18 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
         monaco.editor.onDidCreateEditor((codeEditor) =>{
             if(this.readonly) {
                 codeEditor.updateOptions({readOnly: this.readonly});
-            } else {
-                codeEditor.onDidChangeModel(async (e) => {
-                    if (!e.newModelUrl) return 
-                    if (e.newModelUrl.scheme === 'file'){
-                        let res = await this.itoiServer.isFileOpen(e.newModelUrl?.toString()?? "");
-                        if(res > 1){
-                            codeEditor.updateOptions({readOnly: true});
-                        }
-                    }
-                });
             }
+            // } else {
+            //     codeEditor.onDidChangeModel(async (e) => {
+            //         if (!e.newModelUrl) return 
+            //         if (e.newModelUrl.scheme === 'file'){
+            //             let res = await this.itoiServer.isFileOpen(e.newModelUrl?.toString()?? "");
+            //             if(res > 1){
+            //                 codeEditor.updateOptions({readOnly: true});
+            //             }
+            //         }
+            //     });
+            // }
         });
         
         
@@ -171,13 +172,20 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                     this.readonly = response.data.readonly;
                     console.log(this.readonly);
                     this.setReadOnly();
-
-                    this.monacoWorkspace.onDidOpenTextDocument((e)=> {
-                        //e.uri
+                    this.itoiServer.setUsername(response.data.username);
+                    setInterval(
+                        () => {
+                            this.itoiServer.userPing();
+                        }
+                    ,10*1000);
+                    this.monacoWorkspace.onDidOpenTextDocument(async (e)=> {
+                        let usersList = await this.itoiServer.getUsersWithFileOpen(e.uri);
+                        if(usersList.length>0){
+                            this.messageService.info("yo estes bacanos tem o ficheiro aberto!\n" + usersList.join(' | '));
+                        }
                         this.itoiServer.fileOpened(e.uri);
                     });
                     this.monacoWorkspace.onDidCloseTextDocument((e)=> {
-                        //e.uri
                         this.itoiServer.fileClosed(e.uri);
                     });
                  }

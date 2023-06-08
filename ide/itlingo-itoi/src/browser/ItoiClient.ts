@@ -3,14 +3,15 @@ import { ItoiClient } from "../node/ItoiServer";
 // import { MessageService } from "@theia/core";
 
 
- @injectable()
+@injectable()
 export class ItoiClientNode implements ItoiClient {
-    // @inject(MessageService)
-    // protected readonly messageService: MessageService;
-
+    
     onMessageUser(message: string): void {
         console.log(message);
     }
+
+
+
 }
 
 
