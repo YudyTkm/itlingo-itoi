@@ -118,8 +118,10 @@ export class ItoiServerNode implements ItoiServer {
   }
 
   userPing(): void {
-    console.log("USER PING " + this.username);
-    usersAlive.set(this.username, new Date());
+    //console.log("USER PING " + this.username);
+    if (this.username.length>0) {
+      usersAlive.set(this.username, new Date());
+    }
   }
 
   async getUsersWithFileOpen(fileUri: string): Promise<string[]> {
@@ -163,9 +165,9 @@ function timeoutUser(username: string){
         openedFile.set(file, listofUsers);
       }
     }
-    userOpenedFiles.delete(username);
-    usersAlive.delete(username);
   }
+  userOpenedFiles.delete(username);
+  usersAlive.delete(username);
 }
 
 //   clientTiny = new TinyliciousClient();

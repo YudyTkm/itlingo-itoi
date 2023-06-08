@@ -311,13 +311,17 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                     if(err) {
                         console.error("gitCloneDB ERROR");
                         console.error(err.stack);
+                        res.statusCode = 500;
+                        res.setHeader('Content-Type', 'text/plain');
+                        res.end(); 
                         return;
                     }
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.end(); 
                 });
             }
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end(); 
+            
         });
 
 
@@ -328,13 +332,23 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 //console.log(`${req.query.repoUrl} `);
                 let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
                 pgPool.query('SELECT repo FROM public.fn_getgitrepo($1::varchar)', [workspaceName], (err:any, qres:QueryResult) => {
+                    if(err){
+                        res.statusCode = 500;
+                        res.setHeader('Content-Type', 'text/plain');
+                        res.end(); 
+                    }
                     console.log(qres.rows[0].repo);
-                    cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${qres.rows[0].repo}`);
+                    let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${qres.rows[0].repo}`).toString();
+                    if(output === '') output = "Sucess!"
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.json({
+                        output: output
+                    })
+                    res.end(); 
                 });                
             }
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end(); 
+            
         });
 
         app.get('/gitPush',(req, res) => {
@@ -344,13 +358,23 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
                 //console.log(`${req.query.repoUrl} `);
                 pgPool.query('SELECT repo FROM public.fn_getgitrepo($1::varchar)', [workspaceName], (err:any, qres:any) => {
+                    if(err){
+                        res.statusCode = 500;
+                        res.setHeader('Content-Type', 'text/plain');
+                        res.end(); 
+                    }
                     console.log(qres.rows[0].repo);
-                    cp.execSync(`cd ${currentEditors[ip].foldername} && git push ${qres.rows[0].repo}`);
+                    let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git push ${qres.rows[0].repo}`).toString();
+                    if(output === '') output = "Sucess!"
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.json({
+                        output: output
+                    })
+                    res.end(); 
                 });                
             }
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end(); 
+            
         });
     
 
