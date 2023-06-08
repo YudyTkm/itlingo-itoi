@@ -181,7 +181,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                     this.monacoWorkspace.onDidOpenTextDocument(async (e)=> {
                         let usersList = await this.itoiServer.getUsersWithFileOpen(e.uri);
                         if(usersList.length>0){
-                            this.messageService.info("yo estes bacanos tem o ficheiro aberto!\n" + usersList.join(' | '));
+                            this.messageService.info("This document is currently open by the following users!\n" + usersList.join(' | '));
                         }
                         this.itoiServer.fileOpened(e.uri);
                     });
