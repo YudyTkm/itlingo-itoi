@@ -1,5 +1,4 @@
 grammar Rsl
-import 'Terminals'
 
 entry Model infers Model:
     (packages+=PackageAbstract )* 
@@ -34,7 +33,7 @@ Month infers Month:
     ^type=('Jan' | 'Feb' | 'Mar' | 'Apr' | 'May' | 'Jun' | 'Jul' | 'Aug' | 'Sep' | 'Oct' | 'Nov' | 'Dec' ) 
 ;
 
-^Date infers _Date:
+^DateRule infers ^DateRule:
     year=INT  '-' month=INT  '-' day=INT   
 ;
 
@@ -47,7 +46,7 @@ DateTime infers DateTime:
 ;
 
 AttributeValue infers AttributeValue:
-    ^string=STRING  | dateTime=DateTime  | date=^Date  | time=Time  | doubleOrInt=DoubleOrInt  | percentage=Percentage  | ^boolean=Boolean  
+    ^string=STRING  | dateTime=DateTime  | date=^DateRule  | time=Time  | doubleOrInt=DoubleOrInt  | percentage=Percentage  | ^boolean=Boolean  
 ;
 
 Multiplicity infers Multiplicity:
@@ -75,7 +74,7 @@ IncludeAll infers IncludeAll:
 ;
 
 IncludeElement infers IncludeElement:
-    'Include' ^type=IncludeSystemElementType  'fromSystem' system=[System:ID ] 'element' element=[SystemElement:QualifiedName ] ('[' (updateFields=UpdateFields )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
+    'Include' ^type=IncludeSystemElementType  'fromSystem' system=[System:ID ] 'element' element=[SystemConcept:QualifiedName ] ('[' (updateFields=UpdateFields )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
 UpdateFields infers UpdateFields:
@@ -886,8 +885,16 @@ StereotypeTypeOriginal infers StereotypeTypeOriginal:
     ^type=('System' | 'TestSuite' | 'GlossaryTerm' | 'Vulnerability' | 'Risk' | 'Stakeholder' | 'Actor' | 'StateMachine' | 'ActiveTask' | 'ActiveEvent' | 'ActiveFlow' | 'Goal' | 'QR' | 'FR' | 'Constraint' | 'UserStory' | 'UseCase' | 'AcceptanceCriteriaTest' | 'DataEntityTest' | 'UseCaseTest' | 'StateMachineTest' | 'DataEnumeration' | 'DataEntity' | 'DataEntityCluster' | 'Data' | 'TestData' | 'AcceptanceCriteriaTestView' | 'UseCaseTestView' | 'DataEntityTestView' | 'StatemachineTestView' | 'MainScenario' | 'Scenario' | 'Step' | 'AcceptanceCriteriaScenario' | 'DataAttribute' | 'Other' ) 
 ;
 
+ViewType infers ViewType:
+    ^type=('RequirementView' | 'GoalView' | 'QRView' | 'FRView' | 'ConstraintView' | 'UserStoryView' | 'UseCaseView' | 'TestView' | 'StakeholderView' | 'ActorView' | 'GlossaryTermView' | 'DataEntityView' | 'DataEntityClusterView' | 'ActiveElementView' | 'RiskView' | 'VulnerabilityView' ) 
+;
+
+ThemeType infers ThemeType:
+    ^type=('SystemElementTheme' | 'StructureElementTheme' | 'BehaviorElementTheme' | 'RequirementTheme' | 'TestTheme' | 'OtherTheme' ) 
+;
+
 IncludeSystemElementType infers IncludeSystemElementType:
-    ^type=('Goal' | 'QR' | 'FR' | 'Constraint' | 'UserStory' | 'UseCase' | 'AcceptanceCriteriaTestView' | 'UseCaseTestView' | 'DataEntityTestView' | 'StatemachineTestView' | 'Stakeholder' | 'Actor' | 'GlossaryTerm' | 'DataEnumeration' | 'DataEntity' | 'DataEntityCluster' | 'StateMachine' | 'ActiveEvent' | 'ActiveTask' | 'ActiveFlow' | 'Vulnerability' | 'Risk' ) 
+    ^type=('Goal' | 'QR' | 'FR' | 'Constraint' | 'UserStory' | 'UseCase' | 'AcceptanceCriteriaTestView' | 'UseCaseTestView' | 'DataEntityTestView' | 'StatemachineTestView' | 'Stakeholder' | 'Actor' | 'GlossaryTerm' | 'DataEnumeration' | 'DataEntity' | 'DataEntityCluster' | 'StateMachine' | 'ActiveEvent' | 'ActiveTask' | 'ActiveFlow' | 'Vulnerability' | 'Risk' | 'LinguisticRule' | 'LinguisticFragment' ) 
 ;
 
 LinguisticRuleType infers LinguisticRuleType:
@@ -895,7 +902,7 @@ LinguisticRuleType infers LinguisticRuleType:
 ;
 
 GlossaryTerm infers GlossaryTerm:
-    'Term' name=ID  (nameAlias=STRING )? ':' ^type=GlossaryTermType  ('[' ('isA' super=[GlossaryTerm:QualifiedName ] )? ('partOf' ('optional' | 'mandatory' )?partOf=[GlossaryTerm:QualifiedName ] )? ('acronym' acronym=STRING  )? ('applicableTo' applicableTo=RefTermApplicableTo  )? ('synonym' synonym=STRING  )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
+    'Term' name=ID  (nameAlias=STRING )? ':' ^type=GlossaryTermType  ('[' ('isA' super=[GlossaryTerm:QualifiedName ] )? ('partOf' ('optional' | 'mandatory' )?partOf=[GlossaryTerm:QualifiedName ] )? ('acronym' acronym=STRING  )? ('applicableTo' applicableTo=RefTermApplicableTo  )? ('synonyms' synonyms+=STRING  (',' synonyms+=STRING  )* )? (tags+=Tag )* ('description' description=STRING  )? ']' )?  
 ;
 
 RefTermApplicableTo infers RefTermApplicableTo:
@@ -1222,65 +1229,49 @@ ReferenceElements infers ReferenceElements:
     references+=[SystemElement:QualifiedName ] (',' references+=[SystemElement:QualifiedName ] )*  
 ;
 
-ViewType infers ViewType:
-    ^type=('RequirementView' | 'GoalView' | 'QRView' | 'FRView' | 'ConstraintView' | 'UserStoryView' | 'UseCaseView' | 'TestView' | 'StakeholderView' | 'ActorView' | 'GlossaryTermView' | 'DataEntityView' | 'DataEntityClusterView' | 'ActiveElementView' | 'RiskView' | 'VulnerabilityView' ) 
+type PartOfSpeechEnum = 'Adjective' | 'Adposition' | 'Adverb' | 'Auxiliary' | 'CoordinatingConjunction' | 'Determiner' | 'Interjection' | 'Noun' | 'Numeral' | 'Particle' | 'Pronoun' | 'ProperNoun' | 'Punctuation' | 'SubordinatingConjunction' | 'Symbol' | 'Verb' | 'Other';
+PartOfSpeechEnum returns PartOfSpeechEnum:
+    PartOfSpeechEnum_ADJ | PartOfSpeechEnum_ADP | PartOfSpeechEnum_ADV | PartOfSpeechEnum_AUX | PartOfSpeechEnum_CCONJ | PartOfSpeechEnum_DET | PartOfSpeechEnum_INTJ | PartOfSpeechEnum_NOUN | PartOfSpeechEnum_NUM | PartOfSpeechEnum_PART | PartOfSpeechEnum_PRON | PartOfSpeechEnum_PROPN | PartOfSpeechEnum_PUNCT | PartOfSpeechEnum_SCONJ | PartOfSpeechEnum_SYM | PartOfSpeechEnum_VERB | PartOfSpeechEnum_X
 ;
-
-ThemeType infers ThemeType:
-    ^type=('SystemElementTheme' | 'StructureElementTheme' | 'BehaviorElementTheme' | 'RequirementTheme' | 'TestTheme' | 'OtherTheme' ) 
-;
-
-type PartOfSpeechEnum = 'CoordinatingConjunction' | 'CardinalNumber' | 'Determiner' | 'ExistentialThere' | 'ForeignWord' | 'PrepositionOrSubordinatingConjunction' | 'Adjective' | 'AdjectiveComparative' | 'AdjectiveSuperlative' | 'ListItemMarker' | 'Modal' | 'NounSingular' | 'NounPlural' | 'ProperNounSingular' | 'ProperNounPlural' | 'Predeterminer' | 'PossessiveSnding' | 'PronounPersonal' | 'PronounPossessive' | 'Adverb' | 'AdverbComparative' | 'AdverbSuperlative' | 'Particle' | 'Symbol' | 'To' | 'Interjection' | 'VerbBaseForm' | 'VerbPastTense' | 'VerbGerundOrPresentParticiple' | 'VerbPastParticiple' | 'VerbNon3rdPersonSingularPresent' | 'Verb3rdPersonSingularPresent' | 'WhDeterminer' | 'WhPronoun' | 'PossessiveWhPronoun' | 'WhAdverb';
-PartOfSpeechEnum returns string:
-    PartOfSpeechEnum_CC | PartOfSpeechEnum_CD | PartOfSpeechEnum_DT | PartOfSpeechEnum_EX | PartOfSpeechEnum_FW | PartOfSpeechEnum_IN | PartOfSpeechEnum_JJ | PartOfSpeechEnum_JJR | PartOfSpeechEnum_JJS | PartOfSpeechEnum_LS | PartOfSpeechEnum_MD | PartOfSpeechEnum_NN | PartOfSpeechEnum_NNS | PartOfSpeechEnum_NNP | PartOfSpeechEnum_NNPS | PartOfSpeechEnum_PDT | PartOfSpeechEnum_POS | PartOfSpeechEnum_PRP | PartOfSpeechEnum_PRP_DOLLAR | PartOfSpeechEnum_RB | PartOfSpeechEnum_RBR | PartOfSpeechEnum_RBS | PartOfSpeechEnum_RP | PartOfSpeechEnum_SYM | PartOfSpeechEnum_TO | PartOfSpeechEnum_UH | PartOfSpeechEnum_VB | PartOfSpeechEnum_VBD | PartOfSpeechEnum_VBG | PartOfSpeechEnum_VBN | PartOfSpeechEnum_VBP | PartOfSpeechEnum_VBZ | PartOfSpeechEnum_WDT | PartOfSpeechEnum_WP | PartOfSpeechEnum_WP_DOLLAR | PartOfSpeechEnum_WRB
-;
-PartOfSpeechEnum_CC returns string: 'CoordinatingConjunction' ;
-PartOfSpeechEnum_CD returns string: 'CardinalNumber' ;
-PartOfSpeechEnum_DT returns string: 'Determiner' ;
-PartOfSpeechEnum_EX returns string: 'ExistentialThere' ;
-PartOfSpeechEnum_FW returns string: 'ForeignWord' ;
-PartOfSpeechEnum_IN returns string: 'PrepositionOrSubordinatingConjunction' ;
-PartOfSpeechEnum_JJ returns string: 'Adjective' ;
-PartOfSpeechEnum_JJR returns string: 'AdjectiveComparative' ;
-PartOfSpeechEnum_JJS returns string: 'AdjectiveSuperlative' ;
-PartOfSpeechEnum_LS returns string: 'ListItemMarker' ;
-PartOfSpeechEnum_MD returns string: 'Modal' ;
-PartOfSpeechEnum_NN returns string: 'NounSingular' ;
-PartOfSpeechEnum_NNS returns string: 'NounPlural' ;
-PartOfSpeechEnum_NNP returns string: 'ProperNounSingular' ;
-PartOfSpeechEnum_NNPS returns string: 'ProperNounPlural' ;
-PartOfSpeechEnum_PDT returns string: 'Predeterminer' ;
-PartOfSpeechEnum_POS returns string: 'PossessiveSnding' ;
-PartOfSpeechEnum_PRP returns string: 'PronounPersonal' ;
-PartOfSpeechEnum_PRP_DOLLAR returns string: 'PronounPossessive' ;
-PartOfSpeechEnum_RB returns string: 'Adverb' ;
-PartOfSpeechEnum_RBR returns string: 'AdverbComparative' ;
-PartOfSpeechEnum_RBS returns string: 'AdverbSuperlative' ;
-PartOfSpeechEnum_RP returns string: 'Particle' ;
+PartOfSpeechEnum_ADJ returns string: 'Adjective' ;
+PartOfSpeechEnum_ADP returns string: 'Adposition' ;
+PartOfSpeechEnum_ADV returns string: 'Adverb' ;
+PartOfSpeechEnum_AUX returns string: 'Auxiliary' ;
+PartOfSpeechEnum_CCONJ returns string: 'CoordinatingConjunction' ;
+PartOfSpeechEnum_DET returns string: 'Determiner' ;
+PartOfSpeechEnum_INTJ returns string: 'Interjection' ;
+PartOfSpeechEnum_NOUN returns string: 'Noun' ;
+PartOfSpeechEnum_NUM returns string: 'Numeral' ;
+PartOfSpeechEnum_PART returns string: 'Particle' ;
+PartOfSpeechEnum_PRON returns string: 'Pronoun' ;
+PartOfSpeechEnum_PROPN returns string: 'ProperNoun' ;
+PartOfSpeechEnum_PUNCT returns string: 'Punctuation' ;
+PartOfSpeechEnum_SCONJ returns string: 'SubordinatingConjunction' ;
 PartOfSpeechEnum_SYM returns string: 'Symbol' ;
-PartOfSpeechEnum_TO returns string: 'To' ;
-PartOfSpeechEnum_UH returns string: 'Interjection' ;
-PartOfSpeechEnum_VB returns string: 'VerbBaseForm' ;
-PartOfSpeechEnum_VBD returns string: 'VerbPastTense' ;
-PartOfSpeechEnum_VBG returns string: 'VerbGerundOrPresentParticiple' ;
-PartOfSpeechEnum_VBN returns string: 'VerbPastParticiple' ;
-PartOfSpeechEnum_VBP returns string: 'VerbNon3rdPersonSingularPresent' ;
-PartOfSpeechEnum_VBZ returns string: 'Verb3rdPersonSingularPresent' ;
-PartOfSpeechEnum_WDT returns string: 'WhDeterminer' ;
-PartOfSpeechEnum_WP returns string: 'WhPronoun' ;
-PartOfSpeechEnum_WP_DOLLAR returns string: 'PossessiveWhPronoun' ;
-PartOfSpeechEnum_WRB returns string: 'WhAdverb' ;
+PartOfSpeechEnum_VERB returns string: 'Verb' ;
+PartOfSpeechEnum_X returns string: 'Other' ;
 
 PartOfSpeech infers PartOfSpeech:
     posTag=PartOfSpeechEnum  
 ;
 
 type LinguisticRuleSeverityLevel = 'Warning' | 'Error';
-LinguisticRuleSeverityLevel returns string:
+LinguisticRuleSeverityLevel returns LinguisticRuleSeverityLevel:
     LinguisticRuleSeverityLevel_warning | LinguisticRuleSeverityLevel_error
 ;
 LinguisticRuleSeverityLevel_warning returns string: 'Warning' ;
 LinguisticRuleSeverityLevel_error returns string: 'Error' ;
+
+type LinguisticLanguageType = 'English' | 'Spanish' | 'German' | 'French' | 'Italian' | 'Portuguese';
+LinguisticLanguageType returns LinguisticLanguageType:
+    LinguisticLanguageType_en | LinguisticLanguageType_es | LinguisticLanguageType_de | LinguisticLanguageType_fr | LinguisticLanguageType_it | LinguisticLanguageType_pt
+;
+LinguisticLanguageType_en returns string: 'English' ;
+LinguisticLanguageType_es returns string: 'Spanish' ;
+LinguisticLanguageType_de returns string: 'German' ;
+LinguisticLanguageType_fr returns string: 'French' ;
+LinguisticLanguageType_it returns string: 'Italian' ;
+LinguisticLanguageType_pt returns string: 'Portuguese' ;
 
 Word infers Word:
     word=STRING  
@@ -1291,7 +1282,11 @@ LinguisticFragmentPart infers LinguisticFragmentPart:
 ;
 
 LinguisticElement infers LinguisticElement:
-    LinguisticRule | LinguisticFragment 
+    LinguisticRule | LinguisticFragment | LinguisticLanguage 
+;
+
+LinguisticLanguage infers LinguisticLanguage:
+    'LinguisticLanguage' name=ID  (nameAlias=STRING )? ':' ^type=LinguisticLanguageType  ('[' ('description' description=STRING  )? ']' )?  
 ;
 
 LinguisticFragment infers LinguisticFragment:
@@ -1303,7 +1298,7 @@ LinguisticFragmentRef infers LinguisticFragmentRef:
 ;
 
 LinguisticRule infers LinguisticRule:
-    'LinguisticRule' name=ID  (nameAlias=STRING )? ':' ^type=LinguisticRuleType  ('[' ('property' element=LinguisticRuleElement  '.' property=LinguisticRuleElementProperty  ) ('pattern' pattern+=LinguisticPattern  ('+' pattern+=LinguisticPattern  )* ) ('severity' severity=LinguisticRuleSeverityLevel  ) ('description' description=STRING  )? ']' )  
+    'LinguisticRule' name=ID  (nameAlias=STRING )? ':' ^type=LinguisticRuleType  ('[' ('property' property=LinguisticRuleElementAndProperty  ) ('pattern' pattern+=LinguisticPattern  ('+' pattern+=LinguisticPattern  )* ) ('severity' severity=LinguisticRuleSeverityLevel  ) ('description' description=STRING  )? ']' )  
 ;
 
 LinguisticPattern infers LinguisticPattern:
@@ -1319,10 +1314,17 @@ LinguisticRuleElement infers LinguisticRuleElement:
 ;
 
 type LinguisticRuleElementProperty = 'id' | 'name' | 'description';
-LinguisticRuleElementProperty returns string:
+LinguisticRuleElementProperty returns LinguisticRuleElementProperty:
     LinguisticRuleElementProperty_id | LinguisticRuleElementProperty_name | LinguisticRuleElementProperty_description
 ;
 LinguisticRuleElementProperty_id returns string: 'id' ;
 LinguisticRuleElementProperty_name returns string: 'name' ;
 LinguisticRuleElementProperty_description returns string: 'description' ;
 
+terminal ID: /[_a-zA-Z][\w_]*/;
+terminal INT returns number: /[0-9]+/;
+terminal STRING: /"(\\.|[^"\\])*"|'(\\.|[^'\\])*'/;
+
+hidden terminal ML_COMMENT: /\/\*[\s\S]*?\*\//;
+hidden terminal SL_COMMENT: /\/\/[^\n\r]*/;
+hidden terminal WS: /\s+/;

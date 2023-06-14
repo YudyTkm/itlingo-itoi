@@ -1,30 +1,2196 @@
-// import { ValidationAcceptor, ValidationChecks } from 'langium';
-// import { RslAstType } from './generated/ast';
+import { AstNode, ValidationAcceptor, ValidationChecks, getContainerOfType } from 'langium';
+import {
+    RslAstType,
+    ActiveFlow,
+    isActiveFlowTypeOriginal,
+    ActiveFlowTypeOriginal,
+    ActiveFlowTypeExtendedRef,
+    ActiveTask,
+    isActiveTaskTypeOriginal,
+    ActiveTaskTypeOriginal,
+    ActiveTaskTypeExtendedRef,
+    BehaviorElement,
+    System,
+    Constraint,
+    isConstraintTypeOriginal,
+    ConstraintTypeOriginal,
+    ConstraintTypeExtendedRef,
+    isConstraintSubTypeOriginal,
+    ConstraintSubTypeOriginal,
+    ConstraintSubTypeExtendedRef,
+    DataAttribute,
+    Goal,
+    isGoalTypeOriginal,
+    GoalTypeOriginal,
+    GoalTypeExtendedRef,
+    isGoalSubTypeOriginal,
+    GoalSubTypeOriginal,
+    GoalSubTypeExtendedRef,
+    LinguisticFragment,
+    LinguisticRule,
+    MainScenario,
+    Actor,
+    DataEntity,
+    FR,
+    GlossaryTerm,
+    QR,
+    Risk,
+    Stakeholder,
+    Step,
+    UserStory,
+    Vulnerability,
+    OtherElement,
+    isQRTypeOriginal,
+    QRTypeOriginal,
+    QRTypeExtendedRef,
+    isQRSubTypeOriginal,
+    QRSubTypeOriginal,
+    QRSubTypeExtendedRef,
+    Requirement,
+    RequirementsRelation,
+    isRiskTypeOriginal,
+    RiskTypeOriginal,
+    RiskTypeExtendedRef,
+    isRiskSubTypeOriginal,
+    RiskSubTypeOriginal,
+    RiskSubTypeExtendedRef,
+    Scenario,
+    isStakeholderTypeOriginal,
+    StakeholderTypeOriginal,
+    StakeholderTypeExtendedRef,
+    isStakeholderSubTypeOriginal,
+    StakeholderSubTypeOriginal,
+    StakeholderSubTypeExtendedRef,
+    StateMachine,
+    StructureElement,
+    SystemRelation,
+    SystemsRelation,
+    SystemSet,
+    isSystemTypeOriginal,
+    SystemTypeOriginal,
+    SystemTypeExtendedRef,
+    isSystemSubTypeOriginal,
+    SystemSubTypeOriginal,
+    SystemSubTypeExtendedRef,
+    Test,
+    UseCase,
+    isVulnerabilityTypeOriginal,
+    VulnerabilityTypeOriginal,
+    VulnerabilityTypeExtendedRef,
+    isVulnerabilitySubTypeOriginal,
+    VulnerabilitySubTypeOriginal,
+    VulnerabilitySubTypeExtendedRef,
+    SystemConcept,
+    LinguisticElement,
+    LinguisticRuleElementProperty,
+    LinguisticRuleSeverityLevel,
+    LinguisticPattern,
+    PartOfSpeech,
+    Word,
+    LinguisticRuleElementAndProperty,
+    LinguisticFragmentRef,
+    State,
+    isLinguisticFragmentRef,
+    LinguisticLanguage,
+    IncludeAll,
+    IncludeElement,
+    LinguisticLanguageType,
+    isSystem,
+} from './generated/ast';
 import type { RslServices } from './rsl-module';
+import { LinguisticFragmentPartHelper, OptionType } from '../validation/linguisticFragmentPartHelper';
+import {
+    getGlossaryTerms,
+    getLinguisticLanguageType,
+    getLinguisticLanguages,
+    getLinguisticRules,
+    getStereotypeType,
+    isGlossaryTermApplicableTo,
+} from '../util/rsl-utilities';
+import { NlpHelper } from '../validation/nlpHelper';
+import { NlpToken } from '../validation/nlpToken';
 
 /**
  * Register custom validation checks.
  */
 export function registerValidationChecks(services: RslServices) {
-    // const registry = services.validation.ValidationRegistry;
-    // const validator = services.validation.RslValidator;
-    // const checks: ValidationChecks<RslAstType> = {
-    //     Person: validator.checkPersonStartsWithCapital
-    // };
-    // registry.register(checks, validator);
+    const registry = services.validation.ValidationRegistry;
+    const validator = services.validation.RslValidator;
+    const checks: ValidationChecks<RslAstType> = {
+        ActiveFlow: validator.checkActiveFlowCondition,
+        ActiveTask: [validator.checkActiveTaskParticipantTarget, validator.checkNoCycleInActiveTaskPartOfHierarchy],
+        Actor: validator.checkNoCycleInActorIsAHierarchy,
+        BehaviorElement: validator.checkBehaviorElement,
+        Constraint: [validator.checkConstraintTypeSubType, validator.checkNoCycleInConstraintPartOfHierarchy],
+        DataAttribute: validator.checkDataAttributeElement,
+        DataEntity: validator.checkNoCycleInDataEntityIsAHierarchy,
+        FR: validator.checkNoCycleInFRPartOfHierarchy,
+        GlossaryTerm: [validator.checkNoCycleInGlossaryTermIsAHierarchy, validator.checkNoCycleInGlossaryTermPartOfHierarchy],
+        Goal: [validator.checkGoalTypeSubType, validator.checkNoCycleInGoalPartOfHierarchy],
+        IncludeAll: [validator.checkIncludeAll],
+        IncludeElement: [validator.checkIncludeElement],
+        LinguisticFragment: validator.checkLinguisticFragment,
+        LinguisticLanguage: validator.checkLinguisticLanguage,
+        LinguisticRule: validator.checkLinguisticRule,
+        MainScenario: validator.checkMainScenario,
+        OtherElement: validator.checkOtherElement,
+        QR: [validator.checkNoCycleInQRPartOfHierarchy, validator.checkQRTypeSubType],
+        Risk: [validator.checkNoCycleInRiskPartOfHierarchy, validator.checkRiskTypeSubType],
+        Requirement: validator.checkRequirement,
+        RequirementsRelation: validator.checkRequirementsRelationSrcTrgt,
+        Scenario: validator.checkScenario,
+        Stakeholder: [
+            validator.checkNoCycleInStakeholderIsAHierarchy,
+            validator.checkNoCycleInStakeholderPartOfHierarchy,
+            validator.checkStakeholderTypeSubType,
+        ],
+        StateMachine: validator.checkStateMachineStates,
+        Step: [validator.checkStep, validator.checkNoCycleInStepsHierarchy],
+        StructureElement: validator.checkStructureElement,
+        System: validator.checkSystemTypeSubType,
+        SystemsRelation: [validator.checkSystemRelationSrcTrgt, validator.checkSystemRelation],
+        SystemSet: validator.checkSystemSet,
+        Test: validator.checkTest,
+        UseCase: validator.checkUseCaseExtendsItself,
+        UserStory: validator.checkNoCycleInUserStoryPartOfHierarchy,
+        Vulnerability: [
+            validator.checkNoCycleInVulnerabilityIsAHierarchy,
+            validator.checkNoCycleInVulnerabilityPartOfHierarchy,
+            validator.checkVulnerabilityTypeSubType,
+        ],
+    };
+    registry.register(checks, validator);
+}
+
+export namespace IssueCodes {
+    export const ISSUE_CODE_PREFIX = 'org.itlingo.rsl.';
+    export const CREATE_ELEMENT = ISSUE_CODE_PREFIX + 'CreateElement';
+    export const LINGUISTIC_RULE = ISSUE_CODE_PREFIX + 'LinguisticRule';
+    export const SELECT_ELEMENT = ISSUE_CODE_PREFIX + 'SelectElement';
+    export const REPLACE_WORD = ISSUE_CODE_PREFIX + 'Replace';
+    export const INVALID_NAME = ISSUE_CODE_PREFIX + 'InvalidName';
+    export const INVALID_ID = ISSUE_CODE_PREFIX + 'InvalidID';
+    export const INCONSISTENT_TERM = ISSUE_CODE_PREFIX + 'InconsistentTerm';
+    export const REMOVE_EXCESS_TEXT = ISSUE_CODE_PREFIX + 'RemoveExcessText';
+
+    /* Hierarchy cycle error codes */
+    export const STEP_NEXT_HIERARCHY_CYCLE = ISSUE_CODE_PREFIX + 'StepNextHierarchyCycle';
+    export const PARTOF_HIERARCHY_CYCLE = ISSUE_CODE_PREFIX + 'PartOfHierarchyCycle';
+    export const ISA_HIERARCHY_CYCLE = ISSUE_CODE_PREFIX + 'IsAHierarchyCycle';
+
+    /* Bad Hierarchy error codes */
+    export const BAD_UC_HIERARCHY = ISSUE_CODE_PREFIX + 'BadUCHierarchy';
+
+    /* */
+    export const SM_INIT_FINAL_STATES = ISSUE_CODE_PREFIX + 'SMStates';
+    export const SYS_RELATION_CYCLE = ISSUE_CODE_PREFIX + 'SysRelCycle';
+    export const RELATION_CYCLE = ISSUE_CODE_PREFIX + 'RelCycle';
+
+    /* Invalid types error codes */
+    export const INVALID_SUBTYPE = ISSUE_CODE_PREFIX + 'invalidSubType';
+
+    /* Inconsistent element fragments error codes */
+    export const INVALID_AT_PARTICIPANTTARGET = ISSUE_CODE_PREFIX + 'invalidATParticipantTarget';
+    export const INVALID_AF_CONDITION = ISSUE_CODE_PREFIX + 'invalidAFCondition';
+    export const INVALID_LINGUISTICLANGUAGE = ISSUE_CODE_PREFIX + 'LinguisticLanguage';
+    export const INCLUDE_ELEMENT = ISSUE_CODE_PREFIX + 'IncludeElement';
+    export const INCLUDE_ALL = ISSUE_CODE_PREFIX + 'IncludeAll';
 }
 
 /**
  * Implementation of custom validations.
  */
-// export class RslValidator {
+export class RslValidator {
+    private readonly nlpHelper: NlpHelper;
 
-//     checkPersonStartsWithCapital(person: Person, accept: ValidationAcceptor): void {
-//         if (person.name) {
-//             const firstChar = person.name.substring(0, 1);
-//             if (firstChar.toUpperCase() !== firstChar) {
-//                 accept('warning', 'Person name should start with a capital.', { node: person, property: 'name' });
-//             }
-//         }
-//     }
-// }
+    constructor() {
+        this.nlpHelper = new NlpHelper();
+    }
+
+    checkActiveFlowCondition(element: ActiveFlow, accept: ValidationAcceptor): void {
+        if (!element.condition || !element.type) {
+            return;
+        }
+
+        const type = isActiveFlowTypeOriginal(element.type)
+            ? (element.type as ActiveFlowTypeOriginal).type
+            : (element.type as ActiveFlowTypeExtendedRef).type.$refText;
+
+        if (type !== 'SequenceConditional') {
+            accept('error', "TaskFlow '" + element.name + "' cannot have a condition unless it is of type SequenceConditional", {
+                node: element,
+                property: 'condition',
+                code: IssueCodes.INVALID_AF_CONDITION,
+            });
+        }
+    }
+
+    checkActiveTaskParticipantTarget(element: ActiveTask, accept: ValidationAcceptor): void {
+        if (!element.participantTarget || !element.type) {
+            return;
+        }
+
+        const type = isActiveTaskTypeOriginal(element.type)
+            ? (element.type as ActiveTaskTypeOriginal).type
+            : (element.type as ActiveTaskTypeExtendedRef).type.$refText;
+
+        if (!(type === 'Send' || type === 'Receive')) {
+            accept('error', "ActiveTask '" + element.name + "' cannot have external participants unless it's of type Send or Receive", {
+                node: element,
+                property: 'participantTarget',
+                code: IssueCodes.INVALID_AT_PARTICIPANTTARGET,
+            });
+        }
+    }
+
+    checkBehaviorElement(element: BehaviorElement, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkConstraintTypeSubType(element: Constraint, accept: ValidationAcceptor): void {
+        if (!element.type || !element.subType) {
+            return;
+        }
+
+        const type = isConstraintTypeOriginal(element.type)
+            ? (element.type as ConstraintTypeOriginal).type
+            : (element.type as ConstraintTypeExtendedRef).type.$refText;
+
+        const subType = isConstraintSubTypeOriginal(element.subType)
+            ? (element.subType as ConstraintSubTypeOriginal).type
+            : (element.subType as ConstraintSubTypeExtendedRef).type.$refText;
+
+        if (!subType.includes(type)) {
+            accept('error', "Constraint '" + element.name + "' has inconsistent type and subType", {
+                node: element,
+                property: 'subType',
+                code: IssueCodes.INVALID_SUBTYPE,
+            });
+        }
+    }
+
+    checkDataAttributeElement(element: DataAttribute, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkGoalTypeSubType(element: Goal, accept: ValidationAcceptor): void {
+        if (!element.type || !element.subType) {
+            return;
+        }
+
+        const type = isGoalTypeOriginal(element.type)
+            ? (element.type as GoalTypeOriginal).type
+            : (element.type as GoalTypeExtendedRef).type.$refText;
+
+        const subType = isGoalSubTypeOriginal(element.subType)
+            ? (element.subType as GoalSubTypeOriginal).type
+            : (element.subType as GoalSubTypeExtendedRef).type.$refText;
+
+        if (!subType.includes(type)) {
+            accept('error', "Goal '" + element.name + "' has inconsistent type and subType", {
+                node: element,
+                property: 'subType',
+                code: IssueCodes.INVALID_SUBTYPE,
+            });
+        }
+    }
+
+    checkIncludeAll(element: IncludeAll, accept: ValidationAcceptor): void {
+        if (!element.system) {
+            return;
+        }
+
+        const system = element.system.ref;
+
+        if (!system?.systemConcepts) {
+            return;
+        }
+
+        const systemName = system.name;
+
+        let newElementsText = '';
+
+        for (let concept of system.systemConcepts) {
+            if (!concept.$cstNode?.text) {
+                continue;
+            }
+            newElementsText += `\r\n${concept.$cstNode?.text}\r\n`;
+        }
+
+        accept('info', `Replace this specification with all elements from the ${systemName} system`, {
+            node: element,
+            code: IssueCodes.INCLUDE_ALL,
+            data: [systemName, newElementsText],
+        });
+    }
+
+    checkIncludeElement(element: IncludeElement, accept: ValidationAcceptor): void {
+        if (!element.element || !element.type) {
+            return;
+        }
+
+        const elementType = element.type.type;
+
+        let newElement = element.element.ref;
+
+        if (!newElement) {
+            return;
+        }
+
+        let newElementText = '';
+
+        if (newElement.$cstNode?.text) {
+            newElementText = newElement.$cstNode?.text;
+        }
+
+        accept('info', `Replace this specification with the ${elementType} element specification`, {
+            node: element,
+            code: IssueCodes.INCLUDE_ELEMENT,
+            data: [elementType, newElementText],
+        });
+    }
+
+    checkLinguisticLanguage(element: LinguisticLanguage, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticLanguages(system);
+
+        if (linguisticRules.length > 1) {
+            accept('error', 'Detected multiple linguistic language elements. Please use only one', {
+                node: element,
+                code: IssueCodes.INVALID_LINGUISTICLANGUAGE,
+            });
+        }
+    }
+
+    checkLinguisticFragment(element: LinguisticFragment, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkLinguisticRule(element: LinguisticRule, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkMainScenario(element: MainScenario, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkNoCycleInActiveTaskPartOfHierarchy(element: ActiveTask, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "Constraint '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Constraint '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInActorIsAHierarchy(element: Actor, accept: ValidationAcceptor): void {
+        let superElement = element.super;
+
+        if (!superElement) {
+            return;
+        }
+
+        if (superElement.ref?.name === element.name) {
+            accept('error', "Actor '" + element.name + "' extends itself", {
+                node: element,
+                property: 'super',
+                code: IssueCodes.ISA_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (superElement) {
+            if (!superElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(superElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Actor '" + element.name + "'", {
+                    node: element,
+                    property: 'super',
+                    code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(superElement.ref?.name);
+            superElement = superElement.ref?.super;
+        }
+    }
+
+    checkNoCycleInConstraintPartOfHierarchy(element: Constraint, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "Constraint '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Constraint '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInDataEntityIsAHierarchy(element: DataEntity, accept: ValidationAcceptor): void {
+        let superElement = element.super;
+
+        if (!superElement) {
+            return;
+        }
+
+        if (superElement.ref?.name === element.name) {
+            accept('error', "DataEntity '" + element.name + "' extends itself", {
+                node: element,
+                property: 'super',
+                code: IssueCodes.ISA_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (superElement) {
+            if (!superElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(superElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of DataEntity '" + element.name + "'", {
+                    node: element,
+                    property: 'super',
+                    code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(superElement.ref?.name);
+            superElement = superElement.ref?.super;
+        }
+    }
+
+    checkNoCycleInFRPartOfHierarchy(element: FR, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "FR '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of FR '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInGlossaryTermIsAHierarchy(element: GlossaryTerm, accept: ValidationAcceptor): void {
+        let superElement = element.super;
+
+        if (!superElement) {
+            return;
+        }
+
+        if (superElement.ref?.name === element.name) {
+            accept('error', "GlossaryTerm '" + element.name + "' extends itself", {
+                node: element,
+                property: 'super',
+                code: IssueCodes.ISA_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (superElement) {
+            if (!superElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(superElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of GlossaryTerm '" + element.name + "'", {
+                    node: element,
+                    property: 'super',
+                    code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(superElement.ref?.name);
+            superElement = superElement.ref?.super;
+        }
+    }
+
+    checkNoCycleInGlossaryTermPartOfHierarchy(element: GlossaryTerm, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "GlossaryTerm '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of GlossaryTerm '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInGoalPartOfHierarchy(element: Goal, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "Goal '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Goal '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInQRPartOfHierarchy(element: QR, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "QR '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of QR '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInRiskPartOfHierarchy(element: Risk, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!element.name || !partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "Risk '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Risk '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInStakeholderIsAHierarchy(element: Stakeholder, accept: ValidationAcceptor): void {
+        let superElement = element.super;
+
+        if (!superElement) {
+            return;
+        }
+
+        if (superElement.ref?.name === element.name) {
+            accept('error', "Stakeholder '" + element.name + "' extends itself", {
+                node: element,
+                property: 'super',
+                code: IssueCodes.ISA_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (superElement) {
+            if (!superElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(superElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Stakeholder '" + element.name + "'", {
+                    node: element,
+                    property: 'super',
+                    code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(superElement.ref?.name);
+            superElement = superElement.ref?.super;
+        }
+    }
+
+    checkNoCycleInStakeholderPartOfHierarchy(element: Stakeholder, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "Stakeholder '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Stakeholder '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInStepsHierarchy(element: Step, accept: ValidationAcceptor): void {
+        let nextElement = element.next;
+
+        if (!nextElement) {
+            return;
+        }
+
+        if (nextElement.ref?.name === element.name) {
+            accept('error', "Step '" + element.name + "' has a cycle in 'next' relationship", {
+                node: element,
+                property: 'next',
+                code: IssueCodes.STEP_NEXT_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (nextElement) {
+            if (!nextElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(nextElement.ref?.name)) {
+                accept('error', "Cycle in 'next' relationship of '" + element.name + "'", {
+                    node: element,
+                    property: 'next',
+                    code: IssueCodes.STEP_NEXT_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(nextElement.ref?.name);
+            nextElement = nextElement.ref?.next;
+        }
+    }
+
+    checkNoCycleInUserStoryPartOfHierarchy(element: UserStory, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "UserStory '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of UserStory '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkNoCycleInVulnerabilityIsAHierarchy(element: Vulnerability, accept: ValidationAcceptor): void {
+        let superElement = element.super;
+
+        if (!superElement) {
+            return;
+        }
+
+        if (superElement.ref?.name === element.name) {
+            accept('error', "Vulnerability '" + element.name + "' extends itself", {
+                node: element,
+                property: 'super',
+                code: IssueCodes.ISA_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (superElement) {
+            if (!superElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(superElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Vulnerability '" + element.name + "'", {
+                    node: element,
+                    property: 'super',
+                    code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(superElement.ref?.name);
+            superElement = superElement.ref?.super;
+        }
+    }
+
+    checkNoCycleInVulnerabilityPartOfHierarchy(element: Vulnerability, accept: ValidationAcceptor): void {
+        let partOfElement = element.partOf;
+
+        if (!partOfElement) {
+            return;
+        }
+
+        if (partOfElement.ref?.name === element.name) {
+            accept('error', "Vulnerability '" + element.name + "' is part of itself", {
+                node: element,
+                property: 'partOf',
+                code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+            });
+            return;
+        }
+
+        let visitedElements = new Set<string>();
+        visitedElements.add(element.name);
+
+        while (partOfElement) {
+            if (!partOfElement.ref?.name) {
+                break;
+            }
+
+            if (visitedElements.has(partOfElement.ref?.name)) {
+                accept('error', "Cycle in hierarchy of Vulnerability '" + element.name + "'", {
+                    node: element,
+                    property: 'partOf',
+                    code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                });
+                break;
+            }
+
+            visitedElements.add(partOfElement.ref?.name);
+            partOfElement = partOfElement.ref?.partOf;
+        }
+    }
+
+    checkOtherElement(element: OtherElement, accept: ValidationAcceptor): void {
+        if (!element.name) {
+            return;
+        }
+
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkQRTypeSubType(element: QR, accept: ValidationAcceptor): void {
+        if (!element.type || !element.subType) {
+            return;
+        }
+
+        const type = isQRTypeOriginal(element.type)
+            ? (element.type as QRTypeOriginal).type
+            : (element.type as QRTypeExtendedRef).type.$refText;
+
+        const subType = isQRSubTypeOriginal(element.subType)
+            ? (element.subType as QRSubTypeOriginal).type
+            : (element.subType as QRSubTypeExtendedRef).type.$refText;
+
+        if (!subType.includes(type)) {
+            accept('error', "QR '" + element.name + "' has inconsistent type and subType", {
+                node: element,
+                property: 'subType',
+                code: IssueCodes.INVALID_SUBTYPE,
+            });
+        }
+    }
+
+    checkRequirement(element: Requirement, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkRequirementsRelationSrcTrgt(element: RequirementsRelation, accept: ValidationAcceptor): void {
+        if (!element.source || !element.target) {
+            return;
+        }
+
+        if (element.source === element.target) {
+            accept('error', "RequirementsRelation '" + element.name + "' has the same source and target", {
+                node: element,
+                property: 'source',
+                code: IssueCodes.RELATION_CYCLE,
+            });
+        }
+    }
+
+    checkRiskTypeSubType(element: Risk, accept: ValidationAcceptor): void {
+        if (!element.type || !element.subType) {
+            return;
+        }
+
+        const type = isRiskTypeOriginal(element.type)
+            ? (element.type as RiskTypeOriginal).type
+            : (element.type as RiskTypeExtendedRef).type.$refText;
+
+        const subType = isRiskSubTypeOriginal(element.subType)
+            ? (element.subType as RiskSubTypeOriginal).type
+            : (element.subType as RiskSubTypeExtendedRef).type.$refText;
+
+        if (!subType.includes(type)) {
+            accept('error', "Risk '" + element.name + "' has inconsistent type and subType", {
+                node: element,
+                property: 'subType',
+                code: IssueCodes.INVALID_SUBTYPE,
+            });
+        }
+    }
+
+    checkScenario(element: Scenario, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkStakeholderTypeSubType(element: Stakeholder, accept: ValidationAcceptor): void {
+        if (!element.type || !element.subType) {
+            return;
+        }
+
+        const type = isStakeholderTypeOriginal(element.type)
+            ? (element.type as StakeholderTypeOriginal).type
+            : (element.type as StakeholderTypeExtendedRef).type.$refText;
+
+        const subType = isStakeholderSubTypeOriginal(element.subType)
+            ? (element.subType as StakeholderSubTypeOriginal).type
+            : (element.subType as StakeholderSubTypeExtendedRef).type.$refText;
+
+        if (!subType.includes(type)) {
+            accept('error', "Stakeholder '" + element.name + "' has inconsistent type and subType", {
+                node: element,
+                property: 'subType',
+                code: IssueCodes.INVALID_SUBTYPE,
+            });
+        }
+    }
+
+    checkStateMachineStates(element: StateMachine, accept: ValidationAcceptor): void {
+        let states = element.states?.states as State[];
+        let hasInitialState = false;
+        let hasFinalState = false;
+
+        states.forEach((state) => {
+            if (state.isInitial) {
+                hasInitialState = true;
+            }
+
+            if (state.isFinal) {
+                hasFinalState = true;
+            }
+        });
+
+        if (!hasInitialState) {
+            accept('warning', "State Machine '" + element.name + "' has no initial state", {
+                node: element,
+                property: 'states',
+                code: IssueCodes.SM_INIT_FINAL_STATES,
+            });
+        }
+
+        if (!hasFinalState) {
+            accept('warning', "State Machine '" + element.name + "' has no final state", {
+                node: element,
+                property: 'states',
+                code: IssueCodes.SM_INIT_FINAL_STATES,
+            });
+        }
+    }
+
+    checkStep(element: Step, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkStructureElement(element: StructureElement, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkSystemRelation(element: SystemRelation, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkSystemRelationSrcTrgt(element: SystemsRelation, accept: ValidationAcceptor): void {
+        if (!element.source || !element.target) {
+            return;
+        }
+
+        if (element.target === element.source) {
+            accept('error', "SystemsRelation '" + element.name + "' has the same source and target", {
+                node: element,
+                property: 'source',
+                code: IssueCodes.SYS_RELATION_CYCLE,
+            });
+        }
+    }
+
+    checkSystemSet(element: SystemSet, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkSystemTypeSubType(element: System, accept: ValidationAcceptor): void {
+        if (!element.type || !element.subType) {
+            return;
+        }
+
+        const type = isSystemTypeOriginal(element.type)
+            ? (element.type as SystemTypeOriginal).type
+            : (element.type as SystemTypeExtendedRef).type.$refText;
+
+        const subType = isSystemSubTypeOriginal(element.subType)
+            ? (element.subType as SystemSubTypeOriginal).type
+            : (element.subType as SystemSubTypeExtendedRef).type.$refText;
+
+        if (!subType.includes(type)) {
+            accept('error', "System '" + element.name + "' has inconsistent type and subType", {
+                node: element,
+                property: 'subType',
+                code: IssueCodes.INVALID_SUBTYPE,
+            });
+        }
+    }
+
+    checkTest(element: Test, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticRules(system);
+        const linguisticLanguage = getLinguisticLanguageType(system);
+
+        this.checkLinguisticRules(linguisticRules, element, element.name, 'name', 'id', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.nameAlias, 'nameAlias', 'name', linguisticLanguage, accept);
+        this.checkLinguisticRules(linguisticRules, element, element.description, 'description', 'description', linguisticLanguage, accept);
+
+        const glossaryTerms = getGlossaryTerms(system);
+
+        this.checkSynonyms(glossaryTerms, element, element.name, 'name', accept);
+        this.checkSynonyms(glossaryTerms, element, element.nameAlias, 'nameAlias', accept);
+        this.checkSynonyms(glossaryTerms, element, element.description, 'description', accept);
+
+        this.checkUniqueElementId(element.name, element, system, accept);
+    }
+
+    checkUseCaseExtendsItself(element: UseCase, accept: ValidationAcceptor): void {
+        if (!element.extends) {
+            return;
+        }
+
+        element.extends.forEach((ucExtends) => {
+            if (ucExtends.usecase.$refText === element.name) {
+                accept('error', "UseCase '" + element.name + "' extends itself", {
+                    node: element,
+                    property: 'extends',
+                    code: IssueCodes.BAD_UC_HIERARCHY,
+                });
+            }
+        });
+    }
+
+    checkVulnerabilityTypeSubType(element: Vulnerability, accept: ValidationAcceptor): void {
+        if (!element.type || !element.subType) {
+            return;
+        }
+
+        const type = isVulnerabilityTypeOriginal(element.type)
+            ? (element.type as VulnerabilityTypeOriginal).type
+            : (element.type as VulnerabilityTypeExtendedRef).type.$refText;
+
+        const subType = isVulnerabilitySubTypeOriginal(element.subType)
+            ? (element.subType as VulnerabilitySubTypeOriginal).type
+            : (element.subType as VulnerabilitySubTypeExtendedRef).type.$refText;
+
+        if (!subType.includes(type)) {
+            accept('error', "Vulnerability '" + element.name + "' has inconsistent type and subType", {
+                node: element,
+                property: 'subType',
+                code: IssueCodes.INVALID_SUBTYPE,
+            });
+        }
+    }
+
+    private checkSynonyms(
+        glossaryTerms: GlossaryTerm[],
+        element: AstNode,
+        input: string | undefined,
+        elementAttribute: string,
+        accept: ValidationAcceptor
+    ) {
+        if (!input) {
+            return;
+        }
+
+        const inputToCheck = input.toLowerCase();
+
+        for (let term of glossaryTerms) {
+            if (!term.nameAlias || !isGlossaryTermApplicableTo(term, element as SystemConcept)) {
+                continue;
+            }
+
+            for (let synonym of term.synonyms) {
+                if (!synonym) {
+                    continue;
+                }
+
+                if (inputToCheck.includes(synonym.toLowerCase())) {
+                    accept('warning', `Replace the word '${synonym}' by the main word '${term.nameAlias}'`, {
+                        node: element,
+                        property: elementAttribute,
+                        code: IssueCodes.INCONSISTENT_TERM,
+                        data: [synonym, term.nameAlias, input],
+                    });
+                    break;
+                }
+            }
+        }
+    }
+
+    private checkUniqueElementId(inputElementName: string, element: AstNode, system: System, accept: ValidationAcceptor) {
+        let foundDuplicate = false;
+
+        for (let concept of system.systemConcepts) {
+            if (concept as StructureElement) {
+                let elementName = (concept as StructureElement).name;
+
+                if (element !== concept && elementName === inputElementName) {
+                    foundDuplicate = true;
+                    break;
+                }
+            } else if (concept as BehaviorElement) {
+                let elementName = (concept as BehaviorElement).name;
+
+                if (element !== concept && elementName === inputElementName) {
+                    foundDuplicate = true;
+                    break;
+                }
+            } else if (concept as Requirement) {
+                let elementName = (concept as Requirement).name;
+
+                if (element !== concept && elementName === inputElementName) {
+                    foundDuplicate = true;
+                    break;
+                }
+            } else if (concept as OtherElement) {
+                let elementName = (concept as OtherElement).name;
+
+                if (element !== concept && elementName === inputElementName) {
+                    foundDuplicate = true;
+                    break;
+                }
+            } else if (concept as SystemRelation) {
+                let elementName = (concept as SystemRelation).name;
+
+                if (element !== concept && elementName === inputElementName) {
+                    foundDuplicate = true;
+                    break;
+                }
+            } else if (concept as SystemSet) {
+                let elementName = (concept as SystemSet).name;
+
+                if (element !== concept && elementName === inputElementName) {
+                    foundDuplicate = true;
+                    break;
+                }
+            } else if (concept as LinguisticElement) {
+                let elementName = (concept as LinguisticElement).name;
+
+                if (element !== concept && elementName === inputElementName) {
+                    foundDuplicate = true;
+                    break;
+                }
+            } else {
+                throw new Error('Invalid type.');
+            }
+        }
+
+        if (foundDuplicate) {
+            accept('error', `The '${inputElementName} ID is already in use. Please use a different ID'`, {
+                node: element,
+                property: 'name',
+                code: IssueCodes.INVALID_ID,
+            });
+        }
+    }
+
+    private checkLinguisticRules(
+        rules: LinguisticRule[],
+        element: AstNode,
+        input: string | undefined,
+        elementAttribute: string,
+        ruleProperty: LinguisticRuleElementProperty,
+        languageType: LinguisticLanguageType,
+        accept: ValidationAcceptor
+    ) {
+        if (!input) {
+            return;
+        }
+
+        const rslElementName = element.$type;
+
+        for (let rule of rules) {
+            const patterns = rule.pattern;
+
+            if (
+                !patterns ||
+                rule.property.property !== ruleProperty ||
+                getStereotypeType(rule.property.element.element) !== rslElementName
+            ) {
+                continue;
+            }
+
+            let errorMessage = this.getWrongPatternErrorMessage(patterns);
+
+            if (ruleProperty === 'id') {
+                let charIterator = 0;
+                for (let pattern of patterns) {
+                    let checkLinguisticPattern = this.checkElementIdLinguisticPattern(
+                        element,
+                        pattern,
+                        input,
+                        charIterator,
+                        elementAttribute,
+                        errorMessage,
+                        rule.severity,
+                        languageType,
+                        accept
+                    );
+
+                    if (!checkLinguisticPattern.result) {
+                        return;
+                    }
+                }
+                return;
+            }
+
+            let tokens = this.nlpHelper.getTokens(languageType, input);
+
+            if (tokens.length === 0) {
+                this.displayValidationError(
+                    element,
+                    rule.severity,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.LINGUISTIC_RULE,
+                    accept,
+                    input
+                );
+                return;
+            }
+
+            let j = 0;
+            for (let pattern of patterns) {
+                let token = tokens[j];
+
+                if (!token) {
+                    this.displayValidationError(
+                        element,
+                        rule.severity,
+                        errorMessage,
+                        elementAttribute,
+                        IssueCodes.LINGUISTIC_RULE,
+                        accept,
+                        input
+                    );
+                    return;
+                }
+
+                let checkLinguisticPattern = this.checkLinguisticPattern(
+                    element,
+                    pattern,
+                    tokens,
+                    j,
+                    input,
+                    elementAttribute,
+                    errorMessage,
+                    rule.severity,
+                    languageType,
+                    accept
+                );
+
+                if (!checkLinguisticPattern.result) {
+                    return;
+                }
+
+                j = checkLinguisticPattern.tokenIteratorCount;
+                j++;
+            }
+
+            if (j < tokens.length) {
+                let { wrongText, correctText } = this.getExcessTextToRemove(j, tokens, input);
+                this.displayValidationError(
+                    element,
+                    rule.severity,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.REMOVE_EXCESS_TEXT,
+                    accept,
+                    input,
+                    wrongText,
+                    correctText
+                );
+                return;
+            }
+        }
+    }
+
+    private getExcessTextToRemove(tokenIteratorCount: number, tokens: NlpToken[], input: string) {
+        let correctText = '';
+        for (let w = 0; w < tokenIteratorCount; w++) {
+            if (w === 0) {
+                correctText += tokens[w].originalText;
+            } else {
+                correctText += ' ' + tokens[w].originalText;
+            }
+        }
+
+        let wrongText = input.replace(correctText, '');
+
+        return { wrongText, correctText };
+    }
+
+    checkElementIdLinguisticPattern(
+        element: AstNode,
+        pattern: LinguisticPattern,
+        input: string,
+        characterIterator: number,
+        elementAttribute: string,
+        errorMessage: string,
+        severityLevel: LinguisticRuleSeverityLevel,
+        languageType: LinguisticLanguageType,
+        accept: ValidationAcceptor
+    ) {
+        let originalText = input.substring(characterIterator, input.length);
+        if (!originalText) {
+            this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.LINGUISTIC_RULE, accept, input);
+            return { result: false, charIteratorCount: characterIterator };
+        }
+
+        let expectedPartOfSpeech = new Set<string>();
+        let expectedWords = new Set<string>();
+        let expectedElementsAndProperties: LinguisticRuleElementAndProperty[] = [];
+        let linguisticFragmentHelpers: LinguisticFragmentPartHelper[] = [];
+        let possibleCharIterators = new Set<number>();
+
+        for (let fragmentPart of pattern.parts) {
+            if (isLinguisticFragmentRef(fragmentPart)) {
+                let linguisticOption = (fragmentPart as LinguisticFragmentRef).option.ref;
+
+                if (!linguisticOption) {
+                    continue;
+                }
+
+                for (let option of linguisticOption.options) {
+                    let linguisticFragmentHelper = new LinguisticFragmentPartHelper(
+                        languageType,
+                        element,
+                        this.nlpHelper,
+                        option,
+                        undefined,
+                        undefined
+                    );
+
+                    if (!linguisticFragmentHelpers.find((x) => x.optionType === OptionType.PartOfSpeech)) {
+                        linguisticFragmentHelpers.push(linguisticFragmentHelper);
+                    }
+
+                    let result = linguisticFragmentHelper.getMatchingText(originalText);
+
+                    if (!result) {
+                        possibleCharIterators.add(result.length);
+                    }
+                }
+            } else {
+                let patternOptionHelper = new LinguisticFragmentPartHelper(
+                    languageType,
+                    element,
+                    this.nlpHelper,
+                    fragmentPart,
+                    undefined,
+                    undefined
+                );
+
+                let result = patternOptionHelper.getMatchingText(originalText);
+
+                if (patternOptionHelper.optionType === OptionType.PartOfSpeech) {
+                    expectedPartOfSpeech.add(patternOptionHelper.expectedOption as string);
+                } else if (patternOptionHelper.optionType === OptionType.Word) {
+                    expectedWords.add(patternOptionHelper.expectedOption as string);
+                } else if (patternOptionHelper.optionType === OptionType.ElementAndProperty) {
+                    expectedElementsAndProperties.push(patternOptionHelper.expectedRuleElementProperty as LinguisticRuleElementAndProperty);
+                } else {
+                    // nothing to do
+                }
+
+                if (!result) {
+                    possibleCharIterators.add(result.length);
+                }
+            }
+        }
+
+        if (possibleCharIterators.size > 0) {
+            characterIterator += Math.min(...Array.from(possibleCharIterators.values()));
+            return { result: true, charIteratorCount: characterIterator };
+        }
+
+        if (characterIterator > input.length) {
+            this.displayValidationError(
+                element,
+                severityLevel,
+                errorMessage,
+                elementAttribute,
+                IssueCodes.LINGUISTIC_RULE,
+                accept,
+                originalText
+            );
+            return { result: false, charIteratorCount: characterIterator };
+        }
+
+        let additionalInfo = this.getDetailedErrorInfo(
+            originalText,
+            expectedPartOfSpeech,
+            expectedWords,
+            expectedElementsAndProperties,
+            linguisticFragmentHelpers
+        );
+
+        errorMessage += additionalInfo;
+
+        if (expectedWords.size === 0 && expectedElementsAndProperties.length === 0 && linguisticFragmentHelpers.length === 0) {
+            this.displayValidationError(
+                element,
+                severityLevel,
+                errorMessage,
+                elementAttribute,
+                IssueCodes.LINGUISTIC_RULE,
+                accept,
+                originalText
+            );
+            return { result: false, tokenIteratorCount: characterIterator };
+        }
+
+        for (let expectedWord of expectedWords) {
+            // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
+            this.displayValidationError(
+                element,
+                severityLevel,
+                errorMessage,
+                elementAttribute,
+                IssueCodes.REPLACE_WORD,
+                accept,
+                originalText,
+                expectedWord,
+                input
+            );
+        }
+
+        for (let patternOptionHelper of linguisticFragmentHelpers) {
+            let expectedOption = patternOptionHelper.expectedOption as string;
+
+            // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
+            if (patternOptionHelper.optionType === OptionType.Word) {
+                this.displayValidationError(
+                    element,
+                    severityLevel,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.REPLACE_WORD,
+                    accept,
+                    originalText,
+                    expectedOption,
+                    input
+                );
+            } else if (patternOptionHelper.optionType === OptionType.ElementAndProperty) {
+                this.displayValidationError(
+                    element,
+                    severityLevel,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.SELECT_ELEMENT,
+                    accept,
+                    originalText,
+                    expectedOption,
+                    (patternOptionHelper.expectedRuleElementProperty as LinguisticRuleElementAndProperty).toString()
+                );
+            } else if (patternOptionHelper.optionType === OptionType.PartOfSpeech) {
+                this.displayValidationError(
+                    element,
+                    severityLevel,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.LINGUISTIC_RULE,
+                    accept,
+                    originalText,
+                    expectedOption
+                );
+            } else {
+                throw new Error(`${patternOptionHelper.optionType} is not supported`);
+            }
+        }
+
+        for (let elementAndProperty of expectedElementsAndProperties) {
+            // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
+            this.displayValidationError(
+                element,
+                severityLevel,
+                errorMessage,
+                elementAttribute,
+                IssueCodes.CREATE_ELEMENT,
+                accept,
+                originalText,
+                getStereotypeType(elementAndProperty.element.element),
+                elementAndProperty.property
+            );
+        }
+
+        return { result: false, charIteratorCount: characterIterator };
+    }
+
+    checkLinguisticPattern(
+        element: AstNode,
+        pattern: LinguisticPattern,
+        tokens: NlpToken[],
+        tokenIteratorCount: number,
+        input: string,
+        elementAttribute: string,
+        errorMessage: string,
+        severityLevel: LinguisticRuleSeverityLevel,
+        linguisticLanguageType: LinguisticLanguageType,
+        accept: ValidationAcceptor
+    ) {
+        let originalText = tokens[tokenIteratorCount].originalText;
+        let expectedPartOfSpeech = new Set<string>();
+        let expectedWords = new Set<string>();
+        let expectedElementsAndProperties: LinguisticRuleElementAndProperty[] = [];
+        let linguisticFragmentHelpers: LinguisticFragmentPartHelper[] = [];
+
+        for (let fragmentPart of pattern.parts) {
+            if (isLinguisticFragmentRef(fragmentPart)) {
+                let linguisticOption = (fragmentPart as LinguisticFragmentRef).option.ref;
+
+                if (!linguisticOption) {
+                    continue;
+                }
+
+                for (let option of linguisticOption.options) {
+                    let patternOptionHelper = new LinguisticFragmentPartHelper(
+                        linguisticLanguageType,
+                        element,
+                        this.nlpHelper,
+                        option,
+                        tokens,
+                        tokenIteratorCount
+                    );
+
+                    if (!linguisticFragmentHelpers.find((x) => x.optionType === OptionType.PartOfSpeech)) {
+                        linguisticFragmentHelpers.push(patternOptionHelper);
+                    }
+
+                    let validateInput = patternOptionHelper.validateInput();
+
+                    originalText = tokens[validateInput.tokenIteratorCount].originalText;
+
+                    if (validateInput.result) {
+                        return validateInput;
+                    }
+                }
+            } else {
+                let patternOptionHelper = new LinguisticFragmentPartHelper(
+                    linguisticLanguageType,
+                    element,
+                    this.nlpHelper,
+                    fragmentPart,
+                    tokens,
+                    tokenIteratorCount
+                );
+
+                let validateInput = patternOptionHelper.validateInput();
+
+                if (patternOptionHelper.optionType === OptionType.PartOfSpeech) {
+                    expectedPartOfSpeech.add(patternOptionHelper.expectedOption as string);
+                } else if (patternOptionHelper.optionType === OptionType.Word) {
+                    expectedWords.add(patternOptionHelper.expectedOption as string);
+                } else if (patternOptionHelper.optionType === OptionType.ElementAndProperty) {
+                    expectedElementsAndProperties.push(patternOptionHelper.expectedRuleElementProperty as LinguisticRuleElementAndProperty);
+                } else {
+                    // nothing to do
+                }
+
+                originalText = tokens[validateInput.tokenIteratorCount].originalText;
+
+                if (validateInput.result) {
+                    return validateInput;
+                }
+            }
+        }
+
+        let additionalInfo = this.getDetailedErrorInfo(
+            originalText,
+            expectedPartOfSpeech,
+            expectedWords,
+            expectedElementsAndProperties,
+            linguisticFragmentHelpers
+        );
+
+        errorMessage += additionalInfo;
+
+        if (expectedWords.size === 0 && expectedElementsAndProperties.length === 0 && linguisticFragmentHelpers.length === 0) {
+            this.displayValidationError(
+                element,
+                severityLevel,
+                errorMessage,
+                elementAttribute,
+                IssueCodes.LINGUISTIC_RULE,
+                accept,
+                originalText
+            );
+            return { result: false, tokenIteratorCount: tokenIteratorCount };
+        }
+
+        for (let expectedWord of expectedWords) {
+            // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
+            this.displayValidationError(
+                element,
+                severityLevel,
+                errorMessage,
+                elementAttribute,
+                IssueCodes.REPLACE_WORD,
+                accept,
+                originalText,
+                expectedWord,
+                input
+            );
+        }
+
+        for (let patternOptionHelper of linguisticFragmentHelpers) {
+            let expectedOption = patternOptionHelper.expectedOption as string;
+
+            // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
+            if (patternOptionHelper.optionType === OptionType.Word) {
+                this.displayValidationError(
+                    element,
+                    severityLevel,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.REPLACE_WORD,
+                    accept,
+                    originalText,
+                    expectedOption,
+                    input
+                );
+            } else if (patternOptionHelper.optionType === OptionType.ElementAndProperty) {
+                this.displayValidationError(
+                    element,
+                    severityLevel,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.SELECT_ELEMENT,
+                    accept,
+                    originalText,
+                    expectedOption,
+                    (patternOptionHelper.expectedRuleElementProperty as LinguisticRuleElementAndProperty).toString()
+                );
+            } else if (patternOptionHelper.optionType === OptionType.PartOfSpeech) {
+                this.displayValidationError(
+                    element,
+                    severityLevel,
+                    errorMessage,
+                    elementAttribute,
+                    IssueCodes.LINGUISTIC_RULE,
+                    accept,
+                    originalText,
+                    expectedOption
+                );
+            } else {
+                throw new Error(`${patternOptionHelper.optionType} is not supported`);
+            }
+        }
+
+        for (let elementAndProperty of expectedElementsAndProperties) {
+            // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
+            this.displayValidationError(
+                element,
+                severityLevel,
+                errorMessage,
+                elementAttribute,
+                IssueCodes.CREATE_ELEMENT,
+                accept,
+                originalText,
+                getStereotypeType(elementAndProperty.element.element),
+                elementAndProperty.property
+            );
+        }
+
+        return { result: false, tokenIteratorCount: tokenIteratorCount };
+    }
+
+    getDetailedErrorInfo(
+        originalText: string,
+        expectedPartOfSpeech: Set<string>,
+        expectedWords: Set<string>,
+        expectedElementsAndProperties: LinguisticRuleElementAndProperty[],
+        linguisticFragmentHelpers: LinguisticFragmentPartHelper[]
+    ): string {
+        let expectedPartOfSpeechesList: string[] = [];
+        expectedPartOfSpeech.forEach((x) => expectedPartOfSpeechesList.push(x));
+
+        let additionalInfo = `"\r\nThe word '${originalText}' is expected to`;
+
+        for (let i = 0; i < expectedPartOfSpeechesList.length; i++) {
+            let expectedPosTag = expectedPartOfSpeechesList[i];
+            if (i === 0) {
+                additionalInfo += ` be categorized as '${expectedPosTag}'`;
+            } else {
+                additionalInfo += ` or '${expectedPosTag}'`;
+            }
+        }
+
+        let expectedWordsList: string[] = [];
+        expectedWords.forEach((x) => expectedWordsList.push(x));
+
+        for (let i = 0; i < expectedWordsList.length; i++) {
+            let expectedWord = expectedWordsList[i];
+            if (i === 0 && expectedPartOfSpeech.size > 0) {
+                additionalInfo += ` or the word '${expectedWord}'`;
+            } else if (i === 0) {
+                additionalInfo += ` be the word '${expectedWord}'`;
+            } else {
+                additionalInfo += ` or '${expectedWord}'`;
+            }
+        }
+
+        for (let i = 0; i < expectedElementsAndProperties.length; i++) {
+            let linguisticRuleElementAndProperty = expectedElementsAndProperties[i];
+            let property = linguisticRuleElementAndProperty.property.toString().toLowerCase();
+            let element = getStereotypeType(linguisticRuleElementAndProperty.element.element);
+            if (i === 0 && (expectedPartOfSpeech.size > 0 || expectedWords.size > 0)) {
+                additionalInfo += ` or the '${property} of a/an '${element}'`;
+            } else if (i === 0) {
+                additionalInfo += ` be the '${property} of a/an '${element}'`;
+            } else {
+                additionalInfo += ` or '${element}'`;
+            }
+        }
+
+        for (let i = 0; i < linguisticFragmentHelpers.length; i++) {
+            let linguisticFragmentPartHelper = linguisticFragmentHelpers[i];
+            if ((i === 0 && (expectedPartOfSpeech.size > 0 || expectedWords.size > 0)) || expectedElementsAndProperties.length > 0) {
+                additionalInfo += ` or one of the following fragment: '${linguisticFragmentPartHelper.expectedOption}'`;
+            } else if (i === 0) {
+                additionalInfo += ` to be one of the following fragments: '${linguisticFragmentPartHelper.expectedOption}'`;
+            } else {
+                additionalInfo += ` ,'${linguisticFragmentPartHelper.expectedOption}'`;
+            }
+        }
+        return additionalInfo;
+    }
+
+    displayValidationError(
+        element: AstNode,
+        severity: LinguisticRuleSeverityLevel,
+        errorMessage: string,
+        elementAttribute: string,
+        issueCode: string,
+        accept: ValidationAcceptor,
+        ...issueData: string[]
+    ) {
+        switch (severity) {
+            case 'Error':
+                accept('error', errorMessage, { node: element, property: elementAttribute, code: issueCode, data: issueData });
+                break;
+
+            case 'Warning':
+                accept('warning', errorMessage, { node: element, property: elementAttribute, code: issueCode, data: issueData });
+                break;
+
+            default:
+                throw new Error(`${severity} is not supported`);
+        }
+    }
+
+    private getWrongPatternErrorMessage(patterns: LinguisticPattern[]): string {
+        let errorMessage = "This text must follow the pattern '";
+
+        for (let i = 0; i < patterns.length; i++) {
+            let patternPart = patterns[i];
+            if (i > 0) {
+                errorMessage += ' + ';
+            }
+
+            errorMessage += '(';
+            let parts = patternPart.parts;
+            for (let j = 0; j < parts.length; j++) {
+                let patternOption = parts[j];
+
+                if (j > 0) {
+                    errorMessage += '|';
+                }
+
+                if (patternOption.$type === 'PartOfSpeech') {
+                    let posTag = patternOption as PartOfSpeech;
+                    errorMessage += posTag.posTag;
+                } else if (patternOption.$type === 'Word') {
+                    let word = patternOption as Word;
+                    errorMessage += word.word;
+                } else if (patternOption.$type === 'LinguisticRuleElementAndProperty') {
+                    let element = patternOption as LinguisticRuleElementAndProperty;
+                    errorMessage += getStereotypeType(element.element.element) + '.' + element.property;
+                } else if (patternOption.$type === 'LinguisticFragmentRef') {
+                    let linguisticOption = (patternOption as LinguisticFragmentRef).option;
+                    errorMessage += linguisticOption.ref?.name;
+                } else {
+                    errorMessage += '';
+                }
+            }
+            errorMessage += ')';
+        }
+
+        return errorMessage;
+    }
+}

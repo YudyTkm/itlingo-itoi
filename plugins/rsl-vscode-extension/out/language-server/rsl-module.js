@@ -3,10 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createRslServices = exports.RslModule = void 0;
 const langium_1 = require("langium");
 const module_1 = require("./generated/module");
-const rsl_naming_1 = require("./rsl-naming");
-const rsl_scope_1 = require("./rsl-scope");
-const rsl_completion_1 = require("./rsl-completion");
+const rsl_validator_1 = require("./rsl-validator");
+const rsl_code_actions_1 = require("./rsl-code-actions");
 const rsl_scope_provider_1 = require("./rsl-scope-provider");
+const rsl_naming_1 = require("./rsl-naming");
+const rsl_scope_computation_1 = require("./rsl-scope-computation");
+const rsl_completion_1 = require("./rsl-completion");
 const rsl_linker_1 = require("./rsl-linker");
 /**
  * Dependency injection module that overrides Langium default services and contributes the
@@ -14,15 +16,19 @@ const rsl_linker_1 = require("./rsl-linker");
  * selected services, while the custom services must be fully specified.
  */
 exports.RslModule = {
+    lsp: {
+        CodeActionProvider: () => new rsl_code_actions_1.RslActionProvider(),
+        CompletionProvider: (services) => new rsl_completion_1.RslCompletionProvider(services),
+    },
+    validation: {
+        RslValidator: () => new rsl_validator_1.RslValidator(),
+    },
     references: {
-        ScopeComputation: (services) => new rsl_scope_1.RslScopeComputation(services),
+        ScopeComputation: (services) => new rsl_scope_computation_1.RslScopeComputation(services),
         ScopeProvider: (services) => new rsl_scope_provider_1.RslScopeProvider(services),
         Linker: (services) => new rsl_linker_1.RslLinker(services),
-        QualifiedNameProvider: () => new rsl_naming_1.QualifiedNameProvider()
+        NameProvider: () => new rsl_naming_1.RslNameProvider(),
     },
-    lsp: {
-        CompletionProvider: (services) => new rsl_completion_1.RslCompletionProvider(services)
-    }
 };
 /**
  * Create the full set of services required by Langium.
@@ -43,7 +49,7 @@ function createRslServices(context) {
     const shared = (0, langium_1.inject)((0, langium_1.createDefaultSharedModule)(context), module_1.RslGeneratedSharedModule);
     const Rsl = (0, langium_1.inject)((0, langium_1.createDefaultModule)({ shared }), module_1.RslGeneratedModule, exports.RslModule);
     shared.ServiceRegistry.register(Rsl);
-    // registerValidationChecks(Rsl);
+    (0, rsl_validator_1.registerValidationChecks)(Rsl);
     return { shared, Rsl };
 }
 exports.createRslServices = createRslServices;

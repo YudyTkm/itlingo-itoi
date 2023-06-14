@@ -1,37 +1,22 @@
 "use strict";
-/******************************************************************************
- * Copyright 2021 TypeFox GmbH
- * This program and the accompanying materials are made available under the
- * terms of the MIT License, which is available in the project root.
- ******************************************************************************/
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QualifiedNameProvider = void 0;
-// export function toQualifiedName(pack: PackageSystem, childName: string): string {
-//     return (isPackageSystem(pack.$container) ? toQualifiedName(pack.$container, pack.name) : pack.name) + '.' + childName;
-// }
-class QualifiedNameProvider {
-    /**
-     * @param qualifier if the qualifier is a `string`, simple string concatenation is done: `qualifier.name`.
-     *      if the qualifier is a `PackageDeclaration` fully qualified name is created: `package1.package2.name`.
-     * @param name simple name
-     * @returns qualified name separated by `.`
-     */
-    getQualifiedName(qualifier, name) {
-        let prefix = qualifier;
-        let res;
-        if (name === '')
+exports.RslNameProvider = void 0;
+const langium_1 = require("langium");
+class RslNameProvider extends langium_1.DefaultNameProvider {
+    getQualifiedName(node) {
+        if (!node.$container) {
             return '';
-        if (prefix.hasOwnProperty('name')) {
-            res = prefix.name + '.' + name;
         }
-        else if (prefix.$container) {
-            res = this.getQualifiedName(prefix.$container, name);
+        let qualifiedName = this.getQualifiedName(node.$container);
+        const nodeName = this.getName(node);
+        if (nodeName) {
+            if (qualifiedName) {
+                qualifiedName += '.';
+            }
+            return qualifiedName + nodeName;
         }
-        else {
-            res = name;
-        }
-        return res;
+        return qualifiedName;
     }
 }
-exports.QualifiedNameProvider = QualifiedNameProvider;
+exports.RslNameProvider = RslNameProvider;
 //# sourceMappingURL=rsl-naming.js.map
