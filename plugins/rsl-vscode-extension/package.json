@@ -63,6 +63,7 @@
         "es-compromise": "^0.2.9",
         "fr-compromise": "^0.2.7",
         "it-compromise": "^0.2.0",
+		"ja-compromise": "^0.0.1",
         "langium": "~1.2.0",
         "pt-compromise": "^0.0.3",
         "vscode-languageclient": "~8.0.2",

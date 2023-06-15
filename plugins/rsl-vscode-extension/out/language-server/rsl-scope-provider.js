@@ -18,10 +18,6 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
         if (system) {
             fqNameToRemove = this.nameProvider.getQualifiedName(system);
         }
-        let data;
-        if ((0, ast_1.isDataTableHeader)(context.container)) {
-            data = (0, langium_1.getContainerOfType)(context.container, ast_1.isData);
-        }
         const model = (0, langium_1.getContainerOfType)(context.container, ast_1.isPackageSystem);
         if (!model) {
             return langium_1.EMPTY_SCOPE;
@@ -38,12 +34,6 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
             }
             else {
                 name = name.replace(`${fqNameToRemove}.`, '');
-            }
-            if (data && data.type.ref) {
-                const attributes = data.type.ref.attributes;
-                if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
-                    continue;
-                }
             }
             const newElement = {
                 node: node,
@@ -68,7 +58,21 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
         if (!context) {
             return super.getScope(refInfo);
         }
-        if ((0, ast_1.isIncludeElementGeneric)(context)) {
+        if ((0, ast_1.isDataTableHeader)(context)) {
+            let data = (0, langium_1.getContainerOfType)(context, ast_1.isData);
+            let elements = [];
+            for (let element of super.getScope(refInfo).getAllElements()) {
+                if (data && data.type.ref) {
+                    const attributes = data.type.ref.attributes;
+                    if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
+                        continue;
+                    }
+                    elements.push(element);
+                }
+            }
+            return this.createScope(elements);
+        }
+        else if ((0, ast_1.isIncludeElementGeneric)(context)) {
             if ((0, ast_1.isIncludeElement)(context) && refInfo.property === 'element') {
                 //return super.getScope(refInfo);
                 return this.getIncludeElementScope(refInfo, context);

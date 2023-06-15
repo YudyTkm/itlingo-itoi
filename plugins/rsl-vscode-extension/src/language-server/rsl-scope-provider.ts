@@ -47,11 +47,6 @@ export class RslScopeProvider extends DefaultScopeProvider {
             fqNameToRemove = (this.nameProvider as RslNameProvider).getQualifiedName(system);
         }
 
-        let data;
-        if (isDataTableHeader(context.container)) {
-            data = getContainerOfType(context.container, isData);
-        }
-
         const model = getContainerOfType(context.container, isPackageSystem);
         if (!model) {
             return EMPTY_SCOPE;
@@ -72,13 +67,6 @@ export class RslScopeProvider extends DefaultScopeProvider {
                 name = normalizeImport(imp, name);
             } else {
                 name = name.replace(`${fqNameToRemove}.`, '');
-            }
-
-            if (data && data.type.ref) {
-                const attributes = data.type.ref.attributes;
-                if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
-                    continue;
-                }
             }
 
             const newElement: AstNodeDescription = {
@@ -109,7 +97,23 @@ export class RslScopeProvider extends DefaultScopeProvider {
             return super.getScope(refInfo);
         }
 
-        if (isIncludeElementGeneric(context)) {
+        if (isDataTableHeader(context)) {
+            let data = getContainerOfType(context, isData);
+
+            let elements: AstNodeDescription[] = [];
+            for (let element of super.getScope(refInfo).getAllElements()) {
+                if (data && data.type.ref) {
+                    const attributes = data.type.ref.attributes;
+                    if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
+                        continue;
+                    }
+    
+                    elements.push(element);
+                }
+            }
+            
+            return this.createScope(elements);
+        } else if (isIncludeElementGeneric(context)) {
             if (isIncludeElement(context) && refInfo.property === 'element') {
                 //return super.getScope(refInfo);
                 return this.getIncludeElementScope(refInfo, context as IncludeElement);

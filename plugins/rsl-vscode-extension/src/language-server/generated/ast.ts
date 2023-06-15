@@ -185,7 +185,7 @@ export function isLinguisticFragmentPart(item: unknown): item is LinguisticFragm
     return reflection.isInstance(item, LinguisticFragmentPart);
 }
 
-export type LinguisticLanguageType = 'English' | 'French' | 'German' | 'Italian' | 'Portuguese' | 'Spanish';
+export type LinguisticLanguageType = 'English' | 'French' | 'German' | 'Italian' | 'Japanese' | 'Portuguese' | 'Spanish';
 
 export type LinguisticLanguageType_de = 'German';
 
@@ -215,6 +215,12 @@ export type LinguisticLanguageType_it = 'Italian';
 
 export function isLinguisticLanguageType_it(item: unknown): item is LinguisticLanguageType_it {
     return item === 'Italian';
+}
+
+export type LinguisticLanguageType_ja = 'Japanese';
+
+export function isLinguisticLanguageType_ja(item: unknown): item is LinguisticLanguageType_ja {
+    return item === 'Japanese';
 }
 
 export type LinguisticLanguageType_pt = 'Portuguese';

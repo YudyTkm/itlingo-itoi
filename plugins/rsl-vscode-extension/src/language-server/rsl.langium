@@ -1262,9 +1262,9 @@ LinguisticRuleSeverityLevel returns LinguisticRuleSeverityLevel:
 LinguisticRuleSeverityLevel_warning returns string: 'Warning' ;
 LinguisticRuleSeverityLevel_error returns string: 'Error' ;
 
-type LinguisticLanguageType = 'English' | 'Spanish' | 'German' | 'French' | 'Italian' | 'Portuguese';
+type LinguisticLanguageType = 'English' | 'Spanish' | 'German' | 'French' | 'Italian' | 'Portuguese' | 'Japanese';
 LinguisticLanguageType returns LinguisticLanguageType:
-    LinguisticLanguageType_en | LinguisticLanguageType_es | LinguisticLanguageType_de | LinguisticLanguageType_fr | LinguisticLanguageType_it | LinguisticLanguageType_pt
+    LinguisticLanguageType_en | LinguisticLanguageType_es | LinguisticLanguageType_de | LinguisticLanguageType_fr | LinguisticLanguageType_it | LinguisticLanguageType_pt | LinguisticLanguageType_ja
 ;
 LinguisticLanguageType_en returns string: 'English' ;
 LinguisticLanguageType_es returns string: 'Spanish' ;
@@ -1272,6 +1272,7 @@ LinguisticLanguageType_de returns string: 'German' ;
 LinguisticLanguageType_fr returns string: 'French' ;
 LinguisticLanguageType_it returns string: 'Italian' ;
 LinguisticLanguageType_pt returns string: 'Portuguese' ;
+LinguisticLanguageType_ja returns string: 'Japanese' ;
 
 Word infers Word:
     word=STRING  

@@ -33,6 +33,9 @@ export class NlpHelper {
             case 'Portuguese':
                 nlp = require('pt-compromise');
                 break;
+            case 'Japanese':
+                nlp = require('ja-compromise');
+                break;
             case 'English':
             default:
                 nlp = require('compromise');
