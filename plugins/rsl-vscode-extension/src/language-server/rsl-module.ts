@@ -1,45 +1,56 @@
 import {
-    createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject,
-    LangiumServices, LangiumSharedServices, Module, PartialLangiumServices, 
-    // Module, PartialLangiumServices
+    createDefaultModule,
+    createDefaultSharedModule,
+    DefaultSharedModuleContext,
+    inject,
+    LangiumServices,
+    LangiumSharedServices,
+    Module,
+    PartialLangiumServices,
 } from 'langium';
 import { RslGeneratedModule, RslGeneratedSharedModule } from './generated/module';
-import { QualifiedNameProvider } from './rsl-naming';
-import { RslScopeComputation } from './rsl-scope';
-import { RslCompletionProvider } from './rsl-completion';
+import { RslValidator, registerValidationChecks } from './rsl-validator';
+import { RslActionProvider } from './rsl-code-actions';
 import { RslScopeProvider } from './rsl-scope-provider';
+import { RslNameProvider } from './rsl-naming';
+import { RslScopeComputation } from './rsl-scope-computation';
+import { RslCompletionProvider } from './rsl-completion';
 import { RslLinker } from './rsl-linker';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type RslAddedServices = {
-    references: {
-        QualifiedNameProvider: QualifiedNameProvider
-    },
-}
+    validation: {
+        RslValidator: RslValidator;
+    };
+};
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
- export type RslServices = LangiumServices & RslAddedServices
+export type RslServices = LangiumServices & RslAddedServices;
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
- export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedServices> = {
+export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedServices> = {
+    lsp: {
+        CodeActionProvider: () => new RslActionProvider(),
+        CompletionProvider: (services) => new RslCompletionProvider(services),
+    },
+    validation: {
+        RslValidator: () => new RslValidator(),
+    },
     references: {
         ScopeComputation: (services) => new RslScopeComputation(services),
         ScopeProvider: (services) => new RslScopeProvider(services),
         Linker: (services) => new RslLinker(services),
-        QualifiedNameProvider: () => new QualifiedNameProvider()
+        NameProvider: () => new RslNameProvider(),
     },
-    lsp: {
-       CompletionProvider: (services) => new RslCompletionProvider(services)
-    }
 };
 
 /**
@@ -58,19 +69,12 @@ export type RslAddedServices = {
  * @returns An object wrapping the shared services and the language-specific services
  */
 export function createRslServices(context: DefaultSharedModuleContext): {
-    shared: LangiumSharedServices,
-    Rsl: RslServices
+    shared: LangiumSharedServices;
+    Rsl: RslServices;
 } {
-    const shared = inject(
-        createDefaultSharedModule(context),
-        RslGeneratedSharedModule
-    );
-    const Rsl = inject(
-        createDefaultModule({ shared }),
-        RslGeneratedModule,
-        RslModule
-    );
+    const shared = inject(createDefaultSharedModule(context), RslGeneratedSharedModule);
+    const Rsl = inject(createDefaultModule({ shared }), RslGeneratedModule, RslModule);
     shared.ServiceRegistry.register(Rsl);
-    // registerValidationChecks(Rsl);
+    registerValidationChecks(Rsl);
     return { shared, Rsl };
 }
