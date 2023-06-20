@@ -144,9 +144,56 @@ export class RslScopeProvider extends DefaultScopeProvider {
                 if (context.$container.type.type === 'UseCaseView') {
                     let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase').toArray();
                     return this.createScope(elements);
+                } else if (context.$container.type.type === 'ActiveElementView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'ActiveElement').toArray();
+                    return this.createScope(elements);
+                } else if (context.$container.type.type === 'ActorView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Actor').toArray();
+                    return this.createScope(elements);
+                } else if (context.$container.type.type === 'ConstraintView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Constraint').toArray();
+                    return this.createScope(elements);
+                } else if (context.$container.type.type === 'DataEntityClusterView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'DataEntityCluster').toArray();
+                    return this.createScope(elements);
+                } else if (context.$container.type.type === 'DataEntityView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'DataEntity').toArray();
+                    return this.createScope(elements);
+                } else if (context.$container.type.type === 'FRView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'FR').toArray();
+                    return this.createScope(elements);
+                } else if (context.$container.type.type === 'GlossaryTermView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'GlossaryTerm').toArray();
+                    return this.createScope(elements);
+                } else if (context.$container.type.type === 'GoalView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Goal').toArray();
+                    return this.createScope(elements);
+                }else if (context.$container.type.type === 'QRView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'QR').toArray();
+                    return this.createScope(elements);
+                }else if (context.$container.type.type === 'RequirementView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Requirement').toArray();
+                    return this.createScope(elements);
+                }else if (context.$container.type.type === 'RiskView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Risk').toArray();
+                    return this.createScope(elements);
+                }else if (context.$container.type.type === 'StakeholderView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Stakeholder').toArray();
+                    return this.createScope(elements);
+                }else if (context.$container.type.type === 'TestView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Test').toArray();
+                    return this.createScope(elements);
+                }else if (context.$container.type.type === 'UserStoryView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UserStory').toArray();
+                    return this.createScope(elements);
+                }else if (context.$container.type.type === 'VulnerabilityView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Vulnerability').toArray();
+                    return this.createScope(elements);
                 }
+                
             }
         } else if (isUCExtends(context)){
+            if(refInfo.property !== 'extensionPoint') return super.getScope(refInfo);
             let elements: AstNodeDescription[] = [];
             for (let element of super.getScope(refInfo).getAllElements()) {
                 if(element.name.substring(0, context.usecase.$refText.length) === context.usecase.$refText){

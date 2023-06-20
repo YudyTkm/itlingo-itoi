@@ -18,7 +18,7 @@ exports.AslModule = {
         ScopeComputation: (services) => new asl_scope_1.AslScopeComputation(services),
         ScopeProvider: (services) => new asl_scope_provider_1.AslScopeProvider(services),
         Linker: (services) => new asl_linker_1.AslLinker(services),
-        QualifiedNameProvider: () => new asl_naming_1.QualifiedNameProvider()
+        NameProvider: () => new asl_naming_1.AslNameProvider(),
     },
     lsp: {
         CompletionProvider: (services) => new asl_completion_1.AslCompletionProvider(services)

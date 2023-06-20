@@ -18,6 +18,7 @@ import {
     isPackageSystem,
     isSystem,
     isUCExtends,
+    // isUCExtends,
     isView,
 } from './generated/ast';
 import { AslServices } from './asl-module';
@@ -141,8 +142,26 @@ export class AslScopeProvider extends DefaultScopeProvider {
                     let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase').toArray();
                     return this.createScope(elements);
                 }
+                else if (context.$container.type.type === 'ActiveStructureView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'ActiveStructure').toArray();
+                    return this.createScope(elements);
+                }
+                else if (context.$container.type.type === 'ActiveView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Active').toArray();
+                    return this.createScope(elements);
+                }
+                else if (context.$container.type.type === 'PassiveStructureView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'PassiveStructure').toArray();
+                    return this.createScope(elements);
+                }
+                else if (context.$container.type.type === 'UIView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UI').toArray();
+                    return this.createScope(elements);
+                }
             }
-        } else if (isUCExtends(context)){
+        } 
+        else if (isUCExtends(context)){
+            if(refInfo.property !== 'extensionPoint') return super.getScope(refInfo);
             let elements: AstNodeDescription[] = [];
             for (let element of super.getScope(refInfo).getAllElements()) {
                 if(element.name.substring(0, context.usecase.$refText.length) === context.usecase.$refText){
