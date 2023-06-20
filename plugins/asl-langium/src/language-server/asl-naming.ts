@@ -1,39 +1,23 @@
-/******************************************************************************
- * Copyright 2021 TypeFox GmbH
- * This program and the accompanying materials are made available under the
- * terms of the MIT License, which is available in the project root.
- ******************************************************************************/
+import { AstNode, DefaultNameProvider } from 'langium';
 
-import { AstNode } from 'langium';
-import {  } from './generated/ast';
-
-// export function toQualifiedName(pack: PackageSystem, childName: string): string {
-//     return (isPackageSystem(pack.$container) ? toQualifiedName(pack.$container, pack.name) : pack.name) + '.' + childName;
-// }
-
-
-
-export class QualifiedNameProvider {
-
-    /**
-     * @param qualifier if the qualifier is a `string`, simple string concatenation is done: `qualifier.name`.
-     *      if the qualifier is a `PackageDeclaration` fully qualified name is created: `package1.package2.name`.
-     * @param name simple name
-     * @returns qualified name separated by `.`
-     */
-    getQualifiedName(qualifier: AstNode, name: string): string {
-        let prefix = qualifier;
-        let res;        
-        if (name==='') return '';
-        if (prefix.hasOwnProperty('name')){
-            res = (prefix as AstNode & {name:string}).name + '.' + name
-        } else if (prefix.$container){
-            res = this.getQualifiedName(prefix.$container, name);
-        } else {
-            res = name
+export class AslNameProvider extends DefaultNameProvider {
+    getQualifiedName(node: AstNode): string {
+        if (!node.$container) {
+            return '';
         }
-        
-        return res;
-    }
 
+        let qualifiedName = this.getQualifiedName(node.$container);
+
+        const nodeName = this.getName(node);
+
+        if (nodeName) {
+            if (qualifiedName) {
+                qualifiedName += '.';
+            }
+
+            return qualifiedName + nodeName;
+        }
+
+        return qualifiedName;
+    }
 }

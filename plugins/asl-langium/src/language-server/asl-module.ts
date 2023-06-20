@@ -3,7 +3,7 @@ import {
     LangiumServices, LangiumSharedServices, Module, PartialLangiumServices
 } from 'langium';
 import { AslGeneratedModule, AslGeneratedSharedModule } from './generated/module';
-import { QualifiedNameProvider } from './asl-naming';
+import { AslNameProvider } from './asl-naming';
 import { AslScopeComputation } from './asl-scope';
 import { AslCompletionProvider } from './asl-completion';
 import { AslScopeProvider } from './asl-scope-provider';
@@ -15,7 +15,7 @@ import { AslLinker } from './asl-linker';
  */
 export type AslAddedServices = {
     references: {
-        QualifiedNameProvider: QualifiedNameProvider
+        //QualifiedNameProvider: QualifiedNameProvider
     },
     // validation: {
     //     AslValidator: AslValidator
@@ -38,7 +38,7 @@ export const AslModule: Module<AslServices, PartialLangiumServices & AslAddedSer
         ScopeComputation: (services) => new AslScopeComputation(services),
         ScopeProvider: (services) => new AslScopeProvider(services),
         Linker: (services) => new AslLinker(services),
-        QualifiedNameProvider: () => new QualifiedNameProvider()
+        NameProvider: () => new AslNameProvider(),
     },
     lsp: {
        CompletionProvider: (services) => new AslCompletionProvider(services)
