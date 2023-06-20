@@ -5,6 +5,7 @@ import {
     DefaultScopeProvider,
     EMPTY_SCOPE,
     LangiumDocuments,
+    Reference,
     ReferenceInfo,
     Scope,
     StreamScope,
@@ -13,6 +14,7 @@ import {
     stream,
 } from 'langium';
 import {
+    ActionTypeExtended,
     Import,
     IncludeElement,
     PackageSystem,
@@ -21,7 +23,11 @@ import {
     isIncludeElement,
     isIncludeElementGeneric,
     isPackageSystem,
+    isRefUCAction,
     isSystem,
+    isUCExtends,
+    isUseCase,
+    isView,
 } from './generated/ast';
 import { RslServices } from './rsl-module';
 import { RslNameProvider } from './rsl-naming';
@@ -107,7 +113,7 @@ export class RslScopeProvider extends DefaultScopeProvider {
                     if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
                         continue;
                     }
-    
+                    element.name = element.name.slice(data.type.ref.name.length+1);
                     elements.push(element);
                 }
             }
@@ -115,7 +121,6 @@ export class RslScopeProvider extends DefaultScopeProvider {
             return this.createScope(elements);
         } else if (isIncludeElementGeneric(context)) {
             if (isIncludeElement(context) && refInfo.property === 'element') {
-                //return super.getScope(refInfo);
                 return this.getIncludeElementScope(refInfo, context as IncludeElement);
             }
 
@@ -130,8 +135,46 @@ export class RslScopeProvider extends DefaultScopeProvider {
             }
 
             return this.createScope(elements);
-        }
+        } else if (isView(context.$container)) {
+            if (!context.$container.type) {
+                return super.getScope(refInfo);
+            }
 
+            if (refInfo.property === 'references') {
+                if (context.$container.type.type === 'UseCaseView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase').toArray();
+                    return this.createScope(elements);
+                }
+            }
+        } else if (isUCExtends(context)){
+            let elements: AstNodeDescription[] = [];
+            for (let element of super.getScope(refInfo).getAllElements()) {
+                if(element.name.substring(0, context.usecase.$refText.length) === context.usecase.$refText){
+                    element.name = element.name.slice(context.usecase.$refText.length+1);
+                    elements.push(element);
+                }
+            }
+            return this.createScope(elements);
+        } else if (isRefUCAction(context.$container)){
+            if (!context.$container.useCase) {
+                return super.getScope(refInfo);
+            }
+            let useCase = getContainerOfType(context.$container.useCase.ref, isUseCase);
+            if(!useCase) {
+                return super.getScope(refInfo);
+            }
+            let actions = useCase?.actions?.actions
+                        .map((action) => {
+                            let type = action.type as Reference<ActionTypeExtended>
+                            return type.$refText
+                        });
+            let elements = super.getScope(refInfo).getAllElements().filter(
+                (action) => {
+                    return actions?.includes(action.name)
+                }
+            ).toArray();
+            return this.createScope(elements);
+        }
         return super.getScope(refInfo);
     }
 

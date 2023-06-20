@@ -7,7 +7,7 @@ export class RslScopeComputation extends DefaultScopeComputation {
     constructor(services: RslServices) {
         super(services);
     }
-
+    
     override async computeExports(document: LangiumDocument, cancelToken = CancellationToken.None): Promise<AstNodeDescription[]> {
         const exportedDescriptions: AstNodeDescription[] = [];
 

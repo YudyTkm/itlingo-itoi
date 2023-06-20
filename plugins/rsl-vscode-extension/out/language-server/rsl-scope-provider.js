@@ -55,6 +55,7 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
         return new langium_1.StreamScope((0, langium_1.stream)(matchingElements));
     }
     getScopeInternal(refInfo, context) {
+        var _a;
         if (!context) {
             return super.getScope(refInfo);
         }
@@ -67,6 +68,7 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
                     if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
                         continue;
                     }
+                    element.name = element.name.slice(data.type.ref.name.length + 1);
                     elements.push(element);
                 }
             }
@@ -74,7 +76,6 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
         }
         else if ((0, ast_1.isIncludeElementGeneric)(context)) {
             if ((0, ast_1.isIncludeElement)(context) && refInfo.property === 'element') {
-                //return super.getScope(refInfo);
                 return this.getIncludeElementScope(refInfo, context);
             }
             const contextDocument = (0, langium_1.getDocument)(context);
@@ -85,6 +86,44 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
                 }
                 elements.push(element);
             }
+            return this.createScope(elements);
+        }
+        else if ((0, ast_1.isView)(context.$container)) {
+            if (!context.$container.type) {
+                return super.getScope(refInfo);
+            }
+            if (refInfo.property === 'references') {
+                if (context.$container.type.type === 'UseCaseView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase').toArray();
+                    return this.createScope(elements);
+                }
+            }
+        }
+        else if ((0, ast_1.isUCExtends)(context)) {
+            let elements = [];
+            for (let element of super.getScope(refInfo).getAllElements()) {
+                if (element.name.substring(0, context.usecase.$refText.length) === context.usecase.$refText) {
+                    element.name = element.name.slice(context.usecase.$refText.length + 1);
+                    elements.push(element);
+                }
+            }
+            return this.createScope(elements);
+        }
+        else if ((0, ast_1.isRefUCAction)(context.$container)) {
+            if (!context.$container.useCase) {
+                return super.getScope(refInfo);
+            }
+            let useCase = (0, langium_1.getContainerOfType)(context.$container.useCase.ref, ast_1.isUseCase);
+            if (!useCase) {
+                return super.getScope(refInfo);
+            }
+            let actions = (_a = useCase === null || useCase === void 0 ? void 0 : useCase.actions) === null || _a === void 0 ? void 0 : _a.actions.map((action) => {
+                let type = action.type;
+                return type.$refText;
+            });
+            let elements = super.getScope(refInfo).getAllElements().filter((action) => {
+                return actions === null || actions === void 0 ? void 0 : actions.includes(action.name);
+            }).toArray();
             return this.createScope(elements);
         }
         return super.getScope(refInfo);
