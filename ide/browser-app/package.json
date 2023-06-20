@@ -37,7 +37,8 @@
       "config": {
         "applicationName": "ITOI",
         "preferences": {
-          "workbench.colorTheme": "dark"
+          "workbench.colorTheme": "dark",
+          "files.enableTrash": false
         }
       }
     }
