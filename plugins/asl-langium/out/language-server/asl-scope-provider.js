@@ -104,6 +104,22 @@ class AslScopeProvider extends langium_1.DefaultScopeProvider {
                     let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase').toArray();
                     return this.createScope(elements);
                 }
+                else if (context.$container.type.type === 'ActiveStructureView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'ActiveStructure').toArray();
+                    return this.createScope(elements);
+                }
+                else if (context.$container.type.type === 'ActiveView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Active').toArray();
+                    return this.createScope(elements);
+                }
+                else if (context.$container.type.type === 'PassiveStructureView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'PassiveStructure').toArray();
+                    return this.createScope(elements);
+                }
+                else if (context.$container.type.type === 'UIView') {
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UI').toArray();
+                    return this.createScope(elements);
+                }
             }
         }
         else if ((0, ast_1.isUCExtends)(context)) {

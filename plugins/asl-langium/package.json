@@ -33,6 +33,12 @@
                 "path": "./syntaxes/asl.tmLanguage.json"
             }
         ], 
+        "submenus": [
+            {
+              "id": "asl.submenu",
+              "label": "Convert ASL file to"
+            }
+        ],
         "commands": [
             {
                 "command": "asl.diagram.open",
@@ -62,11 +68,15 @@
             },
             {
                 "command": "genio.export",
-                "title": "Export from Asl..."
+                "title": "Genio"
+            },
+            {
+                "command": "asl.export",
+                "title": "Asl"
             },
             {
                 "command": "zip.import",
-                "title": "Import to ASL..."
+                "title": "Import to ASL"
             }
         ],
         "menus": {
@@ -91,21 +101,7 @@
                     "command": "asl.diagram.export",
                     "when": "asl-diagram-focused"
                 }
-            ],
-            "editor/context": [
-                {
-                    "command": "asl.diagram.open",
-                    "when": "editorLangId == 'asl'",
-                    "group": "navigation"
-                }
-            ],
-            "editor/title": [
-                {
-                    "command": "asl.diagram.open",
-                    "when": "editorLangId == 'asl'",
-                    "group": "navigation"
-                }
-            ],
+            ],        
             "explorer/context": [
                 {
                     "command": "asl.diagram.open",
@@ -113,16 +109,24 @@
                     "group": "navigation"
                 },
                 {
+                    "submenu": "asl.submenu",
+                    "when": "resourceExtname == '.asl'",
+                    "group": "asl.group"
+                },
+                {
                     "command": "zip.import",
                     "when": "explorerResourceIsFolder",
                     "group": "navigation"
+                }
+            ],
+            "asl.submenu": [
+                {
+                    "command": "genio.export"
                 },
                 {
-                    "command": "genio.export",
-                    "when": "resourceExtname == '.asl'",
-                    "group": "navigation"
+                    "command": "asl.export"
                 }
-            ]
+              ]
         },
         "keybindings": [
             {
