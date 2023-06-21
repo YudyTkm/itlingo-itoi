@@ -1,4 +1,4 @@
-ARG NODE_VERSION=14.21.3
+ARG NODE_VERSION=16.16.0
 FROM node:${NODE_VERSION}-alpine as base 
 
 RUN apk add --no-cache git openssh bash libsecret 
