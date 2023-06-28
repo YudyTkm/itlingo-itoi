@@ -182,9 +182,11 @@
         "langium": "^1.1.0",
         "langium-sprotty": "^1.0.0",
         "sprotty-elk": "^0.13.0",
+        "sprotty-vscode": "^0.5.0",
         "vscode-languageclient": "^8.0.2",
         "vscode-languageserver": "~8.0.2",
-        "vscode-uri": "~3.0.7"
+        "vscode-uri": "~3.0.7",
+        "concat-map": "^0.0.1"
     },
     "devDependencies": {
         "@types/node": "~16.18.11",
