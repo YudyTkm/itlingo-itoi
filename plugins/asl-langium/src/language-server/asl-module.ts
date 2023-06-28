@@ -1,6 +1,7 @@
+import ElkConstructor from 'elkjs/lib/elk.bundled';
 import {
     createDefaultModule, createDefaultSharedModule, DefaultSharedModuleContext, inject,
-    LangiumServices, LangiumSharedServices, Module, PartialLangiumServices
+    Module, PartialLangiumServices
 } from 'langium';
 import { AslGeneratedModule, AslGeneratedSharedModule } from './generated/module';
 import { AslNameProvider } from './asl-naming';
@@ -8,32 +9,39 @@ import { AslScopeComputation } from './asl-scope';
 import { AslCompletionProvider } from './asl-completion';
 import { AslScopeProvider } from './asl-scope-provider';
 import { AslLinker } from './asl-linker';
+import { DefaultElementFilter, ElkFactory, ElkLayoutEngine, IElementFilter, ILayoutConfigurator } from 'sprotty-elk/lib/elk-layout';
+import { LangiumSprottyServices, LangiumSprottySharedServices, SprottyDiagramServices, SprottySharedModule } from 'langium-sprotty';
+import { AslDiagramGenerator } from './asl-diagram-generator';
+import { AslLayoutConfigurator } from './asl-layout-config';
+import { AslValidator } from './asl-validator';
 // import { AslValidator, registerValidationChecks } from './asl-validator';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type AslAddedServices = {
-    references: {
-        //QualifiedNameProvider: QualifiedNameProvider
-    },
-    // validation: {
-    //     AslValidator: AslValidator
-    // }
+    layout: {
+        ElkFactory: ElkFactory,
+        ElementFilter: IElementFilter,
+        LayoutConfigurator: ILayoutConfigurator
+    }
+     validation: {
+         AslValidator: AslValidator
+    }
 }
 
 /**
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type AslServices = LangiumServices & AslAddedServices
+export type AslServices = LangiumSprottyServices & AslAddedServices
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
-export const AslModule: Module<AslServices, PartialLangiumServices & AslAddedServices> = {
+export const AslModule: Module<AslServices, PartialLangiumServices & SprottyDiagramServices & AslAddedServices> = {
     references: {
         ScopeComputation: (services) => new AslScopeComputation(services),
         ScopeProvider: (services) => new AslScopeProvider(services),
@@ -42,10 +50,19 @@ export const AslModule: Module<AslServices, PartialLangiumServices & AslAddedSer
     },
     lsp: {
        CompletionProvider: (services) => new AslCompletionProvider(services)
-    }
-    // validation: {
-    //     AslValidator: () => new AslValidator()
-    // }
+    },
+    diagram: {
+        DiagramGenerator: services => new AslDiagramGenerator(services),
+        ModelLayoutEngine: services => new ElkLayoutEngine(services.layout.ElkFactory, services.layout.ElementFilter, services.layout.LayoutConfigurator) as any
+    },
+    layout: {
+        ElkFactory: () => () => new ElkConstructor({ algorithms: ['layered'] }),
+        ElementFilter: () => new DefaultElementFilter,
+        LayoutConfigurator: () => new AslLayoutConfigurator
+    },
+    validation: {
+         AslValidator: () => new AslValidator()
+     }
 };
 
 /**
@@ -64,12 +81,13 @@ export const AslModule: Module<AslServices, PartialLangiumServices & AslAddedSer
  * @returns An object wrapping the shared services and the language-specific services
  */
 export function createAslServices(context: DefaultSharedModuleContext): {
-    shared: LangiumSharedServices,
+    shared: LangiumSprottySharedServices,
     Asl: AslServices
 } {
     const shared = inject(
         createDefaultSharedModule(context),
-        AslGeneratedSharedModule
+        AslGeneratedSharedModule,
+        SprottySharedModule
     );
     const Asl = inject(
         createDefaultModule({ shared }),
@@ -77,6 +95,6 @@ export function createAslServices(context: DefaultSharedModuleContext): {
         AslModule
     );
     shared.ServiceRegistry.register(Asl);
-    // registerValidationChecks(Asl);
+    //registerValidationChecks(Asl);
     return { shared, Asl };
 }

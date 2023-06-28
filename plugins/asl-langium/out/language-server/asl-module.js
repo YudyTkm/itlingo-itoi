@@ -1,6 +1,10 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createAslServices = exports.AslModule = void 0;
+const elk_bundled_1 = __importDefault(require("elkjs/lib/elk.bundled"));
 const langium_1 = require("langium");
 const module_1 = require("./generated/module");
 const asl_naming_1 = require("./asl-naming");
@@ -8,6 +12,11 @@ const asl_scope_1 = require("./asl-scope");
 const asl_completion_1 = require("./asl-completion");
 const asl_scope_provider_1 = require("./asl-scope-provider");
 const asl_linker_1 = require("./asl-linker");
+const elk_layout_1 = require("sprotty-elk/lib/elk-layout");
+const langium_sprotty_1 = require("langium-sprotty");
+const asl_diagram_generator_1 = require("./asl-diagram-generator");
+const asl_layout_config_1 = require("./asl-layout-config");
+const asl_validator_1 = require("./asl-validator");
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
@@ -22,10 +31,19 @@ exports.AslModule = {
     },
     lsp: {
         CompletionProvider: (services) => new asl_completion_1.AslCompletionProvider(services)
+    },
+    diagram: {
+        DiagramGenerator: services => new asl_diagram_generator_1.AslDiagramGenerator(services),
+        ModelLayoutEngine: services => new elk_layout_1.ElkLayoutEngine(services.layout.ElkFactory, services.layout.ElementFilter, services.layout.LayoutConfigurator)
+    },
+    layout: {
+        ElkFactory: () => () => new elk_bundled_1.default({ algorithms: ['layered'] }),
+        ElementFilter: () => new elk_layout_1.DefaultElementFilter,
+        LayoutConfigurator: () => new asl_layout_config_1.AslLayoutConfigurator
+    },
+    validation: {
+        AslValidator: () => new asl_validator_1.AslValidator()
     }
-    // validation: {
-    //     AslValidator: () => new AslValidator()
-    // }
 };
 /**
  * Create the full set of services required by Langium.
@@ -43,10 +61,10 @@ exports.AslModule = {
  * @returns An object wrapping the shared services and the language-specific services
  */
 function createAslServices(context) {
-    const shared = (0, langium_1.inject)((0, langium_1.createDefaultSharedModule)(context), module_1.AslGeneratedSharedModule);
+    const shared = (0, langium_1.inject)((0, langium_1.createDefaultSharedModule)(context), module_1.AslGeneratedSharedModule, langium_sprotty_1.SprottySharedModule);
     const Asl = (0, langium_1.inject)((0, langium_1.createDefaultModule)({ shared }), module_1.AslGeneratedModule, exports.AslModule);
     shared.ServiceRegistry.register(Asl);
-    // registerValidationChecks(Asl);
+    //registerValidationChecks(Asl);
     return { shared, Asl };
 }
 exports.createAslServices = createAslServices;

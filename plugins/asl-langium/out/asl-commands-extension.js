@@ -39,6 +39,7 @@ class ASLCustomCommands {
         //vscode.commands.registerCommand('genie.import',this.genieCallBack);
         vscode.commands.registerCommand('zip.import', this.zipCallBack, this);
         vscode.commands.registerCommand('genio.export', this.exportGenieCallBack, this);
+        vscode.commands.registerCommand('asl.export', this.exportAslCallBack, this);
     }
     genieCallBack(...context) {
         console.log("GenieCallback");
@@ -71,13 +72,22 @@ class ASLCustomCommands {
         let generatorType = 'Genio';
         const workspaceRoot = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
             ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
-        console.log(workspaceRoot);
         if (!workspaceRoot) {
             return;
         }
         const commandString = `${generatorPath} ${generatorType} ${fileUri.path} ${workspaceRoot}`;
-        console.log(commandString);
-        console.log("exportGenie-2-");
+        cp.execSync(commandString);
+    }
+    exportAslCallBack(...callcontext) {
+        let fileUri = callcontext[0];
+        let generatorPath = this.context.asAbsolutePath(path.join('server', 'asl', 'bin', 'generator.sh'));
+        let generatorType = 'Asl';
+        const workspaceRoot = (vscode.workspace.workspaceFolders && (vscode.workspace.workspaceFolders.length > 0))
+            ? vscode.workspace.workspaceFolders[0].uri.fsPath : undefined;
+        if (!workspaceRoot) {
+            return;
+        }
+        const commandString = `${generatorPath} ${generatorType} ${fileUri.path} ${workspaceRoot}`;
         cp.execSync(commandString);
     }
 }

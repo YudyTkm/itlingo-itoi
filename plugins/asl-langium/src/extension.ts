@@ -3,25 +3,36 @@ import * as path from 'path';
 import {
     LanguageClient, LanguageClientOptions, ServerOptions, TransportKind
 } from 'vscode-languageclient/node';
+import { registerDefaultCommands } from 'sprotty-vscode';
+import { LspWebviewPanelManager } from 'sprotty-vscode/lib/lsp';
+
 
 import { ASLCustomCommands } from './asl-commands-extension';
 
-let client: LanguageClient;
+let languageClient: LanguageClient;
 let aslCustomCommand: ASLCustomCommands;
 
 // This function is called when the extension is activated.
 export function activate(context: vscode.ExtensionContext): void {
-    client = startLanguageClient(context);
     if (!aslCustomCommand) {
         aslCustomCommand = new ASLCustomCommands(context);
         aslCustomCommand.registerCommands();
-   }
+    }
+    languageClient = startLanguageClient(context);
+    const webviewPanelManager = new LspWebviewPanelManager({
+        extensionUri: context.extensionUri,
+        defaultDiagramType: 'asl',
+        languageClient,
+        supportedFileExtensions: ['.asl']
+    });
+    registerDefaultCommands(webviewPanelManager, context, { extensionPrefix: 'asl' });
+
 }
 
 // This function is called when the extension is deactivated.
 export function deactivate(): Thenable<void> | undefined {
-    if (client) {
-        return client.stop();
+    if (languageClient) {
+        return languageClient.stop();
     }
     if (aslCustomCommand){
         aslCustomCommand.dispose();

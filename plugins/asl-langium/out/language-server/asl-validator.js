@@ -2,6 +2,8 @@
 // import { ValidationAcceptor, ValidationChecks } from 'langium';
 // import { AslAstType, DataEntity } from './generated/ast';
 // import type { AslServices } from './asl-module';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AslValidator = void 0;
 /**
  * Register custom validation checks.
  */
@@ -16,14 +18,7 @@
 // /**
 //  * Implementation of custom validations.
 //  */
-// export class AslValidator {
-//     checkPersonStartsWithCapital(person: Person, accept: ValidationAcceptor): void {
-//         // if (person.name) {
-//         //     const firstChar = person.name.substring(0, 1);
-//         //     if (firstChar.toUpperCase() !== firstChar) {
-//         //         accept('warning', 'Person name should start with a capital.', { node: person, property: 'name' });
-//         //     }
-//         // }
-//     }
-// }
+class AslValidator {
+}
+exports.AslValidator = AslValidator;
 //# sourceMappingURL=asl-validator.js.map

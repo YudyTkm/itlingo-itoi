@@ -17,7 +17,8 @@
 // /**
 //  * Implementation of custom validations.
 //  */
-// export class AslValidator {
+export class AslValidator {
+    
 
 //     checkPersonStartsWithCapital(person: Person, accept: ValidationAcceptor): void {
 //         // if (person.name) {
@@ -28,4 +29,4 @@
 //         // }
 //     }
 
-// }
+}

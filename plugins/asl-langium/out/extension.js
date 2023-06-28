@@ -27,22 +27,31 @@ exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const node_1 = require("vscode-languageclient/node");
+const sprotty_vscode_1 = require("sprotty-vscode");
+const lsp_1 = require("sprotty-vscode/lib/lsp");
 const asl_commands_extension_1 = require("./asl-commands-extension");
-let client;
+let languageClient;
 let aslCustomCommand;
 // This function is called when the extension is activated.
 function activate(context) {
-    client = startLanguageClient(context);
     if (!aslCustomCommand) {
         aslCustomCommand = new asl_commands_extension_1.ASLCustomCommands(context);
         aslCustomCommand.registerCommands();
     }
+    languageClient = startLanguageClient(context);
+    const webviewPanelManager = new lsp_1.LspWebviewPanelManager({
+        extensionUri: context.extensionUri,
+        defaultDiagramType: 'asl',
+        languageClient,
+        supportedFileExtensions: ['.asl']
+    });
+    (0, sprotty_vscode_1.registerDefaultCommands)(webviewPanelManager, context, { extensionPrefix: 'asl' });
 }
 exports.activate = activate;
 // This function is called when the extension is deactivated.
 function deactivate() {
-    if (client) {
-        return client.stop();
+    if (languageClient) {
+        return languageClient.stop();
     }
     if (aslCustomCommand) {
         aslCustomCommand.dispose();
