@@ -33,13 +33,19 @@
   },
   "theia": {
     "target": "browser",
+    "backend": {
+      "config": {
+          "warnOnPotentiallyInsecureHostPattern": false
+      }
+    },
     "frontend": {
       "config": {
         "applicationName": "ITOI",
         "preferences": {
           "workbench.colorTheme": "dark",
           "files.enableTrash": false
-        }
+        },
+        "warnOnPotentiallyInsecureHostPattern": false
       }
     }
   }

@@ -14,6 +14,10 @@ RUN apk add openjdk11-jre dos2unix
 # ADD $version.package.json ./package.json
 # ARG GITHUB_TOKEN
 FROM base as build-ide
+
+ENV THEIA_WEBVIEW_EXTERNAL_ENDPOINT='{{hostname}}'
+ENV NODE_OPTIONS "--max-old-space-size=4096"
+
 COPY ide /home/theia/ide
 WORKDIR /home/theia/ide
 
@@ -23,7 +27,6 @@ RUN chmod +x gitUtils/gitPermissionsFix.sh
 #RUN chmod +x startup.sh
 
 WORKDIR /home/theia/ide
-ENV NODE_OPTIONS "--max-old-space-size=4096"
 RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
 RUN find node_modules/@theia/cli/bin -type f -print0 | xargs -0 dos2unix
 # RUN yarn theia build
@@ -87,7 +90,6 @@ EXPOSE $PORT
 
 # ENV SHELL=/bin/bash \
 #    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/ide/plugins
-# ENV USE_LOCAL_GIT true
 
 # USER theia
 
