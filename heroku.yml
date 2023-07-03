@@ -2,4 +2,4 @@ build:
   docker:
     web: Dockerfile
 run:
-  web: cd /home/theia/pub/browser-app && npx tinylicious@latest & /home/theia/ls/asl/bin/start-asl-ls-itlingo --port 3011 & yarn theia start --no-cluster  --plugins=local-dir:../plugins --hostname itlingo-itoi.herokuapp.com --port $PORT
+  web: cd /home/theia/pub/browser-app && npx tinylicious@latest & /home/theia/ls/asl/bin/start-asl-ls-itlingo --port 3011 & yarn theia start --no-cluster  --plugins=local-dir:../plugins --hostname 0.0.0.0 --port $PORT
