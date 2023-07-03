@@ -78,7 +78,7 @@ COPY --from=build-plugins /home/theia/vscode-code-annotation/code-annotation-0.0
 COPY --from=build-plugins /home/theia/rsl-vscode-extension/rsl-vscode-extension-0.0.1.vsix /home/theia/ide/plugins
 COPY --from=build-plugins /home/theia/asl-langium/asl-langium-0.0.1.vsix /home/theia/ide/plugins
 
-RUN chmod -R 755 /tmp/vscode-unpacked
+RUN chmod -R 755 /tmp
 
 EXPOSE $PORT
 #EXPOSE 3000
