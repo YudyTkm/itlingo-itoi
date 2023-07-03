@@ -29,6 +29,7 @@ const path = __importStar(require("path"));
 const node_1 = require("vscode-languageclient/node");
 const sprotty_vscode_1 = require("sprotty-vscode");
 const lsp_1 = require("sprotty-vscode/lib/lsp");
+const webview_utils_1 = require("sprotty-vscode/lib/webview-utils");
 const asl_commands_extension_1 = require("./asl-commands-extension");
 let languageClient;
 let aslCustomCommand;
@@ -39,7 +40,7 @@ function activate(context) {
         aslCustomCommand.registerCommands();
     }
     languageClient = startLanguageClient(context);
-    const webviewPanelManager = new lsp_1.LspWebviewPanelManager({
+    const webviewPanelManager = new CustomLspWebview({
         extensionUri: context.extensionUri,
         defaultDiagramType: 'asl',
         languageClient,
@@ -86,5 +87,18 @@ function startLanguageClient(context) {
     // Start the client. This will also launch the server
     client.start();
     return client;
+}
+class CustomLspWebview extends lsp_1.LspWebviewPanelManager {
+    constructor(options) {
+        super(options);
+        options.languageClient.onNotification(lsp_1.acceptMessageType, message => this.acceptFromLanguageServer(message));
+        options.languageClient.onNotification(lsp_1.openInTextEditorMessageType, message => (0, lsp_1.openInTextEditor)(message));
+    }
+    createWebview(identifier) {
+        return (0, webview_utils_1.createWebviewPanel)(identifier, {
+            localResourceRoots: [(0, webview_utils_1.createFileUri)('/home', 'theia', 'pack')],
+            scriptUri: (0, webview_utils_1.createFileUri)('/home', 'theia', 'pack', 'webview.js')
+        });
+    }
 }
 //# sourceMappingURL=extension.js.map

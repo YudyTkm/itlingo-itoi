@@ -3,8 +3,9 @@ import * as path from 'path';
 import {
     LanguageClient, LanguageClientOptions, ServerOptions, TransportKind
 } from 'vscode-languageclient/node';
-import { registerDefaultCommands } from 'sprotty-vscode';
-import { LspWebviewPanelManager } from 'sprotty-vscode/lib/lsp';
+import { SprottyDiagramIdentifier, registerDefaultCommands } from 'sprotty-vscode';
+import { LspWebviewPanelManager, LspWebviewPanelManagerOptions, acceptMessageType, openInTextEditor, openInTextEditorMessageType } from 'sprotty-vscode/lib/lsp';
+import { createFileUri, createWebviewPanel } from 'sprotty-vscode/lib/webview-utils';
 
 
 import { ASLCustomCommands } from './asl-commands-extension';
@@ -19,7 +20,7 @@ export function activate(context: vscode.ExtensionContext): void {
         aslCustomCommand.registerCommands();
     }
     languageClient = startLanguageClient(context);
-    const webviewPanelManager = new LspWebviewPanelManager({
+    const webviewPanelManager = new CustomLspWebview({
         extensionUri: context.extensionUri,
         defaultDiagramType: 'asl',
         languageClient,
@@ -77,4 +78,23 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
     // Start the client. This will also launch the server
     client.start();
     return client;
+}
+
+
+
+class CustomLspWebview extends LspWebviewPanelManager {
+
+    constructor(options: LspWebviewPanelManagerOptions) {
+        super(options);
+        options.languageClient.onNotification(acceptMessageType, message => this.acceptFromLanguageServer(message));
+        options.languageClient.onNotification(openInTextEditorMessageType, message => openInTextEditor(message));
+    }
+
+    protected override createWebview(identifier: SprottyDiagramIdentifier): vscode.WebviewPanel {
+        return createWebviewPanel(identifier, {
+            localResourceRoots: [ createFileUri('/home', 'theia','pack') ],
+            scriptUri: createFileUri('/home', 'theia','pack','webview.js')
+        });
+    }
+
 }
