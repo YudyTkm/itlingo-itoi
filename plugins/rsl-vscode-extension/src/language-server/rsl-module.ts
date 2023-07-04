@@ -14,6 +14,7 @@ import { RslActionProvider } from './rsl-code-actions';
 import { RslScopeProvider } from './rsl-scope-provider';
 import { RslNameProvider } from './rsl-naming';
 import { RslScopeComputation } from './rsl-scope-computation';
+import { RslJsonSerializer } from '../serializer/rsl-json-serializer';
 import { RslCompletionProvider } from './rsl-completion';
 import { RslLinker } from './rsl-linker';
 
@@ -39,7 +40,7 @@ export type RslServices = LangiumServices & RslAddedServices;
  */
 export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedServices> = {
     lsp: {
-        CodeActionProvider: () => new RslActionProvider(),
+        CodeActionProvider: () => new RslActionProvider(),        
         CompletionProvider: (services) => new RslCompletionProvider(services),
     },
     validation: {
@@ -50,6 +51,9 @@ export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedSer
         ScopeProvider: (services) => new RslScopeProvider(services),
         Linker: (services) => new RslLinker(services),
         NameProvider: () => new RslNameProvider(),
+    },
+    serializer: {
+        JsonSerializer: (services) => new RslJsonSerializer(services),
     },
 };
 

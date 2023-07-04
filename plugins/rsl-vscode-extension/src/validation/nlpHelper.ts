@@ -1,11 +1,20 @@
 import { LinguisticLanguageType } from '../language-server/generated/ast';
 import { NlpToken } from './nlpToken';
 import UniversalPosMapper from './universalPosMapper';
-//import nlp from 'compromise';
 
+/**
+ * Represents a natural language processing (NLP) helper to annotate text.
+ */
 export class NlpHelper {
     private readonly _tokensByInput: Map<string, NlpToken[]> = new Map<string, NlpToken[]>();
 
+    /**
+     * Retrieves the NLP tokens for the given text and language type.
+     *
+     * @param languageType The linguistic language type.
+     * @param text         The input text to process.
+     * @returns An array of NlpToken objects representing the tokens in the text.
+     */
     public getTokens(languageType: LinguisticLanguageType, text: string): NlpToken[] {
         if (!text) {
             return [];

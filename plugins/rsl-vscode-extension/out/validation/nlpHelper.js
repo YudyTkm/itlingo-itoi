@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.NlpHelper = void 0;
 const nlpToken_1 = require("./nlpToken");
 const universalPosMapper_1 = __importDefault(require("./universalPosMapper"));
-//import nlp from 'compromise';
+/**
+ * Represents a natural language processing (NLP) helper to annotate text.
+ */
 class NlpHelper {
     constructor() {
         this._tokensByInput = new Map();
@@ -23,6 +25,13 @@ class NlpHelper {
         //     return word.replace(new RegExp(`(${Object.keys(endings).join('|')})$`), (r) => endings[r as keyof typeof endings]);
         // }
     }
+    /**
+     * Retrieves the NLP tokens for the given text and language type.
+     *
+     * @param languageType The linguistic language type.
+     * @param text         The input text to process.
+     * @returns An array of NlpToken objects representing the tokens in the text.
+     */
     getTokens(languageType, text) {
         if (!text) {
             return [];
