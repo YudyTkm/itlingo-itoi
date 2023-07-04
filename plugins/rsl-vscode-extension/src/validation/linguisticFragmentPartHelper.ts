@@ -14,6 +14,9 @@ import { NlpHelper } from './nlpHelper';
 import { getStereotypeType, getVisibleElements } from '../util/rsl-utilities';
 import { AstNode, getContainerOfType } from 'langium';
 
+/**
+ * Represents a helper to check a linguistic fragment part of a linguistic pattern.
+ */
 export class LinguisticFragmentPartHelper {
     private readonly _element: AstNode;
     private readonly _nlpHelper: NlpHelper;
@@ -25,6 +28,16 @@ export class LinguisticFragmentPartHelper {
     private _expectedOption: string | undefined;
     private readonly _expectedRuleElementProperty: LinguisticRuleElementAndProperty | undefined;
 
+    /**
+     * Initializes a new `LinguisticFragmentPartHelper` instance.
+     *
+     * @param linguisticLanguageType The language associated with the input.
+     * @param element                Element being verified.
+     * @param nlpHelper              NLP framework helper.
+     * @param fragmentPart           The part of the linguistic fragment.
+     * @param tokens                 NLP Tokens associated with the input. Optional.
+     * @param tokenIteratorCount     Tokens iterator count. Optional.
+     */
     constructor(
         linguisticLanguageType: LinguisticLanguageType,
         element: AstNode,
@@ -57,18 +70,34 @@ export class LinguisticFragmentPartHelper {
         }
     }
 
+    /**
+     * Gets the option type.
+     */
     public get optionType(): OptionType {
         return this._optionType;
     }
 
+    /**
+     * Gets the expected option.
+     */
     public get expectedOption(): string | undefined {
         return this._expectedOption;
     }
 
+    /**
+     * Gets the expected element property.
+     */
     public get expectedRuleElementProperty(): LinguisticRuleElementAndProperty | undefined {
         return this._expectedRuleElementProperty;
     }
 
+    /**
+     * Gets the matching text for `originalTextToMatch`.
+     *
+     * @param originalTextToMatch The original text to check.
+     * @return The string that matches the original text. In case of failure returns
+     *         an empty string.
+     */
     public getMatchingText(originalTextToMatch: string) {
         if (isPartOfSpeech(this._fragmentPart)) {
             let posTag = this._expectedOption as string;
@@ -114,6 +143,11 @@ export class LinguisticFragmentPartHelper {
         return '';
     }
 
+    /**
+     * Checks if the input is valid according to the fragment part.
+     *
+     * @returns An object containing the result of the validation and the updated token iterator count.
+     */
     public validateInput() {
         let tokens = this._tokens as NlpToken[];
         let tokenIteratorCount = this._tokenIteratorCount as number;
@@ -126,7 +160,7 @@ export class LinguisticFragmentPartHelper {
         } else if (isWord(this._fragmentPart)) {
             let text = this._expectedOption as string;
             let wordTokens = this._nlpHelper.getTokens(this._linguisticLanguageType, text);
-            let result = this.checkElementText(wordTokens, tokenIteratorCount, tokens, false);
+            let result = this.checkText(wordTokens, tokenIteratorCount, tokens, false);
 
             return result;
         } else if (isLinguisticRuleElementAndProperty(this._fragmentPart)) {
@@ -156,7 +190,7 @@ export class LinguisticFragmentPartHelper {
                         continue;
                     }
 
-                    let result = this.checkElementText(wordTokens, tokenIteratorCount, tokens, useLemma);
+                    let result = this.checkText(wordTokens, tokenIteratorCount, tokens, useLemma);
                     if (result.result) {
                         possibleTokensIteratorCount.add(result.tokenIteratorCount);
                     }
@@ -173,7 +207,7 @@ export class LinguisticFragmentPartHelper {
         return { result: false, tokenIteratorCount: tokenIteratorCount };
     }
 
-    private checkElementText(expectedWordTokens: NlpToken[], tokenIteratorCount: number, tokens: NlpToken[], useLemma: boolean) {
+    private checkText(expectedWordTokens: NlpToken[], tokenIteratorCount: number, tokens: NlpToken[], useLemma: boolean) {
         if (tokenIteratorCount + expectedWordTokens.length > tokens.length) {
             return { result: false, tokenIteratorCount: tokenIteratorCount };
         }
@@ -207,6 +241,12 @@ export class LinguisticFragmentPartHelper {
         return { result, tokenIteratorCount };
     }
 
+    /**
+     * Converts the part-of-speech tag defined in the grammar to the part-of-speech tag notation.
+     *
+     * @param posTagDescription The part-of-speech tag description to convert.
+     * @returns The abbreviated notation of part-of-speech.
+     */
     private getPosTag(posTagDescription: string): string {
         switch (posTagDescription) {
             case 'Adjective':
@@ -249,6 +289,9 @@ export class LinguisticFragmentPartHelper {
     }
 }
 
+/**
+ * Possible fragment options as defined in the grammar.
+ */
 export enum OptionType {
     ElementAndProperty,
     PartOfSpeech,

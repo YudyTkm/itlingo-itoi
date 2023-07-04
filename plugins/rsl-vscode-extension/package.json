@@ -32,7 +32,53 @@
                 "scopeName": "source.rsl",
                 "path": "./syntaxes/rsl.tmLanguage.json"
             }
-        ]
+        ],
+        "commands": [
+            {
+                "command": "rsl.generate.json",
+                "title": "Generate JSON file",
+                "icon": "$(file-symlink-file)",
+                "category": "RSL"
+            },
+            {
+                "command": "rsl.generate.text",
+                "title": "Generate Text file",
+                "icon": "$(file-symlink-file)",
+                "category": "RSL"
+            }
+        ],
+        "submenus": [
+            {
+              "id": "rsl.submenu",
+              "label": "Generate"
+            }
+        ],
+        "menus": {
+            "commandPalette": [
+                {
+                    "command": "rsl.generate.json",
+                    "when": "editorLangId == 'rsl'"
+                },
+                {
+                    "command": "rsl.generate.text",
+                    "when": "editorLangId == 'rsl'"
+                }
+            ],
+            "explorer/context": [
+                {
+                    "submenu": "rsl.submenu",
+                    "when": "resourceExtname == '.rsl'"
+                }
+            ],
+            "rsl.submenu": [                
+                {
+                    "command": "rsl.generate.json"
+                },
+                {
+                    "command": "rsl.generate.text"
+                }
+            ]
+        }
     },
     "activationEvents": [
         "onLanguage:rsl"

@@ -1,5 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * Provides a mapping between the tags used in the nlp-compromise framework and the Universal Dependencies (UD) tags.
+ * It allows for converting tags from the nlp-compromise framework to their corresponding UD tags.
+ */
 class UniversalPosMapper {
     static toUD(term) {
         if (term.tags.has('ProperNoun') && term.tags.has('Plural')) {
@@ -25,6 +29,12 @@ class UniversalPosMapper {
         }
         return 'X';
     }
+    /**
+     * Maps the tags in a given view to their corresponding UD tags.
+     * The mapped UD tag for each term is stored in the `term.ud` property.
+     * All possible UD tags for a term are stored in the `term.possibleTags` property.
+     * @param view - The view object containing the tags to be mapped.
+     */
     static map(view) {
         view.compute('tagRank');
         view.docs.forEach((terms) => {
@@ -47,9 +57,14 @@ class UniversalPosMapper {
         });
     }
 }
-// https://universaldependencies.org/tagset-conversion/en-penn-uposf.html
-// https://observablehq.com/@spencermountain/compromise-tags
-// https://github.com/spencermountain/compromise/blob/master/src/2-two/preTagger/compute/penn.js
+/**
+ * A static mapping object that maps nlp-compromise tags to their corresponding UD tags.
+ * The keys represent nlp-compromise tags, and the values represent their corresponding UD tags
+ * For more information, please visit:
+ * [Tagset en::penn](https://universaldependencies.org/tagset-conversion/en-penn-uposf.html),
+ * [Compromise/tags](https://observablehq.com/@spencermountain/compromise-tags),
+ * [penn.js](https://github.com/spencermountain/compromise/blob/master/src/2-two/preTagger/compute/penn.js)
+ */
 UniversalPosMapper.mapping = {
     // adverbs
     // 'Comparative': 'RBR',

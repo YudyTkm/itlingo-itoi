@@ -4,7 +4,20 @@ exports.OptionType = exports.LinguisticFragmentPartHelper = void 0;
 const ast_1 = require("../language-server/generated/ast");
 const rsl_utilities_1 = require("../util/rsl-utilities");
 const langium_1 = require("langium");
+/**
+ * Represents a helper to check a linguistic fragment part of a linguistic pattern.
+ */
 class LinguisticFragmentPartHelper {
+    /**
+     * Initializes a new `LinguisticFragmentPartHelper` instance.
+     *
+     * @param linguisticLanguageType The language associated with the input.
+     * @param element                Element being verified.
+     * @param nlpHelper              NLP framework helper.
+     * @param fragmentPart           The part of the linguistic fragment.
+     * @param tokens                 NLP Tokens associated with the input. Optional.
+     * @param tokenIteratorCount     Tokens iterator count. Optional.
+     */
     constructor(linguisticLanguageType, element, nlpHelper, fragmentPart, tokens, tokenIteratorCount) {
         this._linguisticLanguageType = linguisticLanguageType;
         this._element = element;
@@ -31,15 +44,31 @@ class LinguisticFragmentPartHelper {
             throw new Error('type ' + fragmentPart.$type + 'is not implemented.');
         }
     }
+    /**
+     * Gets the option type.
+     */
     get optionType() {
         return this._optionType;
     }
+    /**
+     * Gets the expected option.
+     */
     get expectedOption() {
         return this._expectedOption;
     }
+    /**
+     * Gets the expected element property.
+     */
     get expectedRuleElementProperty() {
         return this._expectedRuleElementProperty;
     }
+    /**
+     * Gets the matching text for `originalTextToMatch`.
+     *
+     * @param originalTextToMatch The original text to check.
+     * @return The string that matches the original text. In case of failure returns
+     *         an empty string.
+     */
     getMatchingText(originalTextToMatch) {
         if ((0, ast_1.isPartOfSpeech)(this._fragmentPart)) {
             let posTag = this._expectedOption;
@@ -79,6 +108,11 @@ class LinguisticFragmentPartHelper {
         }
         return '';
     }
+    /**
+     * Checks if the input is valid according to the fragment part.
+     *
+     * @returns An object containing the result of the validation and the updated token iterator count.
+     */
     validateInput() {
         let tokens = this._tokens;
         let tokenIteratorCount = this._tokenIteratorCount;
@@ -91,7 +125,7 @@ class LinguisticFragmentPartHelper {
         else if ((0, ast_1.isWord)(this._fragmentPart)) {
             let text = this._expectedOption;
             let wordTokens = this._nlpHelper.getTokens(this._linguisticLanguageType, text);
-            let result = this.checkElementText(wordTokens, tokenIteratorCount, tokens, false);
+            let result = this.checkText(wordTokens, tokenIteratorCount, tokens, false);
             return result;
         }
         else if ((0, ast_1.isLinguisticRuleElementAndProperty)(this._fragmentPart)) {
@@ -113,7 +147,7 @@ class LinguisticFragmentPartHelper {
                     if (tokenIteratorCount + wordTokens.length > tokens.length) {
                         continue;
                     }
-                    let result = this.checkElementText(wordTokens, tokenIteratorCount, tokens, useLemma);
+                    let result = this.checkText(wordTokens, tokenIteratorCount, tokens, useLemma);
                     if (result.result) {
                         possibleTokensIteratorCount.add(result.tokenIteratorCount);
                     }
@@ -126,7 +160,7 @@ class LinguisticFragmentPartHelper {
         }
         return { result: false, tokenIteratorCount: tokenIteratorCount };
     }
-    checkElementText(expectedWordTokens, tokenIteratorCount, tokens, useLemma) {
+    checkText(expectedWordTokens, tokenIteratorCount, tokens, useLemma) {
         if (tokenIteratorCount + expectedWordTokens.length > tokens.length) {
             return { result: false, tokenIteratorCount: tokenIteratorCount };
         }
@@ -155,6 +189,12 @@ class LinguisticFragmentPartHelper {
         tokenIteratorCount = currentIndex;
         return { result, tokenIteratorCount };
     }
+    /**
+     * Converts the part-of-speech tag defined in the grammar to the part-of-speech tag notation.
+     *
+     * @param posTagDescription The part-of-speech tag description to convert.
+     * @returns The abbreviated notation of part-of-speech.
+     */
     getPosTag(posTagDescription) {
         switch (posTagDescription) {
             case 'Adjective':
@@ -197,6 +237,9 @@ class LinguisticFragmentPartHelper {
     }
 }
 exports.LinguisticFragmentPartHelper = LinguisticFragmentPartHelper;
+/**
+ * Possible fragment options as defined in the grammar.
+ */
 var OptionType;
 (function (OptionType) {
     OptionType[OptionType["ElementAndProperty"] = 0] = "ElementAndProperty";

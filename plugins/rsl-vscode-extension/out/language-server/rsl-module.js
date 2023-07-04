@@ -8,6 +8,7 @@ const rsl_code_actions_1 = require("./rsl-code-actions");
 const rsl_scope_provider_1 = require("./rsl-scope-provider");
 const rsl_naming_1 = require("./rsl-naming");
 const rsl_scope_computation_1 = require("./rsl-scope-computation");
+const rsl_json_serializer_1 = require("../serializer/rsl-json-serializer");
 const rsl_completion_1 = require("./rsl-completion");
 const rsl_linker_1 = require("./rsl-linker");
 /**
@@ -28,6 +29,9 @@ exports.RslModule = {
         ScopeProvider: (services) => new rsl_scope_provider_1.RslScopeProvider(services),
         Linker: (services) => new rsl_linker_1.RslLinker(services),
         NameProvider: () => new rsl_naming_1.RslNameProvider(),
+    },
+    serializer: {
+        JsonSerializer: (services) => new rsl_json_serializer_1.RslJsonSerializer(services),
     },
 };
 /**
