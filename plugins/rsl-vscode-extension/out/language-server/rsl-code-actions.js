@@ -1,10 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RslActionProvider = void 0;
+const langium_1 = require("langium");
 const vscode_languageserver_types_1 = require("vscode-languageserver-types");
 const rsl_validator_1 = require("./rsl-validator");
 const rsl_utilities_1 = require("../util/rsl-utilities");
+/**
+ * Provides code actions for RSL documents.
+ */
 class RslActionProvider {
+    /**
+     * Handle a code action request.
+     *
+     * @param document    The LangiumDocument representing the document in which the code action is requested.
+     * @param params      The CodeActionParams containing information about the code action request.
+     * @param cancelToken Optional CancellationToken for cancellation support.
+     * @returns A MaybePromise that resolves to an array of Command or CodeAction objects, or undefined.
+     * @throws OperationCancelled if cancellation is detected during execution.
+     * @throws ResponseError if an error is detected that should be sent as a response to the client.
+     */
     getCodeActions(document, params, cancelToken) {
         const result = [];
         const acceptor = (ca) => ca && result.push(ca);
@@ -13,6 +27,13 @@ class RslActionProvider {
         }
         return result;
     }
+    /**
+     * Create code actions for a given diagnostic.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @param accept     A callback function to accept the created code action.
+     */
     createCodeActions(diagnostic, document, accept) {
         switch (diagnostic.code) {
             case rsl_validator_1.IssueCodes.ISA_HIERARCHY_CYCLE:
@@ -63,6 +84,13 @@ class RslActionProvider {
         }
         return undefined;
     }
+    /**
+     * Creates a code action for replacing the entire specification with all elements from a system.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
     replaceIncludeAll(diagnostic, document) {
         const range = diagnostic.range;
         const data = diagnostic.data;
@@ -85,6 +113,13 @@ class RslActionProvider {
             },
         };
     }
+    /**
+     * Creates a code action for replacing a specification with a specific element from a system.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
     replaceIncludeElement(diagnostic, document) {
         const range = diagnostic.range;
         const data = diagnostic.data;
@@ -107,6 +142,13 @@ class RslActionProvider {
             },
         };
     }
+    /**
+     * Creates a code action for creating a element specification with a specific property value.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
     createElement(diagnostic, document) {
         const range = diagnostic.range;
         const data = diagnostic.data;
@@ -127,13 +169,20 @@ class RslActionProvider {
                     [document.textDocument.uri]: [
                         {
                             range,
-                            newText: `\r\n\r\n${newElementSpecification}`,
+                            newText: `${langium_1.EOL}${langium_1.EOL}${newElementSpecification}`,
                         },
                     ],
                 },
             },
         };
     }
+    /**
+     * Creates a code action for removing excess text in a specification.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
     removeExcessText(diagnostic, document) {
         const range = diagnostic.range;
         const data = diagnostic.data;
@@ -157,6 +206,14 @@ class RslActionProvider {
             },
         };
     }
+    /**
+     * Creates a code action for removing a specific string in a specification.
+     *
+     * @param title      The title of the code action.
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
     removeString(title, diagnostic, document) {
         const range = diagnostic.range;
         // const activeFlow = document.parseResult.value as ActiveFlow
@@ -178,6 +235,13 @@ class RslActionProvider {
             },
         };
     }
+    /**
+     * Creates a code action for replacing a specific word with its synonym in a specification.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
     replaceWordBySynonym(diagnostic, document) {
         const range = diagnostic.range;
         const data = diagnostic.data;
@@ -203,6 +267,13 @@ class RslActionProvider {
             },
         };
     }
+    /**
+     * Creates a code action for replacing a specific word in a specification.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
     replaceText(diagnostic, document) {
         const range = diagnostic.range;
         const data = diagnostic.data;

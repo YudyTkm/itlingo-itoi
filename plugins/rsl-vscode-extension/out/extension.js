@@ -27,10 +27,16 @@ exports.deactivate = exports.activate = void 0;
 const vscode = __importStar(require("vscode"));
 const path = __importStar(require("path"));
 const node_1 = require("vscode-languageclient/node");
+const rsl_generator_factory_1 = require("./generator/rsl-generator-factory");
+const rsl_json_generator_1 = require("./generator/rsl-json-generator");
+const rsl_text_generator_1 = require("./generator/rsl-text-generator");
 let client;
 // This function is called when the extension is activated.
 function activate(context) {
     client = startLanguageClient(context);
+    const generatorFactory = new rsl_generator_factory_1.RslGeneratorFactory();
+    context.subscriptions.push(vscode.commands.registerCommand("rsl.generate.json", (x) => generatorFactory.execute(new rsl_json_generator_1.RslJsonGenerator(x))));
+    context.subscriptions.push(vscode.commands.registerCommand("rsl.generate.text", (x) => generatorFactory.execute(new rsl_text_generator_1.RsltextGenerator(x))));
 }
 exports.activate = activate;
 // This function is called when the extension is deactivated.

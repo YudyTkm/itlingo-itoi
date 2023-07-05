@@ -1,7 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NlpToken = void 0;
+/**
+ * Represents an natural language processing (NLP) token with its associated properties.
+ */
 class NlpToken {
+    /**
+     * Initializes a new `NlpToken` instance.
+     *
+     * @param originalText The original text of the token.
+     * @param pos          The part-of-speech (POS) tag of the token.
+     * @param lemma        The lemma (base form) of the token.
+     * @param possibleTags A Set of possible tags for the token.
+     */
     constructor(originalText, pos, lemma, possibleTags) {
         this._possibleTags = new Set();
         this._originalText = originalText;
@@ -9,29 +20,29 @@ class NlpToken {
         this._lemma = lemma;
         this._possibleTags = possibleTags;
     }
+    /**
+     * Gets the lemma (base form) of the token.
+     */
     get lemma() {
         return this._lemma;
     }
-    set lemma(value) {
-        this._lemma = value;
-    }
+    /**
+     * Gets the part-of-speech (POS) tag of the token.
+     */
     get pos() {
         return this._pos;
     }
-    set pos(value) {
-        this._pos = value;
-    }
+    /**
+     * Gets the possible tags for the token.
+     */
     get possibleTags() {
         return this._possibleTags;
     }
-    set possibleTags(value) {
-        this._possibleTags = value;
-    }
+    /**
+     * Gets the original text of the token.
+     */
     get originalText() {
         return this._originalText;
-    }
-    set originalText(value) {
-        this._originalText = value;
     }
 }
 exports.NlpToken = NlpToken;

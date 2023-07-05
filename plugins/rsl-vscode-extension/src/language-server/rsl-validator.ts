@@ -1,4 +1,4 @@
-import { AstNode, ValidationAcceptor, ValidationChecks, getContainerOfType } from 'langium';
+import { AstNode, EOL, ValidationAcceptor, ValidationChecks, getContainerOfType } from 'langium';
 import {
     RslAstType,
     ActiveFlow,
@@ -130,7 +130,7 @@ export function registerValidationChecks(services: RslServices) {
         IncludeAll: [validator.checkIncludeAll],
         IncludeElement: [validator.checkIncludeElement],
         LinguisticFragment: validator.checkLinguisticFragment,
-        LinguisticLanguage: validator.checkLinguisticLanguage,
+        LinguisticLanguage: validator.checkUniqueLinguisticLanguage,
         LinguisticRule: validator.checkLinguisticRule,
         MainScenario: validator.checkMainScenario,
         OtherElement: validator.checkOtherElement,
@@ -207,6 +207,12 @@ export class RslValidator {
         this.nlpHelper = new NlpHelper();
     }
 
+    /**
+     * Checks if ActiveFlow type condition is consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkActiveFlowCondition(element: ActiveFlow, accept: ValidationAcceptor): void {
         if (!element.condition || !element.type) {
             return;
@@ -225,6 +231,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if ActiveTask type is consistent with participants.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkActiveTaskParticipantTarget(element: ActiveTask, accept: ValidationAcceptor): void {
         if (!element.participantTarget || !element.type) {
             return;
@@ -243,6 +255,14 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of Behavior Elements taking into account synonyms and linguistic rules
+     * defined.
+     *
+     * @param behaviorElement RSL element to check.
+     * @param accept          The validation acceptor function to handle validation issues.
+     */
     checkBehaviorElement(element: BehaviorElement, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -266,6 +286,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if constraint type and sub-types are consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkConstraintTypeSubType(element: Constraint, accept: ValidationAcceptor): void {
         if (!element.type || !element.subType) {
             return;
@@ -288,6 +314,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of DataAttributes taking into account synonyms and linguistic rules defined.
+     *
+     * @param dataAttribute RSL element to check.
+     * @param accept        The validation acceptor function to handle validation issues.
+     */
     checkDataAttributeElement(element: DataAttribute, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -311,6 +344,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if goal type and sub-types are consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkGoalTypeSubType(element: Goal, accept: ValidationAcceptor): void {
         if (!element.type || !element.subType) {
             return;
@@ -333,6 +372,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if there are elements that can be copied to the system.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkIncludeAll(element: IncludeAll, accept: ValidationAcceptor): void {
         if (!element.system) {
             return;
@@ -352,7 +397,7 @@ export class RslValidator {
             if (!concept.$cstNode?.text) {
                 continue;
             }
-            newElementsText += `\r\n${concept.$cstNode?.text}\r\n`;
+            newElementsText += `${EOL}${concept.$cstNode?.text}${EOL}`;
         }
 
         accept('info', `Replace this specification with all elements from the ${systemName} system`, {
@@ -362,6 +407,12 @@ export class RslValidator {
         });
     }
 
+    /**
+     * Checks if there are elements that can be copied to the system.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkIncludeElement(element: IncludeElement, accept: ValidationAcceptor): void {
         if (!element.element || !element.type) {
             return;
@@ -388,23 +439,13 @@ export class RslValidator {
         });
     }
 
-    checkLinguisticLanguage(element: LinguisticLanguage, accept: ValidationAcceptor): void {
-        const system = getContainerOfType(element, isSystem);
-
-        if (!system) {
-            return;
-        }
-
-        const linguisticRules = getLinguisticLanguages(system);
-
-        if (linguisticRules.length > 1) {
-            accept('error', 'Detected multiple linguistic language elements. Please use only one', {
-                node: element,
-                code: IssueCodes.INVALID_LINGUISTICLANGUAGE,
-            });
-        }
-    }
-
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of LinguisticFragments regarding the use of synonyms defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkLinguisticFragment(element: LinguisticFragment, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -428,6 +469,13 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of LinguisticRules regarding the use of synonyms defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkLinguisticRule(element: LinguisticRule, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -451,6 +499,13 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of MainScenarios taking into account synonyms and linguistic rules defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkMainScenario(element: MainScenario, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -474,6 +529,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if the active task element has a cycle in its 'part-of' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInActiveTaskPartOfHierarchy(element: ActiveTask, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -512,6 +573,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the actor element has a cycle in its 'is-a' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInActorIsAHierarchy(element: Actor, accept: ValidationAcceptor): void {
         let superElement = element.super;
 
@@ -550,6 +617,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the constraint element has a cycle in its part-of relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInConstraintPartOfHierarchy(element: Constraint, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -588,6 +661,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the data entity element has a cycle in its 'is-a' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInDataEntityIsAHierarchy(element: DataEntity, accept: ValidationAcceptor): void {
         let superElement = element.super;
 
@@ -626,6 +705,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the FR element has a cycle in its 'part-of' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInFRPartOfHierarchy(element: FR, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -664,6 +749,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the glossary term element has a cycle in its 'is-a' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInGlossaryTermIsAHierarchy(element: GlossaryTerm, accept: ValidationAcceptor): void {
         let superElement = element.super;
 
@@ -702,6 +793,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the glossary term element has a cycle in its 'part-of' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInGlossaryTermPartOfHierarchy(element: GlossaryTerm, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -740,6 +837,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the goal element has a cycle in its 'part-of' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInGoalPartOfHierarchy(element: Goal, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -778,6 +881,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the QR element has a cycle in its 'part-of' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInQRPartOfHierarchy(element: QR, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -816,6 +925,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the risk element has a cycle in its 'part-of' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInRiskPartOfHierarchy(element: Risk, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -854,6 +969,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the stakeholder element has a cycle in its 'is-a' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInStakeholderIsAHierarchy(element: Stakeholder, accept: ValidationAcceptor): void {
         let superElement = element.super;
 
@@ -892,6 +1013,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the stakeholder element has a cycle in its 'part-of' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInStakeholderPartOfHierarchy(element: Stakeholder, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -930,6 +1057,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the step element has a cycle in its 'next' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInStepsHierarchy(element: Step, accept: ValidationAcceptor): void {
         let nextElement = element.next;
 
@@ -968,6 +1101,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the user story element has a cycle in its part-of relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInUserStoryPartOfHierarchy(element: UserStory, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -1006,6 +1145,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the vulnerability element has a cycle in its 'is-a' relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInVulnerabilityIsAHierarchy(element: Vulnerability, accept: ValidationAcceptor): void {
         let superElement = element.super;
 
@@ -1044,6 +1189,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the vulnerability element has a cycle in its 'part-of'
+     * relationships.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkNoCycleInVulnerabilityPartOfHierarchy(element: Vulnerability, accept: ValidationAcceptor): void {
         let partOfElement = element.partOf;
 
@@ -1082,6 +1234,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of OtherElements taking into account synonyms and linguistic rules defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkOtherElement(element: OtherElement, accept: ValidationAcceptor): void {
         if (!element.name) {
             return;
@@ -1109,6 +1268,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if QR type and sub-types are consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkQRTypeSubType(element: QR, accept: ValidationAcceptor): void {
         if (!element.type || !element.subType) {
             return;
@@ -1131,6 +1296,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of Requirements taking into account synonyms and linguistic rules defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkRequirement(element: Requirement, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -1154,6 +1326,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if the source and target are the same in a requirements relation.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkRequirementsRelationSrcTrgt(element: RequirementsRelation, accept: ValidationAcceptor): void {
         if (!element.source || !element.target) {
             return;
@@ -1168,6 +1346,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if risk type and sub-types are consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkRiskTypeSubType(element: Risk, accept: ValidationAcceptor): void {
         if (!element.type || !element.subType) {
             return;
@@ -1190,6 +1374,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of Scenarios regarding the use of synonyms and the linguistic rules defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkScenario(element: Scenario, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -1213,6 +1404,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if stakeholder type and sub-types are consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkStakeholderTypeSubType(element: Stakeholder, accept: ValidationAcceptor): void {
         if (!element.type || !element.subType) {
             return;
@@ -1235,6 +1432,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if StateMachine has initial and final state.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkStateMachineStates(element: StateMachine, accept: ValidationAcceptor): void {
         let states = element.states?.states as State[];
         let hasInitialState = false;
@@ -1267,6 +1470,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of Steps regarding the use of synonyms and the linguistic rules defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkStep(element: Step, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -1290,6 +1500,14 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of StructureElements regarding the use of synonyms and the linguistic rules
+     * defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkStructureElement(element: StructureElement, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -1313,6 +1531,14 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of SystemRelations regarding the use of synonyms and the linguistic rules
+     * defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkSystemRelation(element: SystemRelation, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -1336,6 +1562,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if the source and target are the same in a system relation.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkSystemRelationSrcTrgt(element: SystemsRelation, accept: ValidationAcceptor): void {
         if (!element.source || !element.target) {
             return;
@@ -1350,6 +1582,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of SystemSets regarding the use of synonyms and the linguistic rules defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkSystemSet(element: SystemSet, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -1373,6 +1612,12 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if system type and sub-types are consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkSystemTypeSubType(element: System, accept: ValidationAcceptor): void {
         if (!element.type || !element.subType) {
             return;
@@ -1395,6 +1640,13 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if the name ID is unique and checks name, name alias and descriptions
+     * of Tests regarding the use of synonyms and the linguistic rules defined.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkTest(element: Test, accept: ValidationAcceptor): void {
         const system = getContainerOfType(element, isSystem);
 
@@ -1418,6 +1670,35 @@ export class RslValidator {
         this.checkUniqueElementId(element.name, element, system, accept);
     }
 
+    /**
+     * Checks if there is more than one linguistic language element.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
+    checkUniqueLinguisticLanguage(element: LinguisticLanguage, accept: ValidationAcceptor): void {
+        const system = getContainerOfType(element, isSystem);
+
+        if (!system) {
+            return;
+        }
+
+        const linguisticRules = getLinguisticLanguages(system);
+
+        if (linguisticRules.length > 1) {
+            accept('error', 'Detected multiple linguistic language elements. Please use only one', {
+                node: element,
+                code: IssueCodes.INVALID_LINGUISTICLANGUAGE,
+            });
+        }
+    }
+
+    /**
+     * Checks if a UseCase extends itself.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkUseCaseExtendsItself(element: UseCase, accept: ValidationAcceptor): void {
         if (!element.extends) {
             return;
@@ -1434,6 +1715,12 @@ export class RslValidator {
         });
     }
 
+    /**
+     * Checks if vulnerability type and sub-types are consistent.
+     *
+     * @param element RSL element to check.
+     * @param accept  The validation acceptor function to handle validation issues.
+     */
     checkVulnerabilityTypeSubType(element: Vulnerability, accept: ValidationAcceptor): void {
         if (!element.type || !element.subType) {
             return;
@@ -1456,6 +1743,15 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks for synonyms in a RSL element name alias or description.
+     *
+     * @param glossaryTerms    Available glossary of terms.
+     * @param element          RSL element being checked.
+     * @param input            Input to check.
+     * @param elementAttribute RSL element attribute.
+     * @param accept           The validation acceptor function to handle validation issues.
+     */
     private checkSynonyms(
         glossaryTerms: GlossaryTerm[],
         element: AstNode,
@@ -1492,6 +1788,15 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if `objectElementName` is a unique id within the same system.
+     *
+     * @param inputElementName  The ID to check.
+     * @param element           The RSL element associated with the `inputElementName`.
+     * @param system            The system object.
+     * @param linguisticRules   The linguistic rules.
+     * @param accept            The validation acceptor function to handle validation issues.
+     */
     private checkUniqueElementId(inputElementName: string, element: AstNode, system: System, accept: ValidationAcceptor) {
         let foundDuplicate = false;
 
@@ -1559,6 +1864,17 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Checks if a RSL element ID, name or description matches at least one of the given linguistic rules.
+     *
+     * @param rules            Linguistic rules defined.
+     * @param element          RSL element being checked.
+     * @param input            Input to check.
+     * @param elementAttribute RSL element attribute which the input belongs to.
+     * @param ruleProperty     Linguistic rule property.
+     * @param languageType     The linguistic language of the specification document.
+     * @param accept           The validation acceptor function to handle validation issues.
+     */
     private checkLinguisticRules(
         rules: LinguisticRule[],
         element: AstNode,
@@ -1695,6 +2011,20 @@ export class RslValidator {
         return { wrongText, correctText };
     }
 
+    /**
+     * Verifies if a linguistic pattern for an element Id is valid.
+     *
+     * @param element           Element being verified.
+     * @param pattern           Linguistic pattern.
+     * @param input             String being verified.
+     * @param characterIterator Character iterator count.
+     * @param elementAttribute  RSL element attribute.
+     * @param errorMessage      Message to display in case of error.
+     * @param severityLevel     Rule severity level.
+     * @param languageType      The language associated with the input.
+     * @param accept            The validation acceptor function to handle validation issues.
+     * @return An object containing the result of the validation and the updated character iterator count.
+     */
     checkElementIdLinguisticPattern(
         element: AstNode,
         pattern: LinguisticPattern,
@@ -1892,6 +2222,21 @@ export class RslValidator {
         return { result: false, charIteratorCount: characterIterator };
     }
 
+    /**
+     * Verifies if a linguistic pattern is valid.
+     *
+     * @param element            Element being verified.
+     * @param pattern            Linguistic pattern.
+     * @param tokens             NLP tokens.
+     * @param tokenIteratorCount Token iterator count.
+     * @param input              String being verified.
+     * @param elementAttribute   RSL element attribute.
+     * @param errorMessage       Message to display in case of error.
+     * @param severityLevel      Rule severity level.
+     * @param languageType       The language associated with the input.
+     * @param accept             The validation acceptor function to handle validation issues.
+     * @return An object containing the result of the validation and the updated token iterator count.
+     */
     checkLinguisticPattern(
         element: AstNode,
         pattern: LinguisticPattern,
@@ -1901,7 +2246,7 @@ export class RslValidator {
         elementAttribute: string,
         errorMessage: string,
         severityLevel: LinguisticRuleSeverityLevel,
-        linguisticLanguageType: LinguisticLanguageType,
+        languageType: LinguisticLanguageType,
         accept: ValidationAcceptor
     ) {
         let originalText = tokens[tokenIteratorCount].originalText;
@@ -1920,7 +2265,7 @@ export class RslValidator {
 
                 for (let option of linguisticOption.options) {
                     let patternOptionHelper = new LinguisticFragmentPartHelper(
-                        linguisticLanguageType,
+                        languageType,
                         element,
                         this.nlpHelper,
                         option,
@@ -1942,7 +2287,7 @@ export class RslValidator {
                 }
             } else {
                 let patternOptionHelper = new LinguisticFragmentPartHelper(
-                    linguisticLanguageType,
+                    languageType,
                     element,
                     this.nlpHelper,
                     fragmentPart,
@@ -2070,6 +2415,17 @@ export class RslValidator {
         return { result: false, tokenIteratorCount: tokenIteratorCount };
     }
 
+    /**
+     * Gets a detailed explanation for a given error.
+     *
+     * @param originalText                  Text that doesn't match a given
+     *                                      linguistic fragment part.
+     * @param expectedPartOfSpeech          Expected part of speech.
+     * @param expectedWords                 Expected words.
+     * @param expectedElementsAndProperties Expected linguistic rule elements.
+     * @param linguisticFragmentHelpers     Expected linguistic fragment part helpers.
+     * @return Detailed error information.
+     */
     getDetailedErrorInfo(
         originalText: string,
         expectedPartOfSpeech: Set<string>,
@@ -2080,7 +2436,7 @@ export class RslValidator {
         let expectedPartOfSpeechesList: string[] = [];
         expectedPartOfSpeech.forEach((x) => expectedPartOfSpeechesList.push(x));
 
-        let additionalInfo = `"\r\nThe word '${originalText}' is expected to`;
+        let additionalInfo = `"${EOL}The word '${originalText}' is expected to`;
 
         for (let i = 0; i < expectedPartOfSpeechesList.length; i++) {
             let expectedPosTag = expectedPartOfSpeechesList[i];
@@ -2131,6 +2487,16 @@ export class RslValidator {
         return additionalInfo;
     }
 
+    /**
+     * Displays a validation error.
+     *
+     * @param severity         Linguistic rule severity level.
+     * @param errorMessage     Error message to display.
+     * @param elementAttribute Element attribute.
+     * @param issueCode        Issue code.
+     * @param accept           The validation acceptor function to handle validation issues.
+     * @param issueData        Issue data.
+     */
     displayValidationError(
         element: AstNode,
         severity: LinguisticRuleSeverityLevel,
@@ -2154,6 +2520,12 @@ export class RslValidator {
         }
     }
 
+    /**
+     * Gets error message to display for a given pattern.
+     *
+     * @param patterns Pattern that didn't match.
+     * @return Error message.
+     */
     private getWrongPatternErrorMessage(patterns: LinguisticPattern[]): string {
         let errorMessage = "This text must follow the pattern '";
 
