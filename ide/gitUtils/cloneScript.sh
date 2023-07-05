@@ -24,6 +24,6 @@ git clone $repo $workspaceDir
 cd $workspaceDir
 git config user.name "$username"
 git config user.email "$username@itoi.com"
-
+git config pull.rebase true
 ##Move files from the temporary folder back here
 mv -v $destDir/* $workspaceDir/
