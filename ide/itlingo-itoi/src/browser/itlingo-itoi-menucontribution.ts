@@ -215,6 +215,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         inputBox1.description = "Please input your username"
         inputBox1.placeholder = "john"
         inputBox1.value = localStorage.getItem("gituser.username") ?? '';
+        inputBox1.ignoreFocusOut = true;
         inputBox1.onDidAccept(() => {
             gitUser.username = inputBox1.value?.toString() ?? '';
             let inputBox2 = this.quickInputService.createInputBox();
@@ -222,6 +223,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
             inputBox2.placeholder = "******"
             inputBox2.password = true
             inputBox2.value = localStorage.getItem("gituser.accesscode") ?? '';
+            inputBox2.ignoreFocusOut = true;
             inputBox2.onDidAccept(() => {
                 gitUser.accessCode = inputBox2.value?.toString() ?? '';
                 let inputBox3 = this.quickInputService.createInputBox();
@@ -229,6 +231,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
                 inputBox3.value = localStorage.getItem("gituser.repo") ?? '';
                 inputBox3.placeholder = "https://github.com/username/repo.git";
                 inputBox3.password = false;
+                inputBox3.ignoreFocusOut = true;
                 inputBox3.onDidAccept(() => {
                     gitUser.repository = inputBox3.value?.toString() ?? '';
                     this.callCloneBatch();
