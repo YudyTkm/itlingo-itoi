@@ -325,6 +325,37 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         });
 
 
+        app.get('/gitCheckout', (req, res) => {
+            let ip = requestIp.getClientIp(req);
+            if(currentEditors[ip]) {
+                console.log("Checkout!!");
+                let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git checkout ${req.query.data}`).toString();
+                if(output === '') output = "Sucess!"
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.json({
+                        output: output
+                    })
+                    res.end(); 
+            }
+        });
+
+        app.get('/gitBranch', (req, res) => {
+            let ip = requestIp.getClientIp(req);
+            if(currentEditors[ip]) {
+                console.log("Branch!!");
+                let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git checkout -b ${req.query.data}`).toString();
+                if(output === '') output = "Sucess!"
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.json({
+                        output: output
+                    })
+                    res.end(); 
+            }
+        });
+
+
         app.get('/gitPull', (req, res) => {
             let ip = requestIp.getClientIp(req);
             if(currentEditors[ip]) {

@@ -82,7 +82,7 @@
           "when": "scmProvider == git"
         },
         {
-          "command": "extended.git.pull",
+          "command": "extended.git.push",
           "group": "0_header@3",
           "when": "scmProvider == git"
         }

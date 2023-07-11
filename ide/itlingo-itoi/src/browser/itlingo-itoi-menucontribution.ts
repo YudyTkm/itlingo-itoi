@@ -44,6 +44,8 @@ export const StopCollab : Command = {
 
 
 
+
+
 @injectable()
 export class TheiaExampleMenuContribution implements MenuContribution, TabBarToolbarContribution {
     @inject(CommandRegistry) protected readonly  commands: CommandRegistry;
@@ -76,11 +78,11 @@ export class TheiaExampleMenuContribution implements MenuContribution, TabBarToo
             command: GIT_COMMANDS.CLONE.id,
             tooltip: GIT_COMMANDS.CLONE.label,
             group: this.asSubMenuItemOf(GIT_MENUS.SUBMENU_PULL_PUSH, 0)
-        })
+        });
 
     }
     async registerMenus(menus: MenuModelRegistry): Promise<void> {
-
+        
     }
 }
 
@@ -103,28 +105,38 @@ export class TheiaExampleCommandContribution implements CommandContribution {
 
    async registerCommands(commands: CommandRegistry): Promise<void> {
         
-        commands.unregisterCommand(GIT_COMMANDS.PULL);
-        commands.unregisterCommand(GIT_COMMANDS.PULL_DEFAULT);
+        // commands.unregisterCommand(GIT_COMMANDS.PULL);
+        // commands.unregisterCommand(GIT_COMMANDS.PULL_DEFAULT);
         commands.unregisterCommand(GIT_COMMANDS.PULL_DEFAULT_FAVORITE);
-        commands.unregisterCommand(GIT_COMMANDS.PUSH);
-        commands.unregisterCommand(GIT_COMMANDS.PUSH_DEFAULT);
+        // commands.unregisterCommand(GIT_COMMANDS.PUSH);
+        // commands.unregisterCommand(GIT_COMMANDS.PUSH_DEFAULT);
         commands.unregisterCommand(GIT_COMMANDS.PUSH_DEFAULT_FAVORITE);
         commands.unregisterCommand(GIT_COMMANDS.CLONE);
         commands.unregisterCommand(GIT_COMMANDS.FETCH);
 
-        GIT_MENUS.SUBMENU_PULL_PUSH.label = "Pull, Push, Clone";
+        GIT_MENUS.SUBMENU_PULL_PUSH.label = "Extended Actions";
         GIT_COMMANDS.FETCH.label = "Clone...";
+        
+        GIT_COMMANDS.PULL_DEFAULT_FAVORITE.label = "New branch";
+        GIT_COMMANDS.PUSH_DEFAULT_FAVORITE.label = "Checkout branch";
+
         commands.registerCommand(GIT_COMMANDS.FETCH, {
             execute: () => { 
                 this.myGitClone(); 
             } 
         } as CommandHandler);
-        commands.registerCommand(GIT_COMMANDS.PUSH, {
-            execute:  () => { this.myGitPush(); } 
+        // commands.registerCommand(GIT_COMMANDS.PUSH, {
+        //     execute:  () => { this.myGitPush(); } 
+        // } as CommandHandler);
+        commands.registerCommand(GIT_COMMANDS.PULL_DEFAULT_FAVORITE, {
+            execute:  () => { this.myGitBranch(); } 
         } as CommandHandler);
-        commands.registerCommand(GIT_COMMANDS.PULL, {
-            execute: () => { this.myGitPull(); } 
-        } as CommandHandler);
+        // commands.registerCommand(GIT_COMMANDS.PUSH_DEFAULT_FAVORITE, {
+        //     execute:  () => { this.myGitCheckout(); } 
+        // } as CommandHandler);
+        // commands.registerCommand(GIT_COMMANDS.PULL, {
+        //     execute: () => { this.myGitPull(); } 
+        // } as CommandHandler);
         // commands.registerCommand(StartCollab, {
         //     execute: () => { 
         //         this.messageService.info("Start!");
@@ -147,6 +159,38 @@ export class TheiaExampleCommandContribution implements CommandContribution {
 
         
 
+    }
+    myGitCheckout() {
+        let inputBox1 = this.quickInputService.createInputBox();
+        inputBox1.description = "Please insert the branch name to checkout:"
+        inputBox1.placeholder = "Checkout branch"
+        inputBox1.value = '';
+        inputBox1.ignoreFocusOut = true;
+        inputBox1.onDidAccept(() => {
+            axios.get("/gitCheckout", {params:{ data: inputBox1.value }})
+            .then((e) =>{
+                this.messageService.info("Checkout output: " + e.data.output);
+            });
+            inputBox1.hide();
+        });
+        inputBox1.show();
+
+   
+    }
+    myGitBranch() {
+        let inputBox1 = this.quickInputService.createInputBox();
+        inputBox1.description = "Please insert the new branch name:"
+        inputBox1.placeholder = "New Branch"
+        inputBox1.value = '';
+        inputBox1.ignoreFocusOut = true;
+        inputBox1.onDidAccept(() => {
+            axios.get("/gitBranch", {params:{data:inputBox1.value }})
+            .then((e) =>{
+                this.messageService.info("Branch output: " + e.data.output);
+            });
+            inputBox1.hide();
+        });
+        inputBox1.show();
     }
 
     myGitPull(){
