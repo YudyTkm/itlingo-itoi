@@ -35,8 +35,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RslCompletionProvider = void 0;
 const langium_1 = require("langium");
 const ast = __importStar(require("langium/lib/grammar/generated/ast"));
-const vscode_languageserver_1 = require("vscode-languageserver");
+const node_1 = require("vscode-languageserver/node");
 class RslCompletionProvider extends langium_1.DefaultCompletionProvider {
+    constructor(services) {
+        super(services);
+    }
     getCompletion(document, params) {
         return __awaiter(this, void 0, void 0, function* () {
             const root = document.parseResult.value;
@@ -65,7 +68,7 @@ class RslCompletionProvider extends langium_1.DefaultCompletionProvider {
             if (!node) {
                 const parserRule = (0, langium_1.getEntryRule)(this.grammar);
                 yield this.completionForRule(context, parserRule, acceptor);
-                return vscode_languageserver_1.CompletionList.create(items, true);
+                return node_1.CompletionList.create(items, true);
             }
             const parserStart = this.backtrackToTokenStart(text, offset);
             const beforeFeatures = this.findFeaturesAt(textDocument, parserStart);
@@ -91,7 +94,7 @@ class RslCompletionProvider extends langium_1.DefaultCompletionProvider {
                     .distinct(distinctionFunction)
                     .map(e => this.completionFor(context, e, acceptor)));
             }
-            return vscode_languageserver_1.CompletionList.create(items, true);
+            return node_1.CompletionList.create(items, true);
         });
     }
     completionFor(context, next, acceptor) {
@@ -110,7 +113,7 @@ class RslCompletionProvider extends langium_1.DefaultCompletionProvider {
         if (keyword.value.match(/[\[]|[\]]|[\(]|[\)]|[\:]/)) {
             return acceptor({
                 label: keyword.value,
-                kind: vscode_languageserver_1.CompletionItemKind.Keyword,
+                kind: node_1.CompletionItemKind.Keyword,
                 detail: 'Keyword',
                 sortText: '-1'
             });
@@ -118,7 +121,7 @@ class RslCompletionProvider extends langium_1.DefaultCompletionProvider {
         }
         acceptor({
             label: keyword.value,
-            kind: vscode_languageserver_1.CompletionItemKind.Keyword,
+            kind: node_1.CompletionItemKind.Keyword,
             detail: 'Keyword',
             sortText: '1'
         });

@@ -123,7 +123,7 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
             }
             if (refInfo.property === 'references') {
                 if (context.$container.type.type === 'UseCaseView') {
-                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase').toArray();
+                    let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase' || x.type === 'Actor').toArray();
                     return this.createScope(elements);
                 }
                 else if (context.$container.type.type === 'ActiveElementView') {

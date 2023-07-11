@@ -30,19 +30,30 @@ const node_1 = require("vscode-languageclient/node");
 const rsl_generator_factory_1 = require("./generator/rsl-generator-factory");
 const rsl_json_generator_1 = require("./generator/rsl-json-generator");
 const rsl_text_generator_1 = require("./generator/rsl-text-generator");
-let client;
+// import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
+const sprotty_vscode_1 = require("sprotty-vscode");
+// import { SprottyDiagramIdentifier, createFileUri, createWebviewPanel, registerDefaultCommands } from 'sprotty-vscode';
+const lsp_1 = require("sprotty-vscode/lib/lsp");
+let languageClient;
 // This function is called when the extension is activated.
 function activate(context) {
-    client = startLanguageClient(context);
+    languageClient = startLanguageClient(context);
     const generatorFactory = new rsl_generator_factory_1.RslGeneratorFactory();
     context.subscriptions.push(vscode.commands.registerCommand("rsl.generate.json", (x) => generatorFactory.execute(new rsl_json_generator_1.RslJsonGenerator(x))));
     context.subscriptions.push(vscode.commands.registerCommand("rsl.generate.text", (x) => generatorFactory.execute(new rsl_text_generator_1.RsltextGenerator(x))));
+    const webviewPanelManager = new CustomLspWebview({
+        extensionUri: context.extensionUri,
+        defaultDiagramType: 'rsl',
+        languageClient,
+        supportedFileExtensions: ['.rsl']
+    });
+    (0, sprotty_vscode_1.registerDefaultCommands)(webviewPanelManager, context, { extensionPrefix: 'rsl' });
 }
 exports.activate = activate;
 // This function is called when the extension is deactivated.
 function deactivate() {
-    if (client) {
-        return client.stop();
+    if (languageClient) {
+        return languageClient.stop();
     }
     return undefined;
 }
@@ -74,5 +85,10 @@ function startLanguageClient(context) {
     // Start the client. This will also launch the server
     client.start();
     return client;
+}
+class CustomLspWebview extends lsp_1.LspWebviewPanelManager {
+    constructor(options) {
+        super(options);
+    }
 }
 //# sourceMappingURL=extension.js.map

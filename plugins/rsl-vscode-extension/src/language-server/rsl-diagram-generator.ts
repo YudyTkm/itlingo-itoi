@@ -46,10 +46,10 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
                         if(!elem.ref) continue;
                         if(elem.ref.$type === 'UseCase') {
                             let uc  = elem.ref as UseCase;
-                            nodes.push(this.generateUseCaseNode(uc, args));
+                            nodes.push(this.generateUseCaseNode(uc,v, args));
                         } else if(elem.ref.$type === 'Actor') {
                             let actor  = elem.ref as Actor;
-                            let actorNode = this.generateActorNode(actor, args);
+                            let actorNode = this.generateActorNode(actor,v, args);
                             if(actorNode) nodes.push(actorNode);
                         }
                     }
@@ -89,8 +89,8 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
     }
 
 
-    protected generateUseCaseNode(uc: UseCase, { idCache }: GeneratorContext<Model>): SNode {
-        const nodeId = idCache.uniqueId(uc.name, uc);
+    protected generateUseCaseNode(uc: UseCase,v: View, { idCache }: GeneratorContext<Model>): SNode {
+        const nodeId = idCache.uniqueId(uc.name, uc) + idCache.uniqueId(v.name, v);
         return {
             type: 'node',
             id: nodeId,
@@ -111,14 +111,14 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
                 paddingBottom: 10.0,
                 paddingLeft: 10.0,
                 paddingRight: 10.0,
-                "background-color": "coral"
+                "background-color": "green"
             }
         };
     }
 
-    protected generateActorNode(actor: Actor, { idCache }: GeneratorContext<Model>): SNode | undefined {
-        if (idCache.isIdAlreadyUsed(actor.name)) return ;
-        const nodeId = idCache.uniqueId(actor.name, actor);
+    protected generateActorNode(actor: Actor,v: View, { idCache }: GeneratorContext<Model>): SNode | undefined {
+        if (idCache.isIdAlreadyUsed(actor.name) && idCache.isIdAlreadyUsed(v.name)) return ;
+        const nodeId = idCache.uniqueId(actor.name, actor)  + idCache.uniqueId(v.name, v);;
         return {
             type: 'node',
             id: nodeId,
@@ -162,7 +162,7 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
                             let uc  = elem.ref as UseCase;
                             if(uc.primaryActor && uc.primaryActor.ref && isActorInView(uc.primaryActor.ref, v)) {
                                 let actor: Actor = uc.primaryActor.ref as Actor;
-                                edges.push(this.generateActorInitiatesEdge(actor, uc, args))
+                                edges.push(this.generateActorInitiatesEdge(actor, uc,v, args))
                             }
 
                             if(uc.includes){
@@ -170,7 +170,7 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
                                     for(const ucref of includeUC.refs){
                                         if(ucref.ref && isUseCaseInView(ucref.ref, v)){
                                             let useCase: UseCase = ucref.ref as UseCase;
-                                            edges.push(this.generateUseCaseIncludesEdge(useCase, uc, args))
+                                            edges.push(this.generateUseCaseIncludesEdge(useCase, uc,v, args))
                                         }
                                     }
                                 }
@@ -180,7 +180,7 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
                                 for(const extendsUC of uc.extends){
                                     if(extendsUC.usecase.ref && isUseCaseInView(extendsUC.usecase.ref, v)){
                                         let useCase: UseCase = extendsUC.usecase.ref as UseCase;
-                                        edges.push(this.generateUseCaseExtendsEdge(useCase, uc, args))
+                                        edges.push(this.generateUseCaseExtendsEdge(useCase, uc, v, args))
                                     }
                                 }
 
@@ -195,9 +195,9 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
         }
         return edges
     }
-    generateUseCaseIncludesEdge(useCase: UseCase, uc: UseCase, { idCache }: GeneratorContext<Model>): SEdge {
-        const sourceId = idCache.getId(uc);
-        const destinationId = idCache.getId(useCase);
+    generateUseCaseIncludesEdge(useCase: UseCase, uc: UseCase, v: View,  { idCache }: GeneratorContext<Model>): SEdge {
+        const sourceId = idCache.getId(uc) as string + idCache.getId(v);
+        const destinationId = idCache.getId(useCase) as string + idCache.getId(v);
         
         return {
             type: 'edge',
@@ -214,9 +214,9 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
         };
     }
     
-    generateUseCaseExtendsEdge(useCase: UseCase, uc: UseCase, { idCache }: GeneratorContext<Model>): SEdge {
-        const sourceId = idCache.getId(uc);
-        const destinationId = idCache.getId(useCase);
+    generateUseCaseExtendsEdge(useCase: UseCase, uc: UseCase, v: View, { idCache }: GeneratorContext<Model>): SEdge {
+        const sourceId = idCache.getId(uc) as string + idCache.getId(v);
+        const destinationId = idCache.getId(useCase) as string + idCache.getId(v);
         
         return {
             type: 'edge',
@@ -234,9 +234,9 @@ export class RslDiagramGenerator extends LangiumDiagramGenerator {
     }
 
 
-    protected generateActorInitiatesEdge(actor: Actor, uc: UseCase, { idCache }: GeneratorContext<Model>): SEdge {
-        const sourceId = idCache.getId(actor);
-        const destinationId = idCache.getId(uc);
+    protected generateActorInitiatesEdge(actor: Actor, uc: UseCase, v:View,{ idCache }: GeneratorContext<Model>): SEdge {
+        const sourceId = idCache.getId(actor) as string + idCache.getId(v);
+        const destinationId = idCache.getId(uc) as string + idCache.getId(v);
         
         return {
             type: 'edge',

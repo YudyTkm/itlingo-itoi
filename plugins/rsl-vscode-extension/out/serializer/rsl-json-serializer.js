@@ -6,8 +6,8 @@ const langium_1 = require("langium");
  * Custom JSON serializer implementation for the RSL language.
  */
 class RslJsonSerializer extends langium_1.DefaultJsonSerializer {
-    constructor() {
-        super(...arguments);
+    constructor(services) {
+        super(services);
         /**
          * A set of properties to ignore during serialization.
          */

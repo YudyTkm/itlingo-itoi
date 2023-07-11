@@ -46,6 +46,8 @@ RUN npm install -g @vscode/vsce
 #Compile ASL extension
 WORKDIR /home/theia
 COPY plugins/asl-langium /home/theia/asl-langium
+RUN dos2unix /home/theia/asl-langium/server/asl/bin/generator.sh
+RUN dos2unix /home/theia/asl-langium/server/asl/bin/importer.sh
 RUN chmod +x /home/theia/asl-langium/server/asl/bin/generator.sh
 RUN chmod +x /home/theia/asl-langium/server/asl/bin/importer.sh
 WORKDIR /home/theia/asl-langium
