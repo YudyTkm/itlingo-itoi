@@ -1,10 +1,14 @@
 import {  CompletionAcceptor, CompletionContext, DefaultCompletionProvider, LangiumDocument, MaybePromise, NextFeature, findLeafNodeAtOffset, getEntryRule, stream } from "langium";
 import * as ast from 'langium/lib/grammar/generated/ast';
-import { CompletionItem, CompletionItemKind, CompletionList, CompletionParams } from "vscode-languageserver";
+import { CompletionItem, CompletionItemKind, CompletionList, CompletionParams } from "vscode-languageserver/node";
+import { RslServices } from "./rsl-module";
 
 
 export class RslCompletionProvider extends DefaultCompletionProvider{
-    
+
+    constructor(services: RslServices){
+        super(services);
+    }
     override async getCompletion(document: LangiumDocument, params: CompletionParams): Promise<CompletionList | undefined> {
         const root = document.parseResult.value;
         const cst = root.$cstNode;

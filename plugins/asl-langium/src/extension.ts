@@ -3,9 +3,8 @@ import * as path from 'path';
 import {
     LanguageClient, LanguageClientOptions, ServerOptions, TransportKind
 } from 'vscode-languageclient/node';
-import { SprottyDiagramIdentifier, registerDefaultCommands } from 'sprotty-vscode';
-import { LspWebviewPanelManager, LspWebviewPanelManagerOptions, acceptMessageType, openInTextEditor, openInTextEditorMessageType } from 'sprotty-vscode/lib/lsp';
-import { createFileUri, createWebviewPanel } from 'sprotty-vscode/lib/webview-utils';
+import { SprottyDiagramIdentifier, createFileUri, createWebviewPanel, registerDefaultCommands } from 'sprotty-vscode';
+import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
 
 
 import { ASLCustomCommands } from './asl-commands-extension';
@@ -86,8 +85,6 @@ class CustomLspWebview extends LspWebviewPanelManager {
 
     constructor(options: LspWebviewPanelManagerOptions) {
         super(options);
-        options.languageClient.onNotification(acceptMessageType, message => this.acceptFromLanguageServer(message));
-        options.languageClient.onNotification(openInTextEditorMessageType, message => openInTextEditor(message));
     }
 
     protected override createWebview(identifier: SprottyDiagramIdentifier): vscode.WebviewPanel {

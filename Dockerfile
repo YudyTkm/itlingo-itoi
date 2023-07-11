@@ -21,8 +21,11 @@ ENV NODE_OPTIONS "--max-old-space-size=4096"
 COPY ide /home/theia/ide
 WORKDIR /home/theia/ide
 
-RUN chmod +x gitUtils/cloneScript.sh
-RUN chmod +x gitUtils/gitPermissionsFix.sh
+
+RUN dos2unix gitUtils/cloneScript.sh
+RUN dos2unix gitUtils/gitPermissionsFix.sh
+RUN chmod a+x gitUtils/cloneScript.sh
+RUN chmod a+x gitUtils/gitPermissionsFix.sh
 #COPY startup.sh .
 #RUN chmod +x startup.sh
 

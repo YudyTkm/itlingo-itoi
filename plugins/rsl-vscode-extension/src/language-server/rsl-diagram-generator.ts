@@ -16,9 +16,9 @@
 
 import { GeneratorContext, LangiumDiagramGenerator } from 'langium-sprotty';
 import { SEdge, SLabel, SModelRoot, SNode } from 'sprotty-protocol';
-import { ContextDimensionActor, Model, UseCase, View } from './generated/ast';
+ import {  Actor, Model, UseCase, View } from './generated/ast';
 
-export class AslDiagramGenerator extends LangiumDiagramGenerator {
+export class RslDiagramGenerator extends LangiumDiagramGenerator {
 
     protected generateRoot(args: GeneratorContext<Model>): SModelRoot {
         const { document } = args;
@@ -34,6 +34,7 @@ export class AslDiagramGenerator extends LangiumDiagramGenerator {
             children: [...sNode, ...sEdges]
         };
     }
+
     mapViewsToSNodes(views: View[], args: GeneratorContext<Model>): 
     {sNode: SNode[], 
      argsNodes: GeneratorContext<Model>} {
@@ -43,13 +44,14 @@ export class AslDiagramGenerator extends LangiumDiagramGenerator {
                 case "UseCaseView":
                     for(const elem of v.elements.references){
                         if(!elem.ref) continue;
-                        let uc  = elem.ref as UseCase;
-                        if(uc.actorInitiates && uc.actorInitiates.ref) {
-                            let contextDimensionActor: ContextDimensionActor = uc.actorInitiates.ref as ContextDimensionActor;
-                            let actorNode = this.generateActorNode(contextDimensionActor, args);
+                        if(elem.ref.$type === 'UseCase') {
+                            let uc  = elem.ref as UseCase;
+                            nodes.push(this.generateUseCaseNode(uc, args));
+                        } else if(elem.ref.$type === 'Actor') {
+                            let actor  = elem.ref as Actor;
+                            let actorNode = this.generateActorNode(actor, args);
                             if(actorNode) nodes.push(actorNode);
                         }
-                        nodes.push(this.generateUseCaseNode(uc, args));
                     }
                     break;
                 default:
@@ -114,7 +116,7 @@ export class AslDiagramGenerator extends LangiumDiagramGenerator {
         };
     }
 
-    protected generateActorNode(actor: ContextDimensionActor, { idCache }: GeneratorContext<Model>): SNode | undefined {
+    protected generateActorNode(actor: Actor, { idCache }: GeneratorContext<Model>): SNode | undefined {
         if (idCache.isIdAlreadyUsed(actor.name)) return ;
         const nodeId = idCache.uniqueId(actor.name, actor);
         return {
@@ -143,10 +145,10 @@ export class AslDiagramGenerator extends LangiumDiagramGenerator {
 
 
     private fetchListOfViews(root: Model, args: GeneratorContext<Model>): View[] {
-        let views = root.packages[0].system.systemConcepts
+        let views = root.packages[0].system?.systemConcepts
                 .filter(sc => sc.$type === "View")
                 .map(se => se as View)
-        return views;
+        return views as View[];
     }
 
     private fetchListOfEdges(views: View[], args: GeneratorContext<Model>): SEdge[] {
@@ -156,11 +158,35 @@ export class AslDiagramGenerator extends LangiumDiagramGenerator {
                 case "UseCaseView":
                     for(const elem of v.elements.references){
                         if(!elem.ref) continue;
-                        let uc  = elem.ref as UseCase;
-                        if(uc.actorInitiates && uc.actorInitiates.ref) {
-                            let contextDimensionActor: ContextDimensionActor = uc.actorInitiates.ref as ContextDimensionActor;
-                            edges.push(this.generateActorInitiatesEdge(contextDimensionActor, uc, args))
-                        }
+                        if(elem.ref.$type === 'UseCase') {
+                            let uc  = elem.ref as UseCase;
+                            if(uc.primaryActor && uc.primaryActor.ref && isActorInView(uc.primaryActor.ref, v)) {
+                                let actor: Actor = uc.primaryActor.ref as Actor;
+                                edges.push(this.generateActorInitiatesEdge(actor, uc, args))
+                            }
+
+                            if(uc.includes){
+                                for(const includeUC of uc.includes.includes){
+                                    for(const ucref of includeUC.refs){
+                                        if(ucref.ref && isUseCaseInView(ucref.ref, v)){
+                                            let useCase: UseCase = ucref.ref as UseCase;
+                                            edges.push(this.generateUseCaseIncludesEdge(useCase, uc, args))
+                                        }
+                                    }
+                                }
+
+                            }
+                            if(uc.extends){
+                                for(const extendsUC of uc.extends){
+                                    if(extendsUC.usecase.ref && isUseCaseInView(extendsUC.usecase.ref, v)){
+                                        let useCase: UseCase = extendsUC.usecase.ref as UseCase;
+                                        edges.push(this.generateUseCaseExtendsEdge(useCase, uc, args))
+                                    }
+                                }
+
+                            }
+
+                        } 
                     }
                     break;
                 default:
@@ -169,9 +195,46 @@ export class AslDiagramGenerator extends LangiumDiagramGenerator {
         }
         return edges
     }
+    generateUseCaseIncludesEdge(useCase: UseCase, uc: UseCase, { idCache }: GeneratorContext<Model>): SEdge {
+        const sourceId = idCache.getId(uc);
+        const destinationId = idCache.getId(useCase);
+        
+        return {
+            type: 'edge',
+            id: sourceId! + destinationId! + "edge",
+            sourceId: sourceId!,
+            targetId: destinationId!,
+            children: [
+                <SLabel>{
+                    type: 'label:xref',
+                    id: idCache.uniqueId(sourceId! + destinationId! + '.label'),
+                    text: "<<include>>"
+                }
+            ]
+        };
+    }
     
+    generateUseCaseExtendsEdge(useCase: UseCase, uc: UseCase, { idCache }: GeneratorContext<Model>): SEdge {
+        const sourceId = idCache.getId(uc);
+        const destinationId = idCache.getId(useCase);
+        
+        return {
+            type: 'edge',
+            id: sourceId! + destinationId! + "edge",
+            sourceId: sourceId!,
+            targetId: destinationId!,
+            children: [
+                <SLabel>{
+                    type: 'label:xref',
+                    id: idCache.uniqueId(sourceId! + destinationId! + '.label'),
+                    text: "<<extend>>"
+                }
+            ]
+        };
+    }
 
-    protected generateActorInitiatesEdge(actor: ContextDimensionActor, uc: UseCase, { idCache }: GeneratorContext<Model>): SEdge {
+
+    protected generateActorInitiatesEdge(actor: Actor, uc: UseCase, { idCache }: GeneratorContext<Model>): SEdge {
         const sourceId = idCache.getId(actor);
         const destinationId = idCache.getId(uc);
         
@@ -184,10 +247,36 @@ export class AslDiagramGenerator extends LangiumDiagramGenerator {
                 <SLabel>{
                     type: 'label:xref',
                     id: idCache.uniqueId(sourceId! + destinationId! + '.label'),
-                    text: "Initiates"
+                    text: ""
                 }
             ]
         };
     }
 
 }
+function isActorInView(ref: Actor, v: View): boolean {
+    for(const elem of v.elements.references){
+        if(elem.ref){
+            if(elem.ref.$type === 'Actor'){
+                if(elem.ref.name === ref.name){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+function isUseCaseInView(uc: UseCase, v: View): boolean {
+    for(const elem of v.elements.references){
+        if(elem.ref){
+            if(elem.ref.$type === 'UseCase'){
+                if(elem.ref.name === uc.name ){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+

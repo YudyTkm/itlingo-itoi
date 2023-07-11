@@ -35,6 +35,32 @@
         ],
         "commands": [
             {
+                "command": "rsl.diagram.open",
+                "title": "Open in Diagram",
+                "icon": "$(symbol-structure)",
+                "category": "RSL Diagram"
+            },
+            {
+                "command": "rsl.diagram.fit",
+                "title": "Fit to Screen",
+                "category": "RSL Diagram"
+            },
+            {
+                "command": "rsl.diagram.center",
+                "title": "Center selection",
+                "category": "RSL Diagram"
+            },
+            {
+                "command": "rsl.diagram.delete",
+                "title": "Delete selected element",
+                "category": "RSL Diagram"
+            },
+            {
+                "command": "rsl.diagram.export",
+                "title": "Export diagram to SVG",
+                "category": "RSL Diagram"
+            },
+            {
                 "command": "rsl.generate.json",
                 "title": "Generate JSON file",
                 "icon": "$(file-symlink-file)",
@@ -49,12 +75,32 @@
         ],
         "submenus": [
             {
-              "id": "rsl.submenu",
-              "label": "Generate"
+                "id": "rsl.submenu",
+                "label": "Generate"
             }
         ],
         "menus": {
             "commandPalette": [
+                {
+                    "command": "rsl.diagram.open",
+                    "when": "editorLangId == 'rsl'"
+                },
+                {
+                    "command": "rsl.diagram.fit",
+                    "when": "rsl-diagram-focused"
+                },
+                {
+                    "command": "rsl.diagram.center",
+                    "when": "rsl-diagram-focused"
+                },
+                {
+                    "command": "rsl.diagram.delete",
+                    "when": "rsl-diagram-focused"
+                },
+                {
+                    "command": "rsl.diagram.export",
+                    "when": "rsl-diagram-focused"
+                },
                 {
                     "command": "rsl.generate.json",
                     "when": "editorLangId == 'rsl'"
@@ -66,11 +112,16 @@
             ],
             "explorer/context": [
                 {
+                    "command": "rsl.diagram.open",
+                    "when": "resourceExtname == '.rsl'",
+                    "group": "navigation"
+                },
+                {
                     "submenu": "rsl.submenu",
                     "when": "resourceExtname == '.rsl'"
                 }
             ],
-            "rsl.submenu": [                
+            "rsl.submenu": [
                 {
                     "command": "rsl.generate.json"
                 },
@@ -78,7 +129,33 @@
                     "command": "rsl.generate.text"
                 }
             ]
-        }
+        },
+        "keybindings": [
+            {
+                "key": "alt+f",
+                "mac": "alt+f",
+                "command": "rsl.diagram.fit",
+                "when": "rsl-diagram-focused"
+            },
+            {
+                "key": "alt+c",
+                "mac": "alt+c",
+                "command": "rsl.diagram.center",
+                "when": "rsl-diagram-focused"
+            },
+            {
+                "key": "alt+e",
+                "mac": "alt+e",
+                "command": "rsl.diagram.export",
+                "when": "rsl-diagram-focused"
+            },
+            {
+                "key": "delete",
+                "mac": "delete",
+                "command": "rsl.diagram.delete",
+                "when": "rsl-diagram-focused"
+            }
+        ]
     },
     "activationEvents": [
         "onLanguage:rsl"
@@ -109,20 +186,28 @@
         "es-compromise": "^0.2.9",
         "fr-compromise": "^0.2.7",
         "it-compromise": "^0.2.0",
-		"ja-compromise": "^0.0.1",
+        "ja-compromise": "^0.0.1",
         "langium": "~1.2.0",
+        "langium-sprotty": "^1.0.0",
+        "sprotty-elk": "^0.13.0",
+        "sprotty-vscode": "^0.5.0",
         "pt-compromise": "^0.0.3",
-        "vscode-languageclient": "~8.0.2",
+        "vscode-languageclient": "^8.0.2",
         "vscode-languageserver": "~8.0.2",
-        "vscode-uri": "~3.0.7"
+        "vscode-uri": "~3.0.7",
+        "concat-map": "^0.0.1"
     },
     "devDependencies": {
         "@types/node": "~16.18.11",
-        "@types/vscode": "~1.67.0",
+        "@types/vscode": "1.50.0",
+        "source-map-loader": "^3.0.0",
+        "sprotty-vscode": "^0.5.0",
         "@typescript-eslint/eslint-plugin": "~5.51.0",
         "@typescript-eslint/parser": "~5.51.0",
         "eslint": "~8.33.0",
         "langium-cli": "~1.2.0",
-        "typescript": "~4.9.5"
+        "typescript": "~4.9.5",
+        "webpack": "^5.64.2",
+        "webpack-cli": "^4.9.1"
     }
 }

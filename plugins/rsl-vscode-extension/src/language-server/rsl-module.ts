@@ -3,8 +3,6 @@ import {
     createDefaultSharedModule,
     DefaultSharedModuleContext,
     inject,
-    LangiumServices,
-    LangiumSharedServices,
     Module,
     PartialLangiumServices,
 } from 'langium';
@@ -17,11 +15,21 @@ import { RslScopeComputation } from './rsl-scope-computation';
 import { RslJsonSerializer } from '../serializer/rsl-json-serializer';
 import { RslCompletionProvider } from './rsl-completion';
 import { RslLinker } from './rsl-linker';
+import { DefaultElementFilter, ElkFactory, ElkLayoutEngine, IElementFilter, ILayoutConfigurator } from 'sprotty-elk/lib/elk-layout';
+import { LangiumSprottyServices, LangiumSprottySharedServices, SprottyDiagramServices, SprottySharedModule } from 'langium-sprotty';
+import { RslDiagramGenerator } from './rsl-diagram-generator';
+import ElkConstructor from 'elkjs/lib/elk.bundled';
+import { RslLayoutConfigurator } from './rsl-layout-config';
 
 /**
  * Declaration of custom services - add your own service classes here.
  */
 export type RslAddedServices = {
+    layout: {
+        ElkFactory: ElkFactory,
+        ElementFilter: IElementFilter,
+        LayoutConfigurator: ILayoutConfigurator
+    },
     validation: {
         RslValidator: RslValidator;
     };
@@ -31,30 +39,40 @@ export type RslAddedServices = {
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type RslServices = LangiumServices & RslAddedServices;
+export type RslServices = LangiumSprottyServices & RslAddedServices;
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the
  * declared custom services. The Langium defaults can be partially specified to override only
  * selected services, while the custom services must be fully specified.
  */
-export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedServices> = {
-    lsp: {
-        CodeActionProvider: () => new RslActionProvider(),        
-        CompletionProvider: (services) => new RslCompletionProvider(services),
-    },
-    validation: {
-        RslValidator: () => new RslValidator(),
-    },
+export const RslModule: Module<RslServices, PartialLangiumServices & SprottyDiagramServices & RslAddedServices> = {
     references: {
         ScopeComputation: (services) => new RslScopeComputation(services),
         ScopeProvider: (services) => new RslScopeProvider(services),
         Linker: (services) => new RslLinker(services),
         NameProvider: () => new RslNameProvider(),
     },
+    lsp: {
+        CodeActionProvider: () => new RslActionProvider(),        
+        CompletionProvider: (services) => new RslCompletionProvider(services),
+    },
+    diagram: {
+        DiagramGenerator: services => new RslDiagramGenerator(services),
+        ModelLayoutEngine: services => new ElkLayoutEngine(services.layout.ElkFactory, services.layout.ElementFilter, services.layout.LayoutConfigurator) as any
+    },
+    layout: {
+        ElkFactory: () => () => new ElkConstructor({ algorithms: ['layered'] }),
+        ElementFilter: () => new DefaultElementFilter,
+        LayoutConfigurator: () => new RslLayoutConfigurator
+    },
+    validation: {
+        RslValidator: () => new RslValidator(),
+    },
     serializer: {
         JsonSerializer: (services) => new RslJsonSerializer(services),
-    },
+    }
+
 };
 
 /**
@@ -73,11 +91,21 @@ export const RslModule: Module<RslServices, PartialLangiumServices & RslAddedSer
  * @returns An object wrapping the shared services and the language-specific services
  */
 export function createRslServices(context: DefaultSharedModuleContext): {
-    shared: LangiumSharedServices;
-    Rsl: RslServices;
+    shared: LangiumSprottySharedServices,
+    Rsl: RslServices
 } {
-    const shared = inject(createDefaultSharedModule(context), RslGeneratedSharedModule);
-    const Rsl = inject(createDefaultModule({ shared }), RslGeneratedModule, RslModule);
+    const shared = inject(
+        createDefaultSharedModule(context),
+        RslGeneratedSharedModule,
+        SprottySharedModule
+    );
+
+    const Rsl = inject(
+        createDefaultModule({ shared }),
+        RslGeneratedModule,
+        RslModule
+    );
+
     shared.ServiceRegistry.register(Rsl);
     registerValidationChecks(Rsl);
     return { shared, Rsl };

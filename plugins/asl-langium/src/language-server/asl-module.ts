@@ -34,7 +34,7 @@ export type AslAddedServices = {
  * Union of Langium default services and your custom services - use this as constructor parameter
  * of custom service classes.
  */
-export type AslServices = LangiumSprottyServices & AslAddedServices
+export type AslServices =  LangiumSprottyServices & AslAddedServices
 
 /**
  * Dependency injection module that overrides Langium default services and contributes the

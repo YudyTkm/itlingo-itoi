@@ -6,12 +6,18 @@ import {
 import { RslGeneratorFactory } from './generator/rsl-generator-factory';
 import { RslJsonGenerator } from './generator/rsl-json-generator';
 import { RsltextGenerator } from './generator/rsl-text-generator';
+// import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
 
-let client: LanguageClient;
+import { SprottyDiagramIdentifier, createFileUri, createWebviewPanel, registerDefaultCommands } from 'sprotty-vscode';
+import { LspWebviewPanelManager, LspWebviewPanelManagerOptions} from 'sprotty-vscode/lib/lsp';
+
+
+
+let languageClient: LanguageClient;
 
 // This function is called when the extension is activated.
 export function activate(context: vscode.ExtensionContext): void {
-  client = startLanguageClient(context);
+  languageClient = startLanguageClient(context);
 
   const generatorFactory = new RslGeneratorFactory();
 
@@ -21,12 +27,21 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand("rsl.generate.text", (x) => generatorFactory.execute(new RsltextGenerator(x)))
   );
+
+  const webviewPanelManager = new CustomLspWebview({
+    extensionUri: context.extensionUri,
+    defaultDiagramType: 'rsl',
+    languageClient,
+    supportedFileExtensions: ['.rsl']
+  });
+  registerDefaultCommands(webviewPanelManager, context, { extensionPrefix: 'rsl' });
+
 }
 
 // This function is called when the extension is deactivated.
 export function deactivate(): Thenable<void> | undefined {
-  if (client) {
-      return client.stop();
+  if (languageClient) {
+      return languageClient.stop();
   }
   return undefined;
 }
@@ -68,4 +83,22 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
   // Start the client. This will also launch the server
   client.start();
   return client;
+}
+
+
+
+class CustomLspWebview extends LspWebviewPanelManager {
+
+
+  constructor(options: LspWebviewPanelManagerOptions) {
+      super(options);
+  }
+
+  protected override createWebview(identifier: SprottyDiagramIdentifier): vscode.WebviewPanel {
+      return createWebviewPanel(identifier, {
+          localResourceRoots: [ createFileUri('/home', 'theia','pack') ],
+          scriptUri: createFileUri('/home', 'theia','pack','webview.js')
+      });
+  }
+
 }
