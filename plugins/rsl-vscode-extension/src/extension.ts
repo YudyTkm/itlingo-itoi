@@ -94,6 +94,9 @@ class CustomLspWebview extends LspWebviewPanelManager {
       super(options);
   }
 
+
+
+  
   protected override createWebview(identifier: SprottyDiagramIdentifier): vscode.WebviewPanel {
        return createWebviewPanel(identifier, {
            localResourceRoots: [ createFileUri('/home', 'theia','pack') ],
