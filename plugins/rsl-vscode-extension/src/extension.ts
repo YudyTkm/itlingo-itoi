@@ -8,8 +8,7 @@ import { RslJsonGenerator } from './generator/rsl-json-generator';
 import { RsltextGenerator } from './generator/rsl-text-generator';
 // import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
 
- import {  registerDefaultCommands } from 'sprotty-vscode';
-// import { SprottyDiagramIdentifier, createFileUri, createWebviewPanel, registerDefaultCommands } from 'sprotty-vscode';
+import { SprottyDiagramIdentifier, createFileUri, createWebviewPanel, registerDefaultCommands } from 'sprotty-vscode';
 import { LspWebviewPanelManager, LspWebviewPanelManagerOptions} from 'sprotty-vscode/lib/lsp';
 
 

@@ -32,7 +32,6 @@ const rsl_json_generator_1 = require("./generator/rsl-json-generator");
 const rsl_text_generator_1 = require("./generator/rsl-text-generator");
 // import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
 const sprotty_vscode_1 = require("sprotty-vscode");
-// import { SprottyDiagramIdentifier, createFileUri, createWebviewPanel, registerDefaultCommands } from 'sprotty-vscode';
 const lsp_1 = require("sprotty-vscode/lib/lsp");
 let languageClient;
 // This function is called when the extension is activated.
@@ -89,6 +88,12 @@ function startLanguageClient(context) {
 class CustomLspWebview extends lsp_1.LspWebviewPanelManager {
     constructor(options) {
         super(options);
+    }
+    createWebview(identifier) {
+        return (0, sprotty_vscode_1.createWebviewPanel)(identifier, {
+            localResourceRoots: [(0, sprotty_vscode_1.createFileUri)('/home', 'theia', 'pack')],
+            scriptUri: (0, sprotty_vscode_1.createFileUri)('/home', 'theia', 'pack', 'webview.js')
+        });
     }
 }
 //# sourceMappingURL=extension.js.map
