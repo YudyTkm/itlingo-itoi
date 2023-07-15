@@ -35,7 +35,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.writeFile = exports.getFileName = void 0;
+exports.writeFile = exports.getFileNameWithoutExtension = exports.getFileName = void 0;
 const path_1 = __importDefault(require("path"));
 const vscode = __importStar(require("vscode"));
 /**
@@ -45,9 +45,19 @@ const vscode = __importStar(require("vscode"));
  * @returns The file name.
  */
 function getFileName(filePath) {
-    return path_1.default.basename(filePath, path_1.default.extname(filePath)).replace(/[.-]/g, '');
+    return path_1.default.basename(filePath, path_1.default.extname(filePath));
 }
 exports.getFileName = getFileName;
+/**
+ * Retrieves the file name without the extension from a path.
+ *
+ * @param filePath The file path.
+ * @returns The file name.
+ */
+function getFileNameWithoutExtension(filePath) {
+    return path_1.default.basename(filePath, path_1.default.extname(filePath)).replace(/[.-]/g, '');
+}
+exports.getFileNameWithoutExtension = getFileNameWithoutExtension;
 /**
  * Writes the provided content to the specified URI.
  *
@@ -56,7 +66,13 @@ exports.getFileName = getFileName;
  */
 function writeFile(uri, content) {
     return __awaiter(this, void 0, void 0, function* () {
-        const writeData = Buffer.from(content, 'utf8');
+        let writeData;
+        if (typeof content === 'string') {
+            writeData = Buffer.from(content, 'utf8');
+        }
+        else {
+            writeData = content;
+        }
         yield vscode.workspace.fs.writeFile(uri, writeData);
     });
 }

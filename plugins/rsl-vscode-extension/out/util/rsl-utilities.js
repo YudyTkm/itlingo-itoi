@@ -13,63 +13,63 @@ const ast_1 = require("../language-server/generated/ast");
  */
 function createSystemConcept(desiredElement, elementPropertyText, ruleElementProperty) {
     if (!desiredElement) {
-        throw new Error("desiredElement cannot be undefined");
+        throw new Error('desiredElement cannot be undefined');
     }
     switch (desiredElement) {
-        case "GlossaryTerm":
-            return createElement("Term", "term_", "Noun", elementPropertyText, ruleElementProperty);
-        case "Vulnerability":
-            return createElement("Vulnerability", "vul_", "Other", elementPropertyText, ruleElementProperty);
-        case "Risk":
-            return createElement("Risk", "r_", "Other", elementPropertyText, ruleElementProperty);
-        case "Stakeholder":
-            return createElement("Stakeholder", "stk_", "Other", elementPropertyText, ruleElementProperty);
-        case "Actor":
-            return createElement("Actor", "a_", "Other", elementPropertyText, ruleElementProperty);
-        case "StateMachine":
+        case 'GlossaryTerm':
+            return createElement('Term', 'term_', 'Noun', elementPropertyText, ruleElementProperty);
+        case 'Vulnerability':
+            return createElement('Vulnerability', 'vul_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'Risk':
+            return createElement('Risk', 'r_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'Stakeholder':
+            return createElement('Stakeholder', 'stk_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'Actor':
+            return createElement('Actor', 'a_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'StateMachine':
             return createStateMachine(elementPropertyText, ruleElementProperty);
-        case "ActiveTask":
-            return createElement("Task", "at_", "Undefined", elementPropertyText, ruleElementProperty);
-        case "ActiveEvent":
-            return createElement("Event", "ev_", "Undefined", elementPropertyText, ruleElementProperty);
-        case "ActiveFlow":
+        case 'ActiveTask':
+            return createElement('Task', 'at_', 'Undefined', elementPropertyText, ruleElementProperty);
+        case 'ActiveEvent':
+            return createElement('Event', 'ev_', 'Undefined', elementPropertyText, ruleElementProperty);
+        case 'ActiveFlow':
             return createActiveFlow(elementPropertyText, ruleElementProperty);
-        case "Goal":
-            return createElement("Goal", "g_", "Other", elementPropertyText, ruleElementProperty);
-        case "QR":
-            return createElement("QR", "qr_", "Other", elementPropertyText, ruleElementProperty);
-        case "FR":
-            return createElement("FR", "fr_", "Functional", elementPropertyText, ruleElementProperty);
-        case "Constraint":
-            return createElement("Constraint", "c_", "Other", elementPropertyText, ruleElementProperty);
-        case "UserStory":
+        case 'Goal':
+            return createElement('Goal', 'g_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'QR':
+            return createElement('QR', 'qr_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'FR':
+            return createElement('FR', 'fr_', 'Functional', elementPropertyText, ruleElementProperty);
+        case 'Constraint':
+            return createElement('Constraint', 'c_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'UserStory':
             return createUserStory(elementPropertyText, ruleElementProperty);
-        case "UseCase":
+        case 'UseCase':
             return createUseCase(elementPropertyText, ruleElementProperty);
-        case "DataEnumeration":
+        case 'DataEnumeration':
             return createDataEnumeration(elementPropertyText, ruleElementProperty);
-        case "DataEntity":
-            return createElement("DataEntity", "de_", "Other", elementPropertyText, ruleElementProperty);
-        case "DataEntityCluster":
+        case 'DataEntity':
+            return createElement('DataEntity', 'de_', 'Other', elementPropertyText, ruleElementProperty);
+        case 'DataEntityCluster':
             return createDataEntityCluster(elementPropertyText, ruleElementProperty);
-        case "MainScenario":
-        case "Scenario":
-        case "Step":
-        case "AcceptanceCriteriaScenario":
-        case "DataAttribute":
-        case "System":
-        case "TestSuite":
-        case "AcceptanceCriteriaTest":
-        case "DataEntityTest":
-        case "UseCaseTest":
-        case "StateMachineTest":
-        case "AcceptanceCriteriaTestView":
-        case "UseCaseTestView":
-        case "DataEntityTestView":
-        case "StatemachineTestView":
-        case "Data":
-        case "TestData":
-        case "Other":
+        case 'MainScenario':
+        case 'Scenario':
+        case 'Step':
+        case 'AcceptanceCriteriaScenario':
+        case 'DataAttribute':
+        case 'System':
+        case 'TestSuite':
+        case 'AcceptanceCriteriaTest':
+        case 'DataEntityTest':
+        case 'UseCaseTest':
+        case 'StateMachineTest':
+        case 'AcceptanceCriteriaTestView':
+        case 'UseCaseTestView':
+        case 'DataEntityTestView':
+        case 'StatemachineTestView':
+        case 'Data':
+        case 'TestData':
+        case 'Other':
             throw new Error(`Element ${desiredElement} is not supported`);
         default:
             throw new Error(`Element ${desiredElement} is not supported`);
@@ -86,68 +86,68 @@ exports.createSystemConcept = createSystemConcept;
  */
 function getVisibleElements(system, desiredElementName, desiredProperty) {
     if (!desiredElementName) {
-        throw new Error("desiredElement cannot be undefined");
+        throw new Error('desiredElement cannot be undefined');
     }
     switch (desiredElementName) {
-        case "GlossaryTerm":
+        case 'GlossaryTerm':
             return getGlossaryTermElementsProperty(system, desiredProperty);
-        case "Vulnerability":
+        case 'Vulnerability':
             return getVulnerabilityElementsProperty(system, desiredProperty);
-        case "Risk":
+        case 'Risk':
             return getRiskElementsProperty(system, desiredProperty);
-        case "Stakeholder":
+        case 'Stakeholder':
             return getStakeholderElementsProperty(system, desiredProperty);
-        case "Actor":
+        case 'Actor':
             return getActorElementsProperty(system, desiredProperty);
-        case "StateMachine":
+        case 'StateMachine':
             return getStateMachineElementsProperty(system, desiredProperty);
-        case "ActiveTask":
+        case 'ActiveTask':
             return getActiveTaskElementsProperty(system, desiredProperty);
-        case "ActiveEvent":
+        case 'ActiveEvent':
             return getActiveEventElementsProperty(system, desiredProperty);
-        case "ActiveFlow":
+        case 'ActiveFlow':
             return getActiveFlowElementsProperty(system, desiredProperty);
-        case "Goal":
+        case 'Goal':
             return getGoalElementsProperty(system, desiredProperty);
-        case "QR":
+        case 'QR':
             return getQRElementsProperty(system, desiredProperty);
-        case "FR":
+        case 'FR':
             return getFRElementsProperty(system, desiredProperty);
-        case "Constraint":
+        case 'Constraint':
             return getConstraintElementsProperty(system, desiredProperty);
-        case "UserStory":
+        case 'UserStory':
             return getUserStoryElementsProperty(system, desiredProperty);
-        case "UseCase":
+        case 'UseCase':
             return getUseCaseElementsProperty(system, desiredProperty);
-        case "DataEnumeration":
+        case 'DataEnumeration':
             return getDataEnumerationElementsProperty(system, desiredProperty);
-        case "DataEntity":
+        case 'DataEntity':
             return getDataEntityElementsProperty(system, desiredProperty);
-        case "DataEntityCluster":
+        case 'DataEntityCluster':
             return getDataEntityClusterElementsProperty(system, desiredProperty);
-        case "Data":
+        case 'Data':
             return getDataElementsProperty(system, desiredProperty);
-        case "MainScenario":
+        case 'MainScenario':
             return getMainScenarioElementsProperty(system, desiredProperty);
-        case "Scenario":
+        case 'Scenario':
             return getScenarioElementsProperty(system, desiredProperty);
-        case "Step":
+        case 'Step':
             return getStepElementsProperty(system, desiredProperty);
-        case "DataAttribute":
+        case 'DataAttribute':
             return getDataAttributeElementsProperty(system, desiredProperty);
-        case "AcceptanceCriteriaScenario":
-        case "TestData":
-        case "System":
-        case "TestSuite":
-        case "AcceptanceCriteriaTest":
-        case "DataEntityTest":
-        case "UseCaseTest":
-        case "StateMachineTest":
-        case "AcceptanceCriteriaTestView":
-        case "UseCaseTestView":
-        case "DataEntityTestView":
-        case "StatemachineTestView":
-        case "Other":
+        case 'AcceptanceCriteriaScenario':
+        case 'TestData':
+        case 'System':
+        case 'TestSuite':
+        case 'AcceptanceCriteriaTest':
+        case 'DataEntityTest':
+        case 'UseCaseTest':
+        case 'StateMachineTest':
+        case 'AcceptanceCriteriaTestView':
+        case 'UseCaseTestView':
+        case 'DataEntityTestView':
+        case 'StatemachineTestView':
+        case 'Other':
             throw new Error(`Element ${desiredElementName} is not supported`);
         default:
             throw new Error(`Element ${desiredElementName} is not supported`);
@@ -158,15 +158,15 @@ function getDataAttributeElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getDataAttributes(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -179,15 +179,15 @@ function getStepElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getSteps(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -200,15 +200,15 @@ function getScenarioElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getScenarios(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -221,15 +221,15 @@ function getMainScenarioElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getMainScenarios(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -242,15 +242,15 @@ function getDataElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getData(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -263,15 +263,15 @@ function getDataEntityClusterElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getDataEntityClusters(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -284,15 +284,15 @@ function getDataEntityElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getDataEntities(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -305,15 +305,15 @@ function getDataEnumerationElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getDataEnumerations(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -326,15 +326,15 @@ function getUseCaseElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getUseCases(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -347,15 +347,15 @@ function getUserStoryElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getUserStories(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -368,15 +368,15 @@ function getConstraintElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getConstraints(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -389,15 +389,15 @@ function getFRElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getFRs(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -410,15 +410,15 @@ function getQRElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getQRs(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -431,15 +431,15 @@ function getGoalElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getGoals(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -452,15 +452,15 @@ function getActiveFlowElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getActiveFlows(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -473,15 +473,15 @@ function getActiveEventElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getActiveEvents(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -494,15 +494,15 @@ function getActiveTaskElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getActiveTasks(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -515,15 +515,15 @@ function getStateMachineElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getStateMachines(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -536,15 +536,15 @@ function getActorElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getActors(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -557,15 +557,15 @@ function getStakeholderElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getStakeholders(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -578,17 +578,17 @@ function getRiskElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getRisks(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 if (element.name) {
                     elements.add(element.name);
                 }
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -601,15 +601,15 @@ function getVulnerabilityElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getVulnerabilities(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -622,15 +622,15 @@ function getGlossaryTermElementsProperty(system, desiredProperty) {
     let elements = new Set();
     for (let element of getGlossaryTerms(system)) {
         switch (desiredProperty) {
-            case "id":
+            case 'id':
                 elements.add(element.name);
                 break;
-            case "name":
+            case 'name':
                 if (element.nameAlias) {
                     elements.add(element.nameAlias);
                 }
                 break;
-            case "description":
+            case 'description':
                 if (element.description) {
                     elements.add(element.description);
                 }
@@ -653,9 +653,7 @@ function getVulnerabilities(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isVulnerability)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isVulnerability)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -688,9 +686,7 @@ function getRisks(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isRisk)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isRisk)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -723,9 +719,7 @@ function getStakeholders(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isStakeholder)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isStakeholder)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -758,9 +752,7 @@ function getActors(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isActor)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isActor)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -793,9 +785,7 @@ function getStateMachines(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isStateMachine)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isStateMachine)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -828,9 +818,7 @@ function getActiveTasks(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isActiveTask)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isActiveTask)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -863,9 +851,7 @@ function getActiveEvents(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isActiveEvent)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isActiveEvent)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -898,9 +884,7 @@ function getActiveFlows(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isActiveFlow)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isActiveFlow)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -933,9 +917,7 @@ function getGoals(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isGoal)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isGoal)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -968,9 +950,7 @@ function getQRs(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isQR)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isQR)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1003,9 +983,7 @@ function getFRs(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isFR)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isFR)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1038,9 +1016,7 @@ function getConstraints(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isConstraint)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isConstraint)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1076,7 +1052,7 @@ function getLinguisticLanguages(system) {
 }
 exports.getLinguisticLanguages = getLinguisticLanguages;
 /**
- * Gets all linguistic language type of given system.
+ * Gets the linguistic language type of given system.
  * If no linguistic language is specified, the English language is returned.
  *
  * @param system RSL system element.
@@ -1085,10 +1061,10 @@ exports.getLinguisticLanguages = getLinguisticLanguages;
 function getLinguisticLanguageType(system) {
     let result = getLinguisticLanguages(system);
     if (result.length === 0) {
-        return "English";
+        return 'English';
     }
     if (result.length > 1) {
-        throw new Error("Only one linguistic language is supported");
+        throw new Error('Only one linguistic language is supported');
     }
     return result[0].type;
 }
@@ -1107,9 +1083,7 @@ function getLinguisticRules(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isLinguisticRule)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isLinguisticRule)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1142,9 +1116,7 @@ function getUserStories(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isUserStory)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isUserStory)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1177,9 +1149,7 @@ function getGlossaryTerms(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isGlossaryTerm)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isGlossaryTerm)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1236,9 +1206,7 @@ function getUseCases(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isUseCase)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isUseCase)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1271,9 +1239,7 @@ function getDataEnumerations(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isDataEnumeration)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isDataEnumeration)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1306,9 +1272,7 @@ function getDataEntities(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isDataEntity)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isDataEntity)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1341,9 +1305,7 @@ function getDataEntityClusters(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isDataEntityCluster)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isDataEntityCluster)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1376,9 +1338,7 @@ function getData(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isData)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isData)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1464,9 +1424,7 @@ function getDataAttributes(system) {
         }
         else if ((0, ast_1.isIncludeElement)(element)) {
             let includeElement = element;
-            if (includeElement.element &&
-                includeElement.element.ref &&
-                (0, ast_1.isDataAttribute)(includeElement.element.ref)) {
+            if (includeElement.element && includeElement.element.ref && (0, ast_1.isDataAttribute)(includeElement.element.ref)) {
                 elements.push(includeElement.element.ref);
             }
         }
@@ -1491,10 +1449,10 @@ exports.getDataAttributes = getDataAttributes;
  */
 function getStereotypeType(type) {
     var _a;
-    if (type.$type === "StereotypeTypeOriginal") {
+    if (type.$type === 'StereotypeTypeOriginal') {
         return type.type;
     }
-    else if (type.$type === "StereotypeTypeExtendedRef") {
+    else if (type.$type === 'StereotypeTypeExtendedRef') {
         return (_a = type.type.ref) === null || _a === void 0 ? void 0 : _a.name;
     }
     else {
@@ -1503,109 +1461,109 @@ function getStereotypeType(type) {
 }
 exports.getStereotypeType = getStereotypeType;
 function createStateMachine(elementProperty, ruleProperty) {
-    const elementPropertyId = elementProperty.replaceAll("\\s+", "");
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
     const defaultElementId = `sm_${elementPropertyId}`;
-    const elementType = "Simple";
-    const element = "StateMachine";
+    const elementType = 'Simple';
+    const element = 'StateMachine';
     switch (ruleProperty) {
-        case "id":
+        case 'id':
             return `${element} ${elementPropertyId} : ${elementType}`;
-        case "name":
+        case 'name':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType}`;
-        case "description":
+        case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType} [ dataEntity entityId description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
     }
 }
 function createActiveFlow(elementProperty, ruleProperty) {
-    const elementPropertyId = elementProperty.replaceAll("\\s+", "");
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
     const defaultElementId = `af_${elementPropertyId}`;
-    const elementType = "Sequence";
-    const element = "TaskFlow";
+    const elementType = 'Sequence';
+    const element = 'TaskFlow';
     switch (ruleProperty) {
-        case "id":
+        case 'id':
             return `${element} ${elementPropertyId} : ${elementType}`;
-        case "name":
+        case 'name':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType}`;
-        case "description":
+        case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType} [ activeElements eventId1, eventId2 description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
     }
 }
 function createElement(element, defaultIdPrefix, elementType, elementProperty, ruleProperty) {
-    const elementPropertyId = elementProperty.replaceAll("\\s+", "");
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
     const defaultElementId = `${defaultIdPrefix}${elementPropertyId}`;
     switch (ruleProperty) {
-        case "id":
+        case 'id':
             return `${element} ${elementPropertyId} : ${elementType}`;
-        case "name":
+        case 'name':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType}`;
-        case "description":
+        case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType} [ description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
     }
 }
 function createUserStory(elementProperty, ruleProperty) {
-    const elementPropertyId = elementProperty.replaceAll("\\s+", "");
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
     const defaultElementId = `us_${elementPropertyId}`;
-    const elementType = "UserStory";
-    const element = "UserStory";
+    const elementType = 'UserStory';
+    const element = 'UserStory';
     switch (ruleProperty) {
-        case "id":
+        case 'id':
             return `${element} ${elementPropertyId} : ${elementType}`;
-        case "name":
+        case 'name':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType}`;
-        case "description":
+        case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType} [ asA actorId iWant goalId description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
     }
 }
 function createUseCase(elementProperty, ruleProperty) {
-    const elementPropertyId = elementProperty.replaceAll("\\s+", "");
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
     const defaultElementId = `uc_${elementPropertyId}`;
-    const elementType = "Other";
-    const element = "UseCase";
+    const elementType = 'Other';
+    const element = 'UseCase';
     switch (ruleProperty) {
-        case "id":
+        case 'id':
             return `${element} ${elementPropertyId} : ${elementType}`;
-        case "name":
+        case 'name':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType}`;
-        case "description":
+        case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType} [ primaryActor actorId description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
     }
 }
 function createDataEnumeration(elementProperty, ruleProperty) {
-    const elementPropertyId = elementProperty.replaceAll("\\s+", "");
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
     const defaultElementId = `dEnum_${elementPropertyId}`;
-    const element = "DataEnumeration";
+    const element = 'DataEnumeration';
     switch (ruleProperty) {
-        case "id":
+        case 'id':
             return `${element} ${elementPropertyId}`;
-        case "name":
+        case 'name':
             return `${element} ${defaultElementId} "${elementProperty}"`;
-        case "description":
+        case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" values ( valueName ) [ description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
     }
 }
 function createDataEntityCluster(elementProperty, ruleProperty) {
-    const elementPropertyId = elementProperty.replaceAll("\\s+", "");
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
     const defaultElementId = `ec_${elementPropertyId}`;
-    const elementType = "Other";
-    const element = "DataEntityCluster";
+    const elementType = 'Other';
+    const element = 'DataEntityCluster';
     switch (ruleProperty) {
-        case "id":
+        case 'id':
             return `${element} ${elementPropertyId} : ${elementType}`;
-        case "name":
+        case 'name':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType}`;
-        case "description":
+        case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType} [ main dataEntityId description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
