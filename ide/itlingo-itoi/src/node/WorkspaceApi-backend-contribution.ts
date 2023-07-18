@@ -453,7 +453,15 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         }
 
 function createWorkspace(ip:string, params:string[]){
-    if (workspaceExists(params[0])) return;
+    if (workspaceExists(params[0])){
+        currentEditors[ip] = {
+            foldername: currentEditors[ip].foldername,
+            write: params[3]=="true",
+            time: Date.now(),
+            workspaceid: Number.parseInt(params[4]),
+        };
+        return;
+    } 
     let wuuid = uuid.v4();
     var randomFoldername = hostfs + 'tmp/' + wuuid + '/'+ params[0];
 
