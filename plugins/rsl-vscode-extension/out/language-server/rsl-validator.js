@@ -1410,7 +1410,7 @@ class RslValidator {
                         node: element,
                         property: elementAttribute,
                         code: IssueCodes.INCONSISTENT_TERM,
-                        data: [synonym, term.nameAlias, input],
+                        data: [synonym, term.nameAlias],
                     });
                     break;
                 }
@@ -1544,8 +1544,8 @@ class RslValidator {
                 j++;
             }
             if (j < tokens.length) {
-                let { wrongText, correctText } = this.getExcessTextToRemove(j, tokens, input);
-                this.displayValidationError(element, rule.severity, errorMessage, elementAttribute, IssueCodes.REMOVE_EXCESS_TEXT, accept, input, wrongText, correctText);
+                const wrongText = this.getExcessTextToRemove(j, tokens, input);
+                this.displayValidationError(element, rule.severity, errorMessage, elementAttribute, IssueCodes.REMOVE_EXCESS_TEXT, accept, wrongText);
                 return;
             }
         }
@@ -1560,8 +1560,7 @@ class RslValidator {
                 correctText += ' ' + tokens[w].originalText;
             }
         }
-        let wrongText = input.replace(correctText, '');
-        return { wrongText, correctText };
+        return input.replace(correctText, '');
     }
     /**
      * Verifies if a linguistic pattern for an element Id is valid.
@@ -1641,13 +1640,13 @@ class RslValidator {
         }
         for (let expectedWord of expectedWords) {
             // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
-            this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedWord, input);
+            this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedWord);
         }
         for (let patternOptionHelper of linguisticFragmentHelpers) {
             let expectedOption = patternOptionHelper.expectedOption;
             // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
             if (patternOptionHelper.optionType === linguisticFragmentPartHelper_1.OptionType.Word) {
-                this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedOption, input);
+                this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedOption);
             }
             else if (patternOptionHelper.optionType === linguisticFragmentPartHelper_1.OptionType.ElementAndProperty) {
                 this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.SELECT_ELEMENT, accept, originalText, expectedOption, patternOptionHelper.expectedRuleElementProperty.toString());
@@ -1733,13 +1732,13 @@ class RslValidator {
         }
         for (let expectedWord of expectedWords) {
             // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
-            this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedWord, input);
+            this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedWord);
         }
         for (let patternOptionHelper of linguisticFragmentHelpers) {
             let expectedOption = patternOptionHelper.expectedOption;
             // Issue Data follows the convention "{wrongWord, correctWord}" to be recognized by a quick fix handler
             if (patternOptionHelper.optionType === linguisticFragmentPartHelper_1.OptionType.Word) {
-                this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedOption, input);
+                this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.REPLACE_WORD, accept, originalText, expectedOption);
             }
             else if (patternOptionHelper.optionType === linguisticFragmentPartHelper_1.OptionType.ElementAndProperty) {
                 this.displayValidationError(element, severityLevel, errorMessage, elementAttribute, IssueCodes.SELECT_ELEMENT, accept, originalText, expectedOption, patternOptionHelper.expectedRuleElementProperty.toString());

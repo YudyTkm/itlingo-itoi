@@ -33,6 +33,7 @@ const rsl_text_generator_1 = require("./generator/rsl-text-generator");
 // import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
 const sprotty_vscode_1 = require("sprotty-vscode");
 const lsp_1 = require("sprotty-vscode/lib/lsp");
+const rsl_template_file_generator_1 = require("./generator/rsl-template-file-generator");
 let languageClient;
 // This function is called when the extension is activated.
 function activate(context) {
@@ -40,6 +41,7 @@ function activate(context) {
     const generatorFactory = new rsl_generator_factory_1.RslGeneratorFactory();
     context.subscriptions.push(vscode.commands.registerCommand("rsl.generate.json", (x) => generatorFactory.execute(new rsl_json_generator_1.RslJsonGenerator(x))));
     context.subscriptions.push(vscode.commands.registerCommand("rsl.generate.text", (x) => generatorFactory.execute(new rsl_text_generator_1.RsltextGenerator(x))));
+    context.subscriptions.push(vscode.commands.registerCommand('rsl.generate.from-template', (x) => generatorFactory.execute(new rsl_template_file_generator_1.RslTemplateFileGenerator(x))));
     const webviewPanelManager = new CustomLspWebview({
         extensionUri: context.extensionUri,
         defaultDiagramType: 'rsl',

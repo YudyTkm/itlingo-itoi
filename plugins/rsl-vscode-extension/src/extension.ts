@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import {
-    LanguageClient, LanguageClientOptions, ServerOptions, TransportKind
+  LanguageClient, LanguageClientOptions, ServerOptions, TransportKind
 } from 'vscode-languageclient/node';
 import { RslGeneratorFactory } from './generator/rsl-generator-factory';
 import { RslJsonGenerator } from './generator/rsl-json-generator';
@@ -9,7 +9,8 @@ import { RsltextGenerator } from './generator/rsl-text-generator';
 // import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
 
 import { SprottyDiagramIdentifier, createFileUri, createWebviewPanel, registerDefaultCommands } from 'sprotty-vscode';
-import { LspWebviewPanelManager, LspWebviewPanelManagerOptions} from 'sprotty-vscode/lib/lsp';
+import { LspWebviewPanelManager, LspWebviewPanelManagerOptions } from 'sprotty-vscode/lib/lsp';
+import { RslTemplateFileGenerator } from './generator/rsl-template-file-generator';
 
 
 
@@ -27,6 +28,9 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.commands.registerCommand("rsl.generate.text", (x) => generatorFactory.execute(new RsltextGenerator(x)))
   );
+  context.subscriptions.push(
+    vscode.commands.registerCommand('rsl.generate.from-template', (x) => generatorFactory.execute(new RslTemplateFileGenerator(x)))
+  );
 
   const webviewPanelManager = new CustomLspWebview({
     extensionUri: context.extensionUri,
@@ -41,7 +45,7 @@ export function activate(context: vscode.ExtensionContext): void {
 // This function is called when the extension is deactivated.
 export function deactivate(): Thenable<void> | undefined {
   if (languageClient) {
-      return languageClient.stop();
+    return languageClient.stop();
   }
   return undefined;
 }
@@ -56,8 +60,8 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
   // If the extension is launched in debug mode then the debug server options are used
   // Otherwise the run options are used
   const serverOptions: ServerOptions = {
-      run: { module: serverModule, transport: TransportKind.ipc },
-      debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
+    run: { module: serverModule, transport: TransportKind.ipc },
+    debug: { module: serverModule, transport: TransportKind.ipc, options: debugOptions }
   };
 
   const fileSystemWatcher = vscode.workspace.createFileSystemWatcher('**/*.rsl');
@@ -65,19 +69,19 @@ function startLanguageClient(context: vscode.ExtensionContext): LanguageClient {
 
   // Options to control the language client
   const clientOptions: LanguageClientOptions = {
-      documentSelector: [{ scheme: 'file', language: 'rsl' }],
-      synchronize: {
-          // Notify the server about file changes to files contained in the workspace
-          fileEvents: fileSystemWatcher
-      }
+    documentSelector: [{ scheme: 'file', language: 'rsl' }],
+    synchronize: {
+      // Notify the server about file changes to files contained in the workspace
+      fileEvents: fileSystemWatcher
+    }
   };
 
   // Create the language client and start the client.
   const client = new LanguageClient(
-      'rsl',
-      'rsl',
-      serverOptions,
-      clientOptions
+    'rsl',
+    'rsl',
+    serverOptions,
+    clientOptions
   );
 
   // Start the client. This will also launch the server
@@ -91,17 +95,17 @@ class CustomLspWebview extends LspWebviewPanelManager {
 
 
   constructor(options: LspWebviewPanelManagerOptions) {
-      super(options);
+    super(options);
   }
 
 
 
-  
+
   protected override createWebview(identifier: SprottyDiagramIdentifier): vscode.WebviewPanel {
-       return createWebviewPanel(identifier, {
-           localResourceRoots: [ createFileUri('/home', 'theia','pack') ],
-           scriptUri: createFileUri('/home', 'theia','pack','webview.js')
-       });
-   }
+    return createWebviewPanel(identifier, {
+      localResourceRoots: [createFileUri('/home', 'theia', 'pack')],
+      scriptUri: createFileUri('/home', 'theia', 'pack', 'webview.js')
+    });
+  }
 
 }

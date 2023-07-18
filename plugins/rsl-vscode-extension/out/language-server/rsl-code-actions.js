@@ -186,9 +186,10 @@ class RslActionProvider {
     removeExcessText(diagnostic, document) {
         const range = diagnostic.range;
         const data = diagnostic.data;
-        //let wrongText = data[0];
-        let toRemove = data[1];
-        let correctText = data[2];
+        const toRemove = data[0];
+        const wrongText = document.textDocument.getText(range);
+        const regEx = new RegExp(toRemove, 'ig');
+        const correctText = wrongText.replace(regEx, '');
         return {
             title: `Remove '${toRemove}'`,
             kind: vscode_languageserver_types_1.CodeActionKind.QuickFix,
@@ -199,7 +200,7 @@ class RslActionProvider {
                     [document.textDocument.uri]: [
                         {
                             range,
-                            newText: `"${correctText}"`,
+                            newText: correctText,
                         },
                     ],
                 },
@@ -216,8 +217,6 @@ class RslActionProvider {
      */
     removeString(title, diagnostic, document) {
         const range = diagnostic.range;
-        // const activeFlow = document.parseResult.value as ActiveFlow
-        // console.log('ActiveFlow: ' + activeFlow);
         return {
             title: title,
             kind: vscode_languageserver_types_1.CodeActionKind.QuickFix,
@@ -247,7 +246,7 @@ class RslActionProvider {
         const data = diagnostic.data;
         const wrongWord = data[0];
         const correctWord = data[1];
-        const wrongText = data[2];
+        const wrongText = document.textDocument.getText(range);
         const regEx = new RegExp(wrongWord, 'ig');
         const correctText = wrongText.replace(regEx, correctWord);
         return {
@@ -260,7 +259,7 @@ class RslActionProvider {
                     [document.textDocument.uri]: [
                         {
                             range,
-                            newText: `"${correctText}"`,
+                            newText: correctText,
                         },
                     ],
                 },
@@ -279,7 +278,7 @@ class RslActionProvider {
         const data = diagnostic.data;
         const wrongWord = data[0];
         const correctWord = data[1];
-        const wrongText = data[2];
+        const wrongText = document.textDocument.getText(range);
         const regEx = new RegExp(wrongWord, 'ig');
         const correctText = wrongText.replace(regEx, correctWord);
         return {
@@ -292,7 +291,7 @@ class RslActionProvider {
                     [document.textDocument.uri]: [
                         {
                             range,
-                            newText: `"${correctText}"`,
+                            newText: correctText,
                         },
                     ],
                 },

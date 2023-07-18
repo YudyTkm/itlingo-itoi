@@ -5,7 +5,6 @@ import {
   DefaultScopeProvider,
   EMPTY_SCOPE,
   LangiumDocuments,
-  Reference,
   ReferenceInfo,
   Scope,
   StreamScope,
@@ -14,10 +13,12 @@ import {
   stream,
 } from 'langium';
 import {
-  ActionTypeExtended,
+  ActionTypeExtendedRef,
+  ActionTypeOriginal,
   Import,
   IncludeElement,
   PackageSystem,
+  isActionTypeOriginal,
   isData,
   isDataTableHeader,
   isIncludeElement,
@@ -33,9 +34,9 @@ import { RslServices } from './rsl-module';
 import { RslNameProvider } from './rsl-naming';
 
 /**
- * Custom implementation of the `ScopeProvider` for the RSL language.
- * It is responsible for determining the visibility of target elements within a specific cross-reference context.
- */
+* Custom implementation of the `ScopeProvider` for the RSL language.
+* It is responsible for determining the visibility of target elements within a specific cross-reference context.
+*/
 export class RslScopeProvider extends DefaultScopeProvider {
   protected readonly astNodeLocator: AstNodeLocator;
   protected readonly langiumDocuments: LangiumDocuments;
@@ -73,7 +74,7 @@ export class RslScopeProvider extends DefaultScopeProvider {
     const system = getContainerOfType(context.container, isSystem);
     if (system) {
       fqNameToRemove = (this.nameProvider as RslNameProvider).getQualifiedName(system);
-  }
+    }
 
     const model = getContainerOfType(context.container, isPackageSystem);
     if (!model) {
@@ -111,7 +112,7 @@ export class RslScopeProvider extends DefaultScopeProvider {
 
     if (referenceType === 'System' || referenceType === 'State') {
       matchingElements = matchingElements.filter((x) => x.name.split('.').length === 1);
-  }
+    }
 
     if (matchingElements.length === 0) {
       return EMPTY_SCOPE;
@@ -138,120 +139,122 @@ export class RslScopeProvider extends DefaultScopeProvider {
       let elements: AstNodeDescription[] = [];
       for (let element of super.getScope(refInfo).getAllElements()) {
         if (data && data.type.ref) {
-            const attributes = data.type.ref.attributes;
-            if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
-                continue;
-            }
-            element.name = element.name.slice(data.type.ref.name.length+1);
-            elements.push(element);
+          const attributes = data.type.ref.attributes;
+          if (!attributes.some((x) => this.astNodeLocator.getAstNodePath(x) === element.path)) {
+            continue;
+          }
+          element.name = element.name.slice(data.type.ref.name.length + 1);
+          elements.push(element);
         }
       }
-            
+
       return this.createScope(elements);
     } else if (isIncludeElementGeneric(context)) {
       if (isIncludeElement(context) && refInfo.property === 'element') {
-          return this.getIncludeElementScope(refInfo, context as IncludeElement);
+        return this.getIncludeElementScope(refInfo, context as IncludeElement);
       }
 
       const contextDocument = getDocument(context);
       let elements: AstNodeDescription[] = [];
       for (let element of super.getScope(refInfo).getAllElements()) {
-          if (element.documentUri.fsPath === contextDocument.uri.fsPath) {
-              continue;
-          }
+        if (element.documentUri.fsPath === contextDocument.uri.fsPath) {
+          continue;
+        }
 
-          elements.push(element);
+        elements.push(element);
       }
 
       return this.createScope(elements);
-  } else if (isView(context.$container)) {
+    } else if (isView(context.$container)) {
       if (!context.$container.type) {
-          return super.getScope(refInfo);
+        return super.getScope(refInfo);
       }
 
       if (refInfo.property === 'references') {
-          if (context.$container.type.type === 'UseCaseView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase' || x.type === 'Actor').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'ActiveElementView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'ActiveElement').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'ActorView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Actor').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'ConstraintView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Constraint').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'DataEntityClusterView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'DataEntityCluster').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'DataEntityView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'DataEntity').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'FRView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'FR').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'GlossaryTermView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'GlossaryTerm').toArray();
-              return this.createScope(elements);
-          } else if (context.$container.type.type === 'GoalView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Goal').toArray();
-              return this.createScope(elements);
-          }else if (context.$container.type.type === 'QRView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'QR').toArray();
-              return this.createScope(elements);
-          }else if (context.$container.type.type === 'RequirementView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Requirement').toArray();
-              return this.createScope(elements);
-          }else if (context.$container.type.type === 'RiskView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Risk').toArray();
-              return this.createScope(elements);
-          }else if (context.$container.type.type === 'StakeholderView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Stakeholder').toArray();
-              return this.createScope(elements);
-          }else if (context.$container.type.type === 'TestView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Test').toArray();
-              return this.createScope(elements);
-          }else if (context.$container.type.type === 'UserStoryView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UserStory').toArray();
-              return this.createScope(elements);
-          }else if (context.$container.type.type === 'VulnerabilityView') {
-              let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Vulnerability').toArray();
-              return this.createScope(elements);
-          }
-          
+        if (context.$container.type.type === 'UseCaseView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UseCase' || x.type === 'Actor').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'ActiveElementView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'ActiveElement').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'ActorView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Actor').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'ConstraintView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Constraint').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'DataEntityClusterView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'DataEntityCluster').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'DataEntityView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'DataEntity').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'FRView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'FR').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'GlossaryTermView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'GlossaryTerm').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'GoalView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Goal').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'QRView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'QR').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'RequirementView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Requirement').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'RiskView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Risk').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'StakeholderView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Stakeholder').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'TestView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Test').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'UserStoryView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'UserStory').toArray();
+          return this.createScope(elements);
+        } else if (context.$container.type.type === 'VulnerabilityView') {
+          let elements = super.getScope(refInfo).getAllElements().filter(x => x.type === 'Vulnerability').toArray();
+          return this.createScope(elements);
+        }
+
       }
-  } else if (isUCExtends(context)){
-      if(refInfo.property !== 'extensionPoint') return super.getScope(refInfo);
+    } else if (isUCExtends(context)) {
+      if (refInfo.property !== 'extensionPoint') return super.getScope(refInfo);
       let elements: AstNodeDescription[] = [];
       for (let element of super.getScope(refInfo).getAllElements()) {
-          if(element.name.substring(0, context.usecase.$refText.length) === context.usecase.$refText){
-              element.name = element.name.slice(context.usecase.$refText.length+1);
-              elements.push(element);
-          }
+        if (element.name.substring(0, context.usecase.$refText.length) === context.usecase.$refText) {
+          element.name = element.name.slice(context.usecase.$refText.length + 1);
+          elements.push(element);
+        }
       }
       return this.createScope(elements);
-  } else if (isRefUCAction(context.$container)){
+    } else if (isRefUCAction(context.$container)) {
       if (!context.$container.useCase) {
-          return super.getScope(refInfo);
+        return super.getScope(refInfo);
       }
       let useCase = getContainerOfType(context.$container.useCase.ref, isUseCase);
-      if(!useCase) {
-          return super.getScope(refInfo);
+      if (!useCase) {
+        return super.getScope(refInfo);
       }
       let actions = useCase?.actions?.actions
-                  .map((action) => {
-                      let type = action.type as Reference<ActionTypeExtended>
-                      return type.$refText
-                  });
-      let elements = super.getScope(refInfo).getAllElements().filter(
-          (action) => {
-              return actions?.includes(action.name)
+        .map((action) => {
+          if (isActionTypeOriginal(action)) {
+            return (action as ActionTypeOriginal).type;
           }
+          return (action as ActionTypeExtendedRef).type.$refText;
+        });
+      let elements = super.getScope(refInfo).getAllElements().filter(
+        (action) => {
+          return actions?.includes(action.name)
+        }
       ).toArray();
       return this.createScope(elements);
-  }
-  return super.getScope(refInfo);
+    }
+    return super.getScope(refInfo);
   }
 
   /**
@@ -281,49 +284,49 @@ export class RslScopeProvider extends DefaultScopeProvider {
 }
 
 /**
- * Checks if the given import matches the qualified name.
- *
- * @param imp           The import to check.
- * @param qualifiedName The qualified name to match.
- * @returns True if the import matches the qualified name; otherwise false.
- */
+* Checks if the given import matches the qualified name.
+*
+* @param imp           The import to check.
+* @param qualifiedName The qualified name to match.
+* @returns True if the import matches the qualified name; otherwise false.
+*/
 function matchingImport(imp: Import, qualifiedName: string): boolean {
   let importedNamespace = imp.importedNamespace.split('.');
   let elementQualifiedName = qualifiedName.split('.');
 
   if (importedNamespace.length === 0 || elementQualifiedName.length === 0) {
-      return false;
+    return false;
   }
 
   for (let i = 0; i < importedNamespace.length; i++) {
-      if (importedNamespace[i] === '*') {
-          continue;
-      }
+    if (importedNamespace[i] === '*') {
+      continue;
+    }
 
-      if (importedNamespace[i] !== elementQualifiedName[i]) {
-          return false;
-      }
+    if (importedNamespace[i] !== elementQualifiedName[i]) {
+      return false;
+    }
   }
 
   return true;
 }
 
 /**
- * Normalizes the import by removing the import prefix from the name.
- *
- * @param imp  The import to normalize.
- * @param name The name to normalize.
- * @returns The normalized name.
- */
+* Normalizes the import by removing the import prefix from the name.
+*
+* @param imp  The import to normalize.
+* @param name The name to normalize.
+* @returns The normalized name.
+*/
 function normalizeImport(imp: Import, name: string): string {
   let importedNamespace = imp.importedNamespace.split('.');
 
   if (imp.importedNamespace === name) {
-      return importedNamespace[importedNamespace.length - 1];
+    return importedNamespace[importedNamespace.length - 1];
   }
 
   if (importedNamespace[importedNamespace.length - 1] !== '*') {
-      return name.replace(`${imp.importedNamespace}.`, '');
+    return name.replace(`${imp.importedNamespace}.`, '');
   }
 
   importedNamespace.pop();
@@ -332,12 +335,12 @@ function normalizeImport(imp: Import, name: string): string {
 }
 
 /**
- * Sorts imports based on the number of segments and the presence of an asterisk.
- *
- * @param importA The first import to compare.
- * @param importB The second import to compare.
- * @returns -1 if importA should come before importB, 1 if importA should come after importB, or 0 if they are equal.
- */
+* Sorts imports based on the number of segments and the presence of an asterisk.
+*
+* @param importA The first import to compare.
+* @param importB The second import to compare.
+* @returns -1 if importA should come before importB, 1 if importA should come after importB, or 0 if they are equal.
+*/
 function importSort(importA: Import, importB: Import): number {
   const importASegments = importA.importedNamespace.split('.').length;
   const importBSegments = importB.importedNamespace.split('.').length;

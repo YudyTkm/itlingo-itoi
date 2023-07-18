@@ -4,9 +4,9 @@ exports.RslScopeProvider = void 0;
 const langium_1 = require("langium");
 const ast_1 = require("./generated/ast");
 /**
- * Custom implementation of the `ScopeProvider` for the RSL language.
- * It is responsible for determining the visibility of target elements within a specific cross-reference context.
- */
+* Custom implementation of the `ScopeProvider` for the RSL language.
+* It is responsible for determining the visibility of target elements within a specific cross-reference context.
+*/
 class RslScopeProvider extends langium_1.DefaultScopeProvider {
     /**
      * Initializes a new instance of `RslScopeProvider`.
@@ -209,8 +209,10 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
                 return super.getScope(refInfo);
             }
             let actions = (_a = useCase === null || useCase === void 0 ? void 0 : useCase.actions) === null || _a === void 0 ? void 0 : _a.actions.map((action) => {
-                let type = action.type;
-                return type.$refText;
+                if ((0, ast_1.isActionTypeOriginal)(action)) {
+                    return action.type;
+                }
+                return action.type.$refText;
             });
             let elements = super.getScope(refInfo).getAllElements().filter((action) => {
                 return actions === null || actions === void 0 ? void 0 : actions.includes(action.name);
@@ -243,12 +245,12 @@ class RslScopeProvider extends langium_1.DefaultScopeProvider {
 }
 exports.RslScopeProvider = RslScopeProvider;
 /**
- * Checks if the given import matches the qualified name.
- *
- * @param imp           The import to check.
- * @param qualifiedName The qualified name to match.
- * @returns True if the import matches the qualified name; otherwise false.
- */
+* Checks if the given import matches the qualified name.
+*
+* @param imp           The import to check.
+* @param qualifiedName The qualified name to match.
+* @returns True if the import matches the qualified name; otherwise false.
+*/
 function matchingImport(imp, qualifiedName) {
     let importedNamespace = imp.importedNamespace.split('.');
     let elementQualifiedName = qualifiedName.split('.');
@@ -266,12 +268,12 @@ function matchingImport(imp, qualifiedName) {
     return true;
 }
 /**
- * Normalizes the import by removing the import prefix from the name.
- *
- * @param imp  The import to normalize.
- * @param name The name to normalize.
- * @returns The normalized name.
- */
+* Normalizes the import by removing the import prefix from the name.
+*
+* @param imp  The import to normalize.
+* @param name The name to normalize.
+* @returns The normalized name.
+*/
 function normalizeImport(imp, name) {
     let importedNamespace = imp.importedNamespace.split('.');
     if (imp.importedNamespace === name) {
@@ -284,12 +286,12 @@ function normalizeImport(imp, name) {
     return name.replace(`${importedNamespace.join('.')}.`, '');
 }
 /**
- * Sorts imports based on the number of segments and the presence of an asterisk.
- *
- * @param importA The first import to compare.
- * @param importB The second import to compare.
- * @returns -1 if importA should come before importB, 1 if importA should come after importB, or 0 if they are equal.
- */
+* Sorts imports based on the number of segments and the presence of an asterisk.
+*
+* @param importA The first import to compare.
+* @param importB The second import to compare.
+* @returns -1 if importA should come before importB, 1 if importA should come after importB, or 0 if they are equal.
+*/
 function importSort(importA, importB) {
     const importASegments = importA.importedNamespace.split('.').length;
     const importBSegments = importB.importedNamespace.split('.').length;

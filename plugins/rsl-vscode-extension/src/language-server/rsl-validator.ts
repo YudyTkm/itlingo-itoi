@@ -1780,7 +1780,7 @@ export class RslValidator {
                         node: element,
                         property: elementAttribute,
                         code: IssueCodes.INCONSISTENT_TERM,
-                        data: [synonym, term.nameAlias, input],
+                        data: [synonym, term.nameAlias],
                     });
                     break;
                 }
@@ -1979,7 +1979,7 @@ export class RslValidator {
             }
 
             if (j < tokens.length) {
-                let { wrongText, correctText } = this.getExcessTextToRemove(j, tokens, input);
+                const wrongText = this.getExcessTextToRemove(j, tokens, input);
                 this.displayValidationError(
                     element,
                     rule.severity,
@@ -1987,9 +1987,7 @@ export class RslValidator {
                     elementAttribute,
                     IssueCodes.REMOVE_EXCESS_TEXT,
                     accept,
-                    input,
-                    wrongText,
-                    correctText
+                    wrongText
                 );
                 return;
             }
@@ -2006,9 +2004,7 @@ export class RslValidator {
             }
         }
 
-        let wrongText = input.replace(correctText, '');
-
-        return { wrongText, correctText };
+        return input.replace(correctText, '');
     }
 
     /**
@@ -2155,8 +2151,7 @@ export class RslValidator {
                 IssueCodes.REPLACE_WORD,
                 accept,
                 originalText,
-                expectedWord,
-                input
+                expectedWord
             );
         }
 
@@ -2173,8 +2168,7 @@ export class RslValidator {
                     IssueCodes.REPLACE_WORD,
                     accept,
                     originalText,
-                    expectedOption,
-                    input
+                    expectedOption
                 );
             } else if (patternOptionHelper.optionType === OptionType.ElementAndProperty) {
                 this.displayValidationError(
@@ -2348,8 +2342,7 @@ export class RslValidator {
                 IssueCodes.REPLACE_WORD,
                 accept,
                 originalText,
-                expectedWord,
-                input
+                expectedWord
             );
         }
 
@@ -2366,8 +2359,7 @@ export class RslValidator {
                     IssueCodes.REPLACE_WORD,
                     accept,
                     originalText,
-                    expectedOption,
-                    input
+                    expectedOption
                 );
             } else if (patternOptionHelper.optionType === OptionType.ElementAndProperty) {
                 this.displayValidationError(

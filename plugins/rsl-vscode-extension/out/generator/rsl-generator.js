@@ -49,52 +49,53 @@ class RslGenerator {
      * @param uri - The URI of the source file.
      */
     constructor(uri) {
+        this.generatedDirectoryName = 'Generated';
         if (!uri) {
             // in case the command is launched from the commandPalette
             if (vscode.window.activeTextEditor) {
                 uri = vscode.window.activeTextEditor.document.uri;
             }
             else {
-                throw new Error("Failed to detect the source generation file. No URI provided and no active text editor found.");
+                throw new Error('Failed to detect the source generation file. No URI provided and no active text editor found.');
             }
         }
         this.fileUri = uri;
+        const workspace = vscode.workspace.getWorkspaceFolder(this.fileUri);
+        if (!workspace) {
+            throw new Error('Failed to find the workspace folder for the selected/active file');
+        }
+        this.workspace = workspace;
         this.services = (0, rsl_module_1.createRslServices)(node_1.NodeFileSystem).Rsl;
-        this.document =
-            this.services.shared.workspace.LangiumDocuments.getOrCreateDocument(this.fileUri);
+        this.document = this.services.shared.workspace.LangiumDocuments.getOrCreateDocument(this.fileUri);
         this.model = this.document.parseResult.value;
     }
     /**
      * Executes the generator by writing the content to a destination file.
      *
-     * @param content              The content to be written.
+     * @param content The content to be written.
      */
     execute(content) {
         return __awaiter(this, void 0, void 0, function* () {
-            const workspace = vscode.workspace.getWorkspaceFolder(this.fileUri);
-            if (!workspace) {
-                throw new Error("Failed to find the workspace folder for the selected file Uri");
-            }
-            const destinationDirectory = workspace.uri;
-            const fileName = `${(0, generator_utils_1.getFileName)(this.fileUri.path)}.${this.getFileExtension()}`;
-            const fileUri = destinationDirectory.with({
-                path: path_1.posix.join(destinationDirectory.path, fileName),
-            });
+            const destinationDirectory = this.workspace.uri;
+            const fileName = `${(0, generator_utils_1.getFileNameWithoutExtension)(this.fileUri.path)}${this.getFileExtension()}`;
+            const fileUri = destinationDirectory.with({ path: path_1.posix.join(destinationDirectory.path, this.generatedDirectoryName, fileName) });
             yield (0, generator_utils_1.writeFile)(fileUri, content);
             vscode.window.showInformationMessage(`${fileName} generated successfully`);
-            vscode.window.showTextDocument(fileUri);
+            if (this.getFileExtension() === '.txt' || this.getFileExtension() === '.json') {
+                vscode.window.showTextDocument(fileUri);
+            }
         });
     }
     /**
      * Validates the Langium document for errors.
      *
-     * @returns A boolean indicating whether the document is valid (true) or has errors (false).
+     * @throws Error In case the selected RSL file has errors.
      */
     validate() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.services.shared.workspace.DocumentBuilder.build([this.document], { validationChecks: "all" });
+            yield this.services.shared.workspace.DocumentBuilder.build([this.document], { validationChecks: 'all' });
             if (this.document.diagnostics && this.document.diagnostics.length > 0) {
-                throw new Error(`The file ${this.fileUri.path} has some errors. Please fix them before generating the new file`);
+                throw new Error(`The file ${(0, generator_utils_1.getFileName)(this.fileUri.path)} has some errors. Please fix them before generating the new file`);
             }
         });
     }
