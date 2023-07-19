@@ -8,18 +8,18 @@ import * as nsfw from 'nsfw'
 import * as cp from 'child_process'
 import path = require("path");
 import * as uuid from 'uuid';
+import * as session from 'express-session';
 import { Pool, QueryResult }  from 'pg';
 const getDirName = require('path').dirname
 const crypto = require('crypto');
-let requestIp = require('request-ip');
 
 const hostfs = "/tmp/theia/workspaces/";
 export const hostroot = "/home/theia/ide/";
 const staticFolderLength = 63;
 const COM_KEY = "v8y/B?E(H+MbQeThWmZq4t7w!z$C&F)J";
+const COOKIE_KEY = "0JWVNoq6y7X8hai2r59YY8ILAxC8wcvGODtGvEkv2yKgxlVPfpCeUGqHsoxObdXV";
 const itlingoCloudURL = "https://itlingocloud.herokuapp.com/";
 export const hostname = "itlingocloud.herokuapp.com";
-const currentEditors: {[ip:string]: Editor} = {};
 const workspaces: Map<string, string[]> = new Map<string, string[]>();
 
 type Editor = {
@@ -28,6 +28,12 @@ type Editor = {
     time:number;
     workspaceid: number;
 };
+
+declare module "express-session" {
+    interface SessionData {
+      workspace: Editor;
+    }
+  }
 
 @injectable()
 export class SwitchWSBackendContribution implements BackendApplicationContribution {
@@ -192,19 +198,16 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         }
         
         cp.execSync("mkdir -p " + hostfs + "tmp/");
+        app.use(session({ secret: COOKIE_KEY, cookie: { maxAge: 60000 }}));
         createWatcher(hostfs + 'tmp/')
         // registerCollab(app);
         app.get('/getWorkspace', (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            console.log(currentEditors);
-            console.log(ip);
-            if(!(ip in currentEditors)){
+            if(!req.session.workspace){
                 res.statusCode = 401;
                 res.end();
                 return
             }
-
-            let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
+            let workspaceName = getWorkspaceFromPath(req.session.workspace.foldername);
             let username: string = "";
             let params = workspaces.get(workspaceName);
             if(params){
@@ -213,15 +216,14 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             res.statusCode = 200;
             res.setHeader('Content-Type', 'json/application');
             res.json({
-                foldername: currentEditors[ip].foldername,  
-                readonly: !currentEditors[ip].write,
+                foldername: req.session.workspace.foldername,  
+                readonly: !req.session.workspace.write,
                 username: username
             });
             res.end();
         });
 
         app.get('/createTempWorkspace', (req, res) => {
-            let ip = requestIp.getClientIp(req);
             if(req.query.iv == undefined || req.query.t == undefined) {
                 res.statusCode = 301;
                 res.redirect(itlingoCloudURL);
@@ -229,11 +231,12 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             } else {
                 let iv = req.query.iv as string;
                 let token = req.query.t as string;
-                
+
                 let params = decrypt(iv, token);
                 console.log("after decrypt");
                 console.log(params);
-                createWorkspace(ip, params);
+                createWorkspace(req, params);
+                req.session.save();
                 res.statusCode = 301;
                 res.redirect('/');
                 res.end();
@@ -241,20 +244,17 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         });
 
         app.get('/ping', (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) currentEditors[ip].time =  Date.now();
+            if(req.session.workspace) req.session.workspace.time =  Date.now();
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
-            res.send("detected workspace of" + ip);
             res.end();
         });
 
 
 
         app.get('/setupRSL', (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) {
-                copyRSLFolder(currentEditors[ip].foldername)
+            if(req.session.workspace) {
+                copyRSLFolder(req.session.workspace.foldername)
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
@@ -262,9 +262,8 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         });
 
         app.get('/setupASL', (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) {
-                copyASLFolder(currentEditors[ip].foldername)
+            if(req.session.workspace) {
+                copyASLFolder(req.session.workspace.foldername)
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain');
@@ -273,10 +272,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
 
 
         app.get('/setupCustom',async (req, res) => {
-            let ip = requestIp.getClientIp(req);
             let responseItlingoCloud;
-            if(currentEditors[ip]) {
-                responseItlingoCloud = await setupCustomFiles(currentEditors[ip]);
+            if(req.session.workspace) {
+                responseItlingoCloud = await setupCustomFiles(req.session.workspace);
             }
             res.statusCode = 200;
             res.setHeader('Content-Type', 'json/application');
@@ -285,11 +283,10 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         });
 
         app.get('/setupCustomAccepted',async (req, res) => {
-            let ip = requestIp.getClientIp(req);
             console.log('setupCustomAccepted');
             console.log(req.query.fileid);
-            if(currentEditors[ip]) {
-                 downloadItlingoFiles(currentEditors[ip], req.query.filename as string, req.query.fileid as string);
+            if(req.session.workspace) {
+                 downloadItlingoFiles(req.session.workspace, req.query.filename as string, req.query.fileid as string);
             }
             
             res.statusCode = 200;
@@ -299,12 +296,11 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
 
 
         app.get('/cloneRepo', async (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) {
-                let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
+            if(req.session.workspace) {
+                let workspaceName = getWorkspaceFromPath(req.session.workspace.foldername);
                 let jsonData = JSON.parse(Buffer.from(req.query.data as string, "base64").toString());
                 let scriptPath = path.join(hostroot, "gitUtils", "cloneScript.sh");
-                cp.execSync(`${scriptPath} ${currentEditors[ip].foldername} ${jsonData.username} ${jsonData.repository}`);
+                cp.execSync(`${scriptPath} ${req.session.workspace.foldername} ${jsonData.username} ${jsonData.repository}`);
                 let query = 'CALL public.sp_assignGit($1::varchar, $2::varchar)';
                 pgPool.query(query, [workspaceName,jsonData.repository] , (err:any, res:any) =>
                 {
@@ -326,10 +322,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
 
 
         app.get('/gitCheckout', (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) {
+            if(req.session.workspace) {
                 console.log("Checkout!!");
-                let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git checkout ${req.query.data}`).toString();
+                let output = cp.execSync(`cd ${req.session.workspace.foldername} && git checkout ${req.query.data}`).toString();
                 if(output === '') output = "Sucess!"
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'text/plain');
@@ -341,10 +336,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         });
 
         app.get('/gitBranch', (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) {
+            if(req.session.workspace) {
                 console.log("Branch!!");
-                let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git checkout -b ${req.query.data}`).toString();
+                let output = cp.execSync(`cd ${req.session.workspace.foldername} && git checkout -b ${req.query.data}`).toString();
                 if(output === '') output = "Sucess!"
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'text/plain');
@@ -357,19 +351,19 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
 
 
         app.get('/gitPull', (req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) {
+            if(req.session.workspace) {
                 console.log("PULL!!");
                 //console.log(`${req.query.repoUrl} `);
-                let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
+                let workspaceName = getWorkspaceFromPath(req.session.workspace.foldername);
                 pgPool.query('SELECT repo FROM public.fn_getgitrepo($1::varchar)', [workspaceName], (err:any, qres:QueryResult) => {
                     if(err){
                         res.statusCode = 500;
                         res.setHeader('Content-Type', 'text/plain');
                         res.end(); 
                     }
+                    if(!req.session.workspace) return;
                     console.log(qres.rows[0].repo);
-                    let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git pull ${qres.rows[0].repo}`).toString();
+                    let output = cp.execSync(`cd ${req.session.workspace.foldername} && git pull ${qres.rows[0].repo}`).toString();
                     if(output === '') output = "Sucess!"
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'text/plain');
@@ -383,10 +377,10 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         });
 
         app.get('/gitPush',(req, res) => {
-            let ip = requestIp.getClientIp(req);
-            if(currentEditors[ip]) {
+
+            if(req.session.workspace) {
                 console.log("PUSSHHH!!");
-                let workspaceName = getWorkspaceFromPath(currentEditors[ip].foldername);
+                let workspaceName = getWorkspaceFromPath(req.session.workspace.foldername);
                 //console.log(`${req.query.repoUrl} `);
                 pgPool.query('SELECT repo FROM public.fn_getgitrepo($1::varchar)', [workspaceName], (err:any, qres:any) => {
                     if(err){
@@ -394,8 +388,9 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                         res.setHeader('Content-Type', 'text/plain');
                         res.end(); 
                     }
+                    if(!req.session.workspace) return;
                     console.log(qres.rows[0].repo);
-                    let output = cp.execSync(`cd ${currentEditors[ip].foldername} && git push ${qres.rows[0].repo}`).toString();
+                    let output = cp.execSync(`cd ${req.session.workspace.foldername} && git push ${qres.rows[0].repo}`).toString();
                     if(output === '') output = "Sucess!"
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'text/plain');
@@ -452,10 +447,10 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             }
         }
 
-function createWorkspace(ip:string, params:string[]){
-    if (workspaceExists(params[0])){
-        currentEditors[ip] = {
-            foldername: currentEditors[ip].foldername,
+function createWorkspace(req:Express.Request, params:string[]){
+    if (req.session.workspace && workspaceExists(params[0])){
+        req.session.workspace = {
+            foldername: req.session.workspace.foldername,
             write: params[3]=="true",
             time: Date.now(),
             workspaceid: Number.parseInt(params[4]),
@@ -464,15 +459,14 @@ function createWorkspace(ip:string, params:string[]){
     } 
     let wuuid = uuid.v4();
     var randomFoldername = hostfs + 'tmp/' + wuuid + '/'+ params[0];
-
+    req.session.workspace = {
+        foldername: randomFoldername,
+        write: params[3]=="true",
+        time: Date.now(),
+        workspaceid: Number.parseInt(params[4]),
+     };
      fs.mkdir(randomFoldername, {recursive: true},(err:any) => {
          if (err) throw err;
-         currentEditors[ip] = {
-            foldername: randomFoldername,
-            write: params[3]=="true",
-            time: Date.now(),
-            workspaceid: Number.parseInt(params[4]),
-         };
      });
     workspaces.set(params[0], params);
     pullFilesFromDb(randomFoldername,params);
