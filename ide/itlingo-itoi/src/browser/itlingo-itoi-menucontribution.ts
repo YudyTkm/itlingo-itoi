@@ -167,7 +167,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         inputBox1.value = '';
         inputBox1.ignoreFocusOut = true;
         inputBox1.onDidAccept(() => {
-            axios.get("/gitCheckout", {params:{ data: inputBox1.value }})
+            axios.get("/gitCheckout", {params:{ data: inputBox1.value }, withCredentials: true })
             .then((e) =>{
                 this.messageService.info("Checkout output: " + e.data.output);
             });
@@ -184,7 +184,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         inputBox1.value = '';
         inputBox1.ignoreFocusOut = true;
         inputBox1.onDidAccept(() => {
-            axios.get("/gitBranch", {params:{data:inputBox1.value }})
+            axios.get("/gitBranch", {params:{data:inputBox1.value }, withCredentials: true})
             .then((e) =>{
                 this.messageService.info("Branch output: " + e.data.output);
             });
@@ -194,7 +194,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
     }
 
     myGitPull(){
-        axios.get("/gitPull", {params:{ }})
+        axios.get("/gitPull", {params:{ }, withCredentials: true})
         .then((e) =>{
             this.messageService.info("Pull output: " + e.data.output);
         });
@@ -223,7 +223,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         // inputBox1.show();
     }
     myGitPush(){
-        axios.get("/gitPush", {params:{ }})
+        axios.get("/gitPush", {params:{ }, withCredentials: true})
         .then((e) =>{
             this.messageService.info("Push output: " + e.data.output);
         }).catch(e=>{
@@ -300,7 +300,7 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         let encoded = Buffer.from(JSON.stringify(gitUser)).toString("base64");
         axios.get("/cloneRepo", {params:{
             data:encoded
-        }}).then(()=>{
+        } , withCredentials: true}).then(()=>{
             this.messageService.info("Clonned Successfully!");
         });
     }
