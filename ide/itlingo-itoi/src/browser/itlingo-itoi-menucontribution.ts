@@ -167,7 +167,11 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         inputBox1.value = '';
         inputBox1.ignoreFocusOut = true;
         inputBox1.onDidAccept(() => {
-            axios.get("/gitCheckout", {params:{ data: inputBox1.value }, withCredentials: true })
+            axios.get("/gitCheckout", {params:{ data: inputBox1.value }, withCredentials: true, headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+              } })
             .then((e) =>{
                 this.messageService.info("Checkout output: " + e.data.output);
             });

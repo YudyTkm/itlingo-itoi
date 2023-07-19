@@ -150,7 +150,11 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
         
     }
     onStart(app: FrontendApplication):void {
-         axios.get<JSON>('/getWorkspace',{ withCredentials: true },).then(
+         axios.get<JSON>('/getWorkspace',{ withCredentials: true, headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }, },).then(
                  (response: any) => {
                      var prevRoot = this.workspaceService.tryGetRoots()[0] ;
                      
