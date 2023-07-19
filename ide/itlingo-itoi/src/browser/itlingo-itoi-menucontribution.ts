@@ -188,7 +188,11 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         inputBox1.value = '';
         inputBox1.ignoreFocusOut = true;
         inputBox1.onDidAccept(() => {
-            axios.get("/gitBranch", {params:{data:inputBox1.value }, withCredentials: true})
+            axios.get("/gitBranch", {params:{data:inputBox1.value }, withCredentials: true, headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Expires': '0',
+              }})
             .then((e) =>{
                 this.messageService.info("Branch output: " + e.data.output);
             });
@@ -198,7 +202,11 @@ export class TheiaExampleCommandContribution implements CommandContribution {
     }
 
     myGitPull(){
-        axios.get("/gitPull", {params:{ }, withCredentials: true})
+        axios.get("/gitPull", {params:{ }, withCredentials: true, headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }})
         .then((e) =>{
             this.messageService.info("Pull output: " + e.data.output);
         });
@@ -227,7 +235,11 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         // inputBox1.show();
     }
     myGitPush(){
-        axios.get("/gitPush", {params:{ }, withCredentials: true})
+        axios.get("/gitPush", {params:{ }, withCredentials: true, headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }})
         .then((e) =>{
             this.messageService.info("Push output: " + e.data.output);
         }).catch(e=>{
@@ -304,7 +316,11 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         let encoded = Buffer.from(JSON.stringify(gitUser)).toString("base64");
         axios.get("/cloneRepo", {params:{
             data:encoded
-        } , withCredentials: true}).then(()=>{
+        } , withCredentials: true, headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          }}).then(()=>{
             this.messageService.info("Clonned Successfully!");
         });
     }

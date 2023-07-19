@@ -448,9 +448,12 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         }
 
 function createWorkspace(req:Express.Request, params:string[]){
-    if (req.session.workspace && workspaceExists(params[0])){
+    if (workspaceExists(params[0])){
+        let savedParams = workspaces.get(params[0]) as string[];
+        console.log("got saved workspace");
+        console.log(params[5]);
         req.session.workspace = {
-            foldername: req.session.workspace.foldername,
+            foldername: savedParams[5],
             write: params[3]=="true",
             time: Date.now(),
             workspaceid: Number.parseInt(params[4]),
@@ -468,6 +471,7 @@ function createWorkspace(req:Express.Request, params:string[]){
      fs.mkdir(randomFoldername, {recursive: true},(err:any) => {
          if (err) throw err;
      });
+    params.push(randomFoldername);
     workspaces.set(params[0], params);
     pullFilesFromDb(randomFoldername,params);
 }
