@@ -3,6 +3,7 @@ import { CommandContribution,MessageService, CommandHandler, CommandRegistry, Me
 import { KeybindingContribution, KeybindingRegistry, QuickInputService } from '@theia/core/lib/browser';
 import { GIT_COMMANDS, GIT_MENUS } from '@theia/git/lib/browser/git-contribution';
 import { EditorManager } from '@theia/editor/lib/browser'
+
 import {
     TabBarToolbarContribution,
     TabBarToolbarItem,
@@ -99,7 +100,6 @@ export class TheiaExampleCommandContribution implements CommandContribution {
     protected readonly  commands: CommandRegistry;
     @inject(EditorManager)
     protected readonly editorManager: EditorManager;
-
     constructor(){}
 
 

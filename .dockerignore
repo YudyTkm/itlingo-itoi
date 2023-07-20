@@ -4,3 +4,4 @@ heroku.yml
 license
 readme.md
 node_modules
+**/node_modules

@@ -186,6 +186,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                         let usersList = await this.itoiServer.getUsersWithFileOpen(e.uri);
                         if(usersList.length>0){
                             this.messageService.info("This document is currently open by the following users!\n" + usersList.join(' | '));
+                            this.messageService.info(`${e.uri}`);
                         }
                         this.itoiServer.fileOpened(e.uri);
                     });

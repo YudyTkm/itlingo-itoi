@@ -32,10 +32,6 @@ export interface ItoiServer extends JsonRpcServer<ItoiClient> {
     getUsersWithFileOpen(fileUri: string): Promise<string[]>;
     userPing(): void;
 }
-// console.log(jsonData.email);
-// console.log(jsonData.username);
-// console.log(jsonData.accessCode);
-// console.log(jsonData.repository);
 
 
 //revamp  concurrency
@@ -73,7 +69,7 @@ export class ItoiServerNode implements ItoiServer {
   }
 
   fileOpened(fileUri: string): void {
-    // console.log("file opened"+ fileUri);
+    console.log("file opened"+ fileUri);
     let readers = openedFile.get(fileUri);
      if (readers){
       readers
