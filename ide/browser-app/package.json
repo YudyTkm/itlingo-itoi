@@ -43,7 +43,15 @@
         "applicationName": "ITOI",
         "preferences": {
           "workbench.colorTheme": "dark",
-          "files.enableTrash": false
+          "files.enableTrash": false,
+          "files.exclude": {
+            "**/.git": true,
+            "**/.svn": true,
+            "**/.hg": true,
+            "**/.DS_Store": true,
+            "/home/theia": true,
+            "**/annotations.json": true
+          }
         },
         "warnOnPotentiallyInsecureHostPattern": false
       }
