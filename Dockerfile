@@ -93,15 +93,14 @@ RUN chmod 777 -R /home/theia/pack
 EXPOSE $PORT
 #EXPOSE 3000
 
-# RUN addgroup theia && \
-#    adduser -G theia -s /bin/sh -D theia;
-# RUN chmod g+rw /home && \
-#    mkdir -p /home/project && \
-#    chown -R theia:theia /home/theia && \
-#    chown -R theia:theia /home/project;
+ RUN addgroup theia && \
+   adduser -G theia -s /bin/sh -D theia;
+RUN chmod g+rw /home && \
+   chown -R theia:theia /home/theia && \
+   chown -R theia:theia /tmp;
 
-# ENV SHELL=/bin/bash \
-#    THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/ide/plugins
+ENV SHELL=/bin/sh \
+   THEIA_DEFAULT_PLUGINS=local-dir:/home/theia/ide/plugins
 
-# USER theia
+USER theia
 
