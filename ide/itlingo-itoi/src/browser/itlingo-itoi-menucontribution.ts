@@ -2,6 +2,7 @@ import { injectable, inject } from '@theia/core/shared/inversify';
 import { CommandContribution,MessageService, CommandHandler, CommandRegistry, MenuContribution, MenuModelRegistry, Command } from '@theia/core/lib/common';
 import { KeybindingContribution, KeybindingRegistry, QuickInputService } from '@theia/core/lib/browser';
 import { GIT_COMMANDS, GIT_MENUS } from '@theia/git/lib/browser/git-contribution';
+import { WorkspaceCommands } from '@theia/workspace/lib/browser';
 import { EditorManager } from '@theia/editor/lib/browser'
 
 import {
@@ -113,6 +114,9 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         commands.unregisterCommand(GIT_COMMANDS.PUSH_DEFAULT_FAVORITE);
         commands.unregisterCommand(GIT_COMMANDS.CLONE);
         commands.unregisterCommand(GIT_COMMANDS.FETCH);
+        commands.unregisterCommand(WorkspaceCommands.OPEN_WORKSPACE);
+        commands.unregisterCommand(WorkspaceCommands.CLOSE);
+        
 
         GIT_MENUS.SUBMENU_PULL_PUSH.label = "Extended Actions";
         GIT_COMMANDS.FETCH.label = "Clone...";
