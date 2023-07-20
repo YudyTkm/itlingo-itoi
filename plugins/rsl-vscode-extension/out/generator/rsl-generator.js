@@ -78,7 +78,8 @@ class RslGenerator {
         return __awaiter(this, void 0, void 0, function* () {
             const destinationDirectory = this.workspace.uri;
             const fileName = `${(0, generator_utils_1.getFileNameWithoutExtension)(this.fileUri.path)}${this.getFileExtension()}`;
-            const fileUri = destinationDirectory.with({ path: path_1.posix.join(destinationDirectory.path, this.generatedDirectoryName, fileName) });
+            const subDirectories = this.fileUri.path.replace(destinationDirectory.path, '').replace((0, generator_utils_1.getFileName)(this.fileUri.path), '');
+            const fileUri = destinationDirectory.with({ path: path_1.posix.join(destinationDirectory.path, this.generatedDirectoryName, subDirectories, fileName) });
             yield (0, generator_utils_1.writeFile)(fileUri, content);
             vscode.window.showInformationMessage(`${fileName} generated successfully`);
             if (this.getFileExtension() === '.txt' || this.getFileExtension() === '.json') {

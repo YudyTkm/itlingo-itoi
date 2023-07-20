@@ -8,7 +8,7 @@ import * as vscode from 'vscode';
  * @returns The file name.
  */
 export function getFileName(filePath: string): string {
-    return path.basename(filePath, path.extname(filePath));
+    return path.basename(filePath);
 }
 
 /**
