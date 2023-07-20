@@ -115,8 +115,15 @@ export class TheiaExampleCommandContribution implements CommandContribution {
         commands.unregisterCommand(GIT_COMMANDS.CLONE);
         commands.unregisterCommand(GIT_COMMANDS.FETCH);
         commands.unregisterCommand(WorkspaceCommands.OPEN_WORKSPACE);
+        commands.unregisterCommand(WorkspaceCommands.OPEN_FOLDER);
         commands.unregisterCommand(WorkspaceCommands.CLOSE);
         
+
+
+        commands.registerCommand(WorkspaceCommands.OPEN_WORKSPACE, {isEnabled:()=>{ return false}, execute:()=>{}});
+        commands.registerCommand(WorkspaceCommands.OPEN_FOLDER, {isEnabled:()=>{ return false}, execute:()=>{}});
+        commands.registerCommand(WorkspaceCommands.CLOSE, {isEnabled:()=>{ return false}, execute:()=>{}});
+
 
         GIT_MENUS.SUBMENU_PULL_PUSH.label = "Extended Actions";
         GIT_COMMANDS.FETCH.label = "Clone...";
