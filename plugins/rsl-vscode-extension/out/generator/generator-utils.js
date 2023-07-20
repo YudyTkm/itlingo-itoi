@@ -45,7 +45,7 @@ const vscode = __importStar(require("vscode"));
  * @returns The file name.
  */
 function getFileName(filePath) {
-    return path_1.default.basename(filePath, path_1.default.extname(filePath));
+    return path_1.default.basename(filePath);
 }
 exports.getFileName = getFileName;
 /**

@@ -72,7 +72,9 @@ export abstract class RslGenerator {
         const destinationDirectory = this.workspace.uri;
         const fileName = `${getFileNameWithoutExtension(this.fileUri.path)}${this.getFileExtension()}`;
 
-        const fileUri = destinationDirectory.with({ path: posix.join(destinationDirectory.path, this.generatedDirectoryName, fileName) });
+        const subDirectories = this.fileUri.path.replace(destinationDirectory.path, '').replace(getFileName(this.fileUri.path), '');
+
+        const fileUri = destinationDirectory.with({ path: posix.join(destinationDirectory.path, this.generatedDirectoryName, subDirectories, fileName) });
 
         await writeFile(fileUri, content);
 
