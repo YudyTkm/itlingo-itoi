@@ -18,10 +18,10 @@ FROM base as build-ide
 ENV THEIA_WEBVIEW_EXTERNAL_ENDPOINT='{{hostname}}'
 ENV NODE_OPTIONS "--max-old-space-size=4096"
 
-ARG ROOTFOLDER=/home/theia
 
-COPY ide ${ROOTFOLDER}/ide
-WORKDIR ${ROOTFOLDER}/ide
+
+COPY ide /home/theia/ide
+WORKDIR /home/theia/ide
 
 
 RUN dos2unix gitUtils/cloneScript.sh
@@ -31,17 +31,17 @@ RUN chmod a+x gitUtils/gitPermissionsFix.sh
 #COPY startup.sh .
 #RUN chmod +x startup.sh
 
-WORKDIR ${ROOTFOLDER}/ide
+WORKDIR /home/theia/ide
 RUN yarn --scripts-prepend-node-path --cache-folder ./ycache && rm -rf ./ycache
 RUN find node_modules/@theia/cli/bin -type f -print0 | xargs -0 dos2unix
 # RUN yarn theia build
-WORKDIR ${ROOTFOLDER}/ide/itlingo-itoi
+WORKDIR /home/theia/ide/itlingo-itoi
 RUN yarn
-WORKDIR ${ROOTFOLDER}/ide/browser-app
+WORKDIR /home/theia/ide/browser-app
 RUN yarn
-WORKDIR ${ROOTFOLDER}/ide/itlingo-itoi
+WORKDIR /home/theia/ide/itlingo-itoi
 RUN rm src/browser/*.ts src/browser/*.tsx src/common/*.ts src/node/*.ts
-WORKDIR ${ROOTFOLDER}/ide/browser-app
+WORKDIR /home/theia/ide/browser-app
 
 FROM base as build-plugins
 #Setup language servers folder
@@ -83,9 +83,9 @@ RUN mkdir -p /tmp/theia/workspaces/tmp
 
 
 FROM build-ide as setup-server
-COPY --from=build-plugins /home/theia/vscode-code-annotation/code-annotation-0.0.2-dev.vsix ${ROOTFOLDER}/ide/plugins
-COPY --from=build-plugins /home/theia/rsl-vscode-extension/rsl-vscode-extension-0.0.1.vsix ${ROOTFOLDER}/ide/plugins
-COPY --from=build-plugins /home/theia/asl-langium/asl-langium-0.0.1.vsix ${ROOTFOLDER}/ide/plugins
+COPY --from=build-plugins /home/theia/vscode-code-annotation/code-annotation-0.0.2-dev.vsix /home/theia/ide/plugins
+COPY --from=build-plugins /home/theia/rsl-vscode-extension/rsl-vscode-extension-0.0.1.vsix /home/theia/ide/plugins
+COPY --from=build-plugins /home/theia/asl-langium/asl-langium-0.0.1.vsix /home/theia/ide/plugins
 
 COPY pack /home/theia/pack
 RUN chmod 777 -R /home/theia/pack
