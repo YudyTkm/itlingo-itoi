@@ -12,7 +12,6 @@ import { RslActionProvider } from './rsl-code-actions';
 import { RslScopeProvider } from './rsl-scope-provider';
 import { RslNameProvider } from './rsl-naming';
 import { RslScopeComputation } from './rsl-scope-computation';
-import { RslJsonSerializer } from '../serializer/rsl-json-serializer';
 import { RslCompletionProvider } from './rsl-completion';
 import { RslLinker } from './rsl-linker';
 import { DefaultElementFilter, ElkFactory, ElkLayoutEngine, IElementFilter, ILayoutConfigurator } from 'sprotty-elk/lib/elk-layout';
@@ -68,11 +67,7 @@ export const RslModule: Module<RslServices, PartialLangiumServices & SprottyDiag
     },
     validation: {
         RslValidator: () => new RslValidator(),
-    },
-    serializer: {
-        JsonSerializer: (services) => new RslJsonSerializer(services),
     }
-
 };
 
 /**

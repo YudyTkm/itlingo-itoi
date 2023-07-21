@@ -6,6 +6,8 @@ import angularParser from 'docxtemplater/expressions.js';
 import TxtTemplater from 'docxtemplater/js/text.js';
 import path from 'path';
 import fs from 'fs';
+const { sortBy } = require("lodash");
+const expressions= require('angular-expressions');
 
 /**
  * Represents a file generator based on a template file for RSL.
@@ -14,6 +16,77 @@ export class RslTemplateFileGenerator extends RslGenerator {
     private dialog!: Thenable<vscode.Uri[] | undefined>;
     private templateFile!: vscode.Uri;
     private fileExtension!: string;
+
+    /**
+     * Initiates a new instance of `RslGenerator`.
+     *
+     * @param uri - The URI of the source file.
+     */
+    constructor(uri: vscode.Uri) {
+        super(uri);
+
+        angularParser.filters.upper = function (input) {
+            // Make sure that if your input is undefined, your
+            // output will be undefined as well and will not
+            // throw an error
+            if (!input) return input;
+            return input.toUpperCase();
+        };
+
+        angularParser.filters.where = function (input, query) {
+            return input.filter(function (item: any) {
+                return expressions.compile(query)(item);
+            });
+        };
+
+        angularParser.filters.sortBy = function (input, ...fields) {
+            // In our example fields is ["price"]
+        
+            // Make sure that if your input is undefined, your
+            // output will be undefined as well and will not
+            // throw an error
+            if (!input) return input;
+            return sortBy(input, fields);
+        };
+
+        angularParser.filters.loop = function (input, ...keys) {
+            const result = input.reduce(function (result: any[], item: { [x: string]: any; }) {
+                (item[keys[0]] || []).forEach(function (subitem: any) {
+                    result.push({ ...item, ...subitem });
+                });
+                return result;
+            }, []);
+            if (keys.length === 1) {
+                return result;
+            }
+            keys.shift();
+            return angularParser.filters.loop(result, ...keys);
+        };
+
+        angularParser.filters.toFixed = function (input, precision) {
+            // In our example precision is the integer 2
+        
+            // Make sure that if your input is undefined, your
+            // output will be undefined as well and will not
+            // throw an error
+            if (!input) return input;
+        
+            return input.toFixed(precision);
+        };
+
+        angularParser.filters.sumby = function (input, field) {
+            // In our example field is the string "price"
+        
+            // Make sure that if your input is undefined, your
+            // output will be undefined as well and will not
+            // throw an error
+            if (!input) return input;
+        
+            return input.reduce(function (sum: any, object: { [x: string]: any; }) {
+                return sum + object[field];
+            }, 0);
+        };
+    }
 
     private readonly constructorOptions: DXT.ConstructorOptions = {
         paragraphLoop: true,
