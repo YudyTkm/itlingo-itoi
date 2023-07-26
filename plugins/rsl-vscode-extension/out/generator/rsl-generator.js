@@ -94,7 +94,15 @@ class RslGenerator {
      */
     validate() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield this.services.shared.workspace.DocumentBuilder.build([this.document], { validationChecks: 'all' });
+            yield this.services.shared.workspace.WorkspaceManager.initializeWorkspace([
+                {
+                    name: this.workspace.name,
+                    uri: this.workspace.uri.fsPath
+                }
+            ]);
+            const validator = this.services.shared.ServiceRegistry.getServices(this.document.uri).validation.DocumentValidator;
+            const diagnostics = yield validator.validateDocument(this.document);
+            this.document.diagnostics = diagnostics;
             if (this.document.diagnostics && this.document.diagnostics.length > 0) {
                 throw new Error(`The file ${(0, generator_utils_1.getFileName)(this.fileUri.path)} has some errors. Please fix them before generating the new file`);
             }
