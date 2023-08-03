@@ -78,11 +78,87 @@ class RslActionProvider {
             case rsl_validator_1.IssueCodes.INCLUDE_ELEMENT:
                 accept(this.replaceIncludeElement(diagnostic, document));
                 break;
+            case langium_1.DocumentValidator.LinkingError:
+                accept(this.createMissingElementForLinkingError(diagnostic, document));
+                break;
+            case rsl_validator_1.IssueCodes.INVALID_ID:
+                accept(this.useNewId(diagnostic, document));
+                break;
             default:
                 break;
             //throw new Error(`${diagnostic.code} isn't supported.`);
         }
-        return undefined;
+        return;
+    }
+    /**
+     * Creates a code action for using a new ID in a specification.
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
+    useNewId(diagnostic, document) {
+        const range = diagnostic.range;
+        const data = diagnostic.data;
+        const correctWord = data[0];
+        return {
+            title: `Use '${correctWord}' as the ID`,
+            kind: vscode_languageserver_types_1.CodeActionKind.QuickFix,
+            diagnostics: [diagnostic],
+            isPreferred: false,
+            edit: {
+                changes: {
+                    [document.textDocument.uri]: [
+                        {
+                            range,
+                            newText: correctWord,
+                        },
+                    ],
+                },
+            },
+        };
+    }
+    /**
+     * Creates a code action for creating an element in case of a unresolved reference (linking error).
+     *
+     * @param diagnostic The diagnostic object representing the code issue.
+     * @param document   The `LangiumDocument` representing the RSL document.
+     * @returns A `CodeAction` object or `undefined`.
+     */
+    createMissingElementForLinkingError(diagnostic, document) {
+        const range = diagnostic.range;
+        const data = diagnostic.data;
+        const wrongWord = data.refText;
+        let desiredElement = data.property;
+        const elementProperty = 'id';
+        range.start.line = document.textDocument.lineCount + 2;
+        range.start.character = 0;
+        range.end = range.start;
+        if (data.containerType === 'ActionTypeExtendedRef') {
+            desiredElement = 'ActionType';
+        }
+        try {
+            let newElementSpecification = (0, rsl_utilities_1.createSystemConcept)(desiredElement, wrongWord, elementProperty);
+            return {
+                title: `Create '${desiredElement}' with ${elementProperty} '${wrongWord}'`,
+                kind: vscode_languageserver_types_1.CodeActionKind.QuickFix,
+                diagnostics: [diagnostic],
+                isPreferred: false,
+                edit: {
+                    changes: {
+                        [document.textDocument.uri]: [
+                            {
+                                range,
+                                newText: `${langium_1.EOL}${langium_1.EOL}${newElementSpecification}`,
+                            },
+                        ],
+                    },
+                },
+            };
+        }
+        catch (e) {
+            return;
+        }
     }
     /**
      * Creates a code action for replacing the entire specification with all elements from a system.
@@ -216,7 +292,15 @@ class RslActionProvider {
      * @returns A `CodeAction` object or `undefined`.
      */
     removeString(title, diagnostic, document) {
-        const range = diagnostic.range;
+        let range = diagnostic.range;
+        if (diagnostic.data) {
+            try {
+                range = diagnostic.data;
+            }
+            catch (e) {
+                // ignore
+            }
+        }
         return {
             title: title,
             kind: vscode_languageserver_types_1.CodeActionKind.QuickFix,

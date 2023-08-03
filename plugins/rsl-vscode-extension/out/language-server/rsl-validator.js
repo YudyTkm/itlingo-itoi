@@ -65,7 +65,6 @@ var IssueCodes;
     IssueCodes.LINGUISTIC_RULE = IssueCodes.ISSUE_CODE_PREFIX + 'LinguisticRule';
     IssueCodes.SELECT_ELEMENT = IssueCodes.ISSUE_CODE_PREFIX + 'SelectElement';
     IssueCodes.REPLACE_WORD = IssueCodes.ISSUE_CODE_PREFIX + 'Replace';
-    IssueCodes.INVALID_NAME = IssueCodes.ISSUE_CODE_PREFIX + 'InvalidName';
     IssueCodes.INVALID_ID = IssueCodes.ISSUE_CODE_PREFIX + 'InvalidID';
     IssueCodes.INCONSISTENT_TERM = IssueCodes.ISSUE_CODE_PREFIX + 'InconsistentTerm';
     IssueCodes.REMOVE_EXCESS_TEXT = IssueCodes.ISSUE_CODE_PREFIX + 'RemoveExcessText';
@@ -109,10 +108,12 @@ class RslValidator {
             ? element.type.type
             : element.type.type.$refText;
         if (type !== 'SequenceConditional') {
-            accept('error', "TaskFlow '" + element.name + "' cannot have a condition unless it is of type SequenceConditional", {
+            let range = this.getKeywordAndPropertyRange(element, 'condition', 'condition');
+            accept('error', "Error: TaskFlow '" + element.name + "' cannot have a condition unless it is of type SequenceConditional", {
                 node: element,
                 property: 'condition',
                 code: IssueCodes.INVALID_AF_CONDITION,
+                data: range
             });
         }
     }
@@ -130,10 +131,12 @@ class RslValidator {
             ? element.type.type
             : element.type.type.$refText;
         if (!(type === 'Send' || type === 'Receive')) {
-            accept('error', "ActiveTask '" + element.name + "' cannot have external participants unless it's of type Send or Receive", {
+            let range = this.getKeywordAndPropertyRange(element, 'participantExternal', 'participantTarget');
+            accept('error', "Error: ActiveTask '" + element.name + "' cannot have external participants unless it's of type Send or Receive", {
                 node: element,
                 property: 'participantTarget',
                 code: IssueCodes.INVALID_AT_PARTICIPANTTARGET,
+                data: range
             });
         }
     }
@@ -178,10 +181,12 @@ class RslValidator {
             ? element.subType.type
             : element.subType.type.$refText;
         if (!subType.includes(type)) {
-            accept('error', "Constraint '" + element.name + "' has inconsistent type and subType", {
+            let range = this.getKeywordAndPropertyRange(element, ':', 'subType');
+            accept('error', "Error: Constraint '" + element.name + "' has inconsistent type and subType", {
                 node: element,
                 property: 'subType',
                 code: IssueCodes.INVALID_SUBTYPE,
+                data: range
             });
         }
     }
@@ -225,10 +230,12 @@ class RslValidator {
             ? element.subType.type
             : element.subType.type.$refText;
         if (!subType.includes(type)) {
-            accept('error', "Goal '" + element.name + "' has inconsistent type and subType", {
+            let range = this.getKeywordAndPropertyRange(element, ':', 'subType');
+            accept('error', "Error: Goal '" + element.name + "' has inconsistent type and subType", {
                 node: element,
                 property: 'subType',
                 code: IssueCodes.INVALID_SUBTYPE,
+                data: range
             });
         }
     }
@@ -255,7 +262,7 @@ class RslValidator {
             }
             newElementsText += `${langium_1.EOL}${(_b = concept.$cstNode) === null || _b === void 0 ? void 0 : _b.text}${langium_1.EOL}`;
         }
-        accept('info', `Replace this specification with all elements from the ${systemName} system`, {
+        accept('info', `Suggestion: Replace this specification with all elements from the ${systemName} system`, {
             node: element,
             code: IssueCodes.INCLUDE_ALL,
             data: [systemName, newElementsText],
@@ -281,7 +288,7 @@ class RslValidator {
         if ((_a = newElement.$cstNode) === null || _a === void 0 ? void 0 : _a.text) {
             newElementText = (_b = newElement.$cstNode) === null || _b === void 0 ? void 0 : _b.text;
         }
-        accept('info', `Replace this specification with the ${elementType} element specification`, {
+        accept('info', `Suggestion: Replace this specification with the ${elementType} element specification`, {
             node: element,
             code: IssueCodes.INCLUDE_ELEMENT,
             data: [elementType, newElementText],
@@ -369,10 +376,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Constraint '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: Constraint '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -383,10 +392,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Constraint '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Error: Cycle in hierarchy of Constraint '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -407,10 +418,12 @@ class RslValidator {
             return;
         }
         if (((_a = superElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Actor '" + element.name + "' extends itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+            accept('error', "Error: Actor '" + element.name + "' extends itself", {
                 node: element,
                 property: 'super',
                 code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -421,10 +434,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = superElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Actor '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+                accept('error', "Error: Cycle in hierarchy of Actor '" + element.name + "'", {
                     node: element,
                     property: 'super',
                     code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -445,10 +460,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Constraint '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: Constraint '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -459,10 +476,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Constraint '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of Constraint '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -483,10 +502,12 @@ class RslValidator {
             return;
         }
         if (((_a = superElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "DataEntity '" + element.name + "' extends itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+            accept('error', "Error: DataEntity '" + element.name + "' extends itself", {
                 node: element,
                 property: 'super',
                 code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -497,10 +518,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = superElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of DataEntity '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+                accept('error', "Error: Cycle in hierarchy of DataEntity '" + element.name + "'", {
                     node: element,
                     property: 'super',
                     code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -521,10 +544,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "FR '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: FR '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -535,10 +560,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of FR '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of FR '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -559,10 +586,12 @@ class RslValidator {
             return;
         }
         if (((_a = superElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "GlossaryTerm '" + element.name + "' extends itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+            accept('error', "Error: GlossaryTerm '" + element.name + "' extends itself", {
                 node: element,
                 property: 'super',
                 code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -573,10 +602,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = superElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of GlossaryTerm '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+                accept('error', "Error: Cycle in hierarchy of GlossaryTerm '" + element.name + "'", {
                     node: element,
                     property: 'super',
                     code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -597,10 +628,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "GlossaryTerm '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: GlossaryTerm '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -611,10 +644,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of GlossaryTerm '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of GlossaryTerm '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -635,10 +670,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Goal '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: Goal '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -649,10 +686,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Goal '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of Goal '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -673,10 +712,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "QR '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: QR '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -687,10 +728,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of QR '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of QR '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -711,10 +754,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Risk '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: Risk '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -725,10 +770,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Risk '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of Risk '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -749,10 +796,12 @@ class RslValidator {
             return;
         }
         if (((_a = superElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Stakeholder '" + element.name + "' extends itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+            accept('error', "Error: Stakeholder '" + element.name + "' extends itself", {
                 node: element,
                 property: 'super',
                 code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -763,10 +812,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = superElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Stakeholder '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+                accept('error', "Error: Cycle in hierarchy of Stakeholder '" + element.name + "'", {
                     node: element,
                     property: 'super',
                     code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -787,10 +838,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Stakeholder '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: Stakeholder '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -801,10 +854,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Stakeholder '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of Stakeholder '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -825,10 +880,12 @@ class RslValidator {
             return;
         }
         if (((_a = nextElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Step '" + element.name + "' has a cycle in 'next' relationship", {
+            let range = this.getKeywordAndPropertyRange(element, 'nextStep', 'next');
+            accept('error', "Error: Step '" + element.name + "' has a cycle in 'next' relationship", {
                 node: element,
                 property: 'next',
                 code: IssueCodes.STEP_NEXT_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -839,10 +896,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = nextElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in 'next' relationship of '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'nextStep', 'next');
+                accept('error', "Error: Cycle in 'next' relationship of '" + element.name + "'", {
                     node: element,
                     property: 'next',
                     code: IssueCodes.STEP_NEXT_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -863,10 +922,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "UserStory '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: UserStory '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -877,10 +938,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of UserStory '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of UserStory '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -901,10 +964,12 @@ class RslValidator {
             return;
         }
         if (((_a = superElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Vulnerability '" + element.name + "' extends itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+            accept('error', "Error: Vulnerability '" + element.name + "' extends itself", {
                 node: element,
                 property: 'super',
                 code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -915,10 +980,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = superElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Vulnerability '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'isA', 'super');
+                accept('error', "Error: Cycle in hierarchy of Vulnerability '" + element.name + "'", {
                     node: element,
                     property: 'super',
                     code: IssueCodes.ISA_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -940,10 +1007,12 @@ class RslValidator {
             return;
         }
         if (((_a = partOfElement.ref) === null || _a === void 0 ? void 0 : _a.name) === element.name) {
-            accept('error', "Vulnerability '" + element.name + "' is part of itself", {
+            let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+            accept('error', "Error: Vulnerability '" + element.name + "' is part of itself", {
                 node: element,
                 property: 'partOf',
                 code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                data: range
             });
             return;
         }
@@ -954,10 +1023,12 @@ class RslValidator {
                 break;
             }
             if (visitedElements.has((_c = partOfElement.ref) === null || _c === void 0 ? void 0 : _c.name)) {
-                accept('error', "Cycle in hierarchy of Vulnerability '" + element.name + "'", {
+                let range = this.getKeywordAndPropertyRange(element, 'partOf', 'partOf');
+                accept('error', "Error: Cycle in hierarchy of Vulnerability '" + element.name + "'", {
                     node: element,
                     property: 'partOf',
                     code: IssueCodes.PARTOF_HIERARCHY_CYCLE,
+                    data: range
                 });
                 break;
             }
@@ -1008,10 +1079,12 @@ class RslValidator {
             ? element.subType.type
             : element.subType.type.$refText;
         if (!subType.includes(type)) {
-            accept('error', "QR '" + element.name + "' has inconsistent type and subType", {
+            let range = this.getKeywordAndPropertyRange(element, ':', 'subType');
+            accept('error', "Error: QR '" + element.name + "' has inconsistent type and subType", {
                 node: element,
                 property: 'subType',
                 code: IssueCodes.INVALID_SUBTYPE,
+                data: range
             });
         }
     }
@@ -1049,7 +1122,7 @@ class RslValidator {
             return;
         }
         if (element.source === element.target) {
-            accept('error', "RequirementsRelation '" + element.name + "' has the same source and target", {
+            accept('error', "Error: RequirementsRelation '" + element.name + "' has the same source and target", {
                 node: element,
                 property: 'source',
                 code: IssueCodes.RELATION_CYCLE,
@@ -1073,10 +1146,12 @@ class RslValidator {
             ? element.subType.type
             : element.subType.type.$refText;
         if (!subType.includes(type)) {
-            accept('error', "Risk '" + element.name + "' has inconsistent type and subType", {
+            let range = this.getKeywordAndPropertyRange(element, ':', 'subType');
+            accept('error', "Error: Risk '" + element.name + "' has inconsistent type and subType", {
                 node: element,
                 property: 'subType',
                 code: IssueCodes.INVALID_SUBTYPE,
+                data: range
             });
         }
     }
@@ -1120,10 +1195,12 @@ class RslValidator {
             ? element.subType.type
             : element.subType.type.$refText;
         if (!subType.includes(type)) {
-            accept('error', "Stakeholder '" + element.name + "' has inconsistent type and subType", {
+            let range = this.getKeywordAndPropertyRange(element, ':', 'subType');
+            accept('error', "Error: Stakeholder '" + element.name + "' has inconsistent type and subType", {
                 node: element,
                 property: 'subType',
                 code: IssueCodes.INVALID_SUBTYPE,
+                data: range
             });
         }
     }
@@ -1147,14 +1224,14 @@ class RslValidator {
             }
         });
         if (!hasInitialState) {
-            accept('warning', "State Machine '" + element.name + "' has no initial state", {
+            accept('warning', "Warning: State Machine '" + element.name + "' has no initial state", {
                 node: element,
                 property: 'states',
                 code: IssueCodes.SM_INIT_FINAL_STATES,
             });
         }
         if (!hasFinalState) {
-            accept('warning', "State Machine '" + element.name + "' has no final state", {
+            accept('warning', "Warning: State Machine '" + element.name + "' has no final state", {
                 node: element,
                 property: 'states',
                 code: IssueCodes.SM_INIT_FINAL_STATES,
@@ -1243,10 +1320,12 @@ class RslValidator {
             return;
         }
         if (element.target === element.source) {
-            accept('error', "SystemsRelation '" + element.name + "' has the same source and target", {
+            let range = this.getKeywordAndPropertyRange(element, 'source', 'source');
+            accept('error', "Error: SystemsRelation '" + element.name + "' has the same source and target", {
                 node: element,
                 property: 'source',
                 code: IssueCodes.SYS_RELATION_CYCLE,
+                data: range
             });
         }
     }
@@ -1290,10 +1369,12 @@ class RslValidator {
             ? element.subType.type
             : element.subType.type.$refText;
         if (!subType.includes(type)) {
-            accept('error', "System '" + element.name + "' has inconsistent type and subType", {
+            let range = this.getKeywordAndPropertyRange(element, ':', 'subType');
+            accept('error', "Error: System '" + element.name + "' has inconsistent type and subType", {
                 node: element,
                 property: 'subType',
                 code: IssueCodes.INVALID_SUBTYPE,
+                data: range
             });
         }
     }
@@ -1351,7 +1432,7 @@ class RslValidator {
         }
         element.extends.forEach((ucExtends) => {
             if (ucExtends.usecase.$refText === element.name) {
-                accept('error', "UseCase '" + element.name + "' extends itself", {
+                accept('error', "Error: UseCase '" + element.name + "' extends itself", {
                     node: element,
                     property: 'extends',
                     code: IssueCodes.BAD_UC_HIERARCHY,
@@ -1376,10 +1457,12 @@ class RslValidator {
             ? element.subType.type
             : element.subType.type.$refText;
         if (!subType.includes(type)) {
-            accept('error', "Vulnerability '" + element.name + "' has inconsistent type and subType", {
+            let range = this.getKeywordAndPropertyRange(element, ':', 'subType');
+            accept('error', "Error: Vulnerability '" + element.name + "' has inconsistent type and subType", {
                 node: element,
                 property: 'subType',
                 code: IssueCodes.INVALID_SUBTYPE,
+                data: range
             });
         }
     }
@@ -1406,7 +1489,7 @@ class RslValidator {
                     continue;
                 }
                 if (inputToCheck.includes(synonym.toLowerCase())) {
-                    accept('warning', `Replace the word '${synonym}' by the main word '${term.nameAlias}'`, {
+                    accept('warning', `Warning: Replace the word '${synonym}' by the main word '${term.nameAlias}'`, {
                         node: element,
                         property: elementAttribute,
                         code: IssueCodes.INCONSISTENT_TERM,
@@ -1427,68 +1510,87 @@ class RslValidator {
      * @param accept            The validation acceptor function to handle validation issues.
      */
     checkUniqueElementId(inputElementName, element, system, accept) {
-        let foundDuplicate = false;
+        let elementNames = new Set();
         for (let concept of system.systemConcepts) {
             if (concept) {
                 let elementName = concept.name;
-                if (element !== concept && elementName === inputElementName) {
-                    foundDuplicate = true;
-                    break;
+                if (element !== concept) {
+                    elementNames.add(elementName);
                 }
             }
             else if (concept) {
                 let elementName = concept.name;
-                if (element !== concept && elementName === inputElementName) {
-                    foundDuplicate = true;
-                    break;
+                if (element !== concept) {
+                    elementNames.add(elementName);
                 }
             }
             else if (concept) {
                 let elementName = concept.name;
-                if (element !== concept && elementName === inputElementName) {
-                    foundDuplicate = true;
-                    break;
+                if (element !== concept) {
+                    elementNames.add(elementName);
                 }
             }
             else if (concept) {
                 let elementName = concept.name;
-                if (element !== concept && elementName === inputElementName) {
-                    foundDuplicate = true;
-                    break;
+                if (element !== concept && elementName) {
+                    elementNames.add(elementName);
                 }
             }
             else if (concept) {
                 let elementName = concept.name;
-                if (element !== concept && elementName === inputElementName) {
-                    foundDuplicate = true;
-                    break;
+                if (element !== concept) {
+                    elementNames.add(elementName);
                 }
             }
             else if (concept) {
                 let elementName = concept.name;
-                if (element !== concept && elementName === inputElementName) {
-                    foundDuplicate = true;
-                    break;
+                if (element !== concept) {
+                    elementNames.add(elementName);
                 }
             }
             else if (concept) {
                 let elementName = concept.name;
-                if (element !== concept && elementName === inputElementName) {
-                    foundDuplicate = true;
-                    break;
+                if (element !== concept) {
+                    elementNames.add(elementName);
                 }
             }
             else {
                 throw new Error('Invalid type.');
             }
         }
-        if (foundDuplicate) {
-            accept('error', `The '${inputElementName} ID is already in use. Please use a different ID'`, {
-                node: element,
-                property: 'name',
-                code: IssueCodes.INVALID_ID,
-            });
+        const duplicateElementName = elementNames.has(inputElementName);
+        if (!duplicateElementName) {
+            return;
         }
+        let suffixCount = 1;
+        const matchResult = inputElementName.match(/_(\d+)$/);
+        if (matchResult) {
+            const matchNumber = inputElementName.match(/(\d+)$/);
+            if (matchNumber) {
+                try {
+                    suffixCount = parseInt(matchNumber[0]);
+                }
+                catch (e) {
+                    // ignore
+                }
+            }
+        }
+        inputElementName = inputElementName.replace(/_\d+$/, '');
+        while (true) {
+            if (!elementNames.has(`${inputElementName}_${suffixCount}`)) {
+                break;
+            }
+            suffixCount++;
+        }
+        const newName = `${inputElementName}_${suffixCount}`;
+        accept('error', `The '${inputElementName} ID is already in use. Please use a different ID'`, {
+            node: element,
+            property: 'name',
+            code: IssueCodes.INVALID_ID,
+            data: [
+                newName
+            ]
+        });
     }
     /**
      * Checks if a RSL element ID, name or description matches at least one of the given linguistic rules.
@@ -1835,10 +1937,10 @@ class RslValidator {
     displayValidationError(element, severity, errorMessage, elementAttribute, issueCode, accept, ...issueData) {
         switch (severity) {
             case 'Error':
-                accept('error', errorMessage, { node: element, property: elementAttribute, code: issueCode, data: issueData });
+                accept('error', `Error: ${errorMessage}`, { node: element, property: elementAttribute, code: issueCode, data: issueData });
                 break;
             case 'Warning':
-                accept('warning', errorMessage, { node: element, property: elementAttribute, code: issueCode, data: issueData });
+                accept('warning', `Warning: ${errorMessage}`, { node: element, property: elementAttribute, code: issueCode, data: issueData });
                 break;
             default:
                 throw new Error(`${severity} is not supported`);
@@ -1888,6 +1990,27 @@ class RslValidator {
             errorMessage += ')';
         }
         return errorMessage;
+    }
+    /**
+     * Retrieves the range of a given `keyword` and its corresponding `property` within the `element`.
+     *
+     * @param element The AST node representing the element to search for the `keyword` and `property`.
+     * @param keyword The keyword to search for within the element.
+     * @param property The property to search for within the element.
+     * @returns The `Range` object representing the span that encloses both the `keyword` and `property`,
+     * or `undefined` if either the `keyword` or the `property` cannot be found in the `element`.
+     */
+    getKeywordAndPropertyRange(element, keyword, property) {
+        const keywordNode = (0, langium_1.findNodeForKeyword)(element.$cstNode, keyword);
+        const propertyNode = (0, langium_1.findNodeForProperty)(element.$cstNode, property);
+        let range;
+        if ((keywordNode === null || keywordNode === void 0 ? void 0 : keywordNode.range) && (propertyNode === null || propertyNode === void 0 ? void 0 : propertyNode.range)) {
+            range = {
+                start: keywordNode === null || keywordNode === void 0 ? void 0 : keywordNode.range.start,
+                end: propertyNode === null || propertyNode === void 0 ? void 0 : propertyNode.range.end
+            };
+        }
+        return range;
     }
 }
 exports.RslValidator = RslValidator;

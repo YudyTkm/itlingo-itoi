@@ -3,73 +3,75 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getStereotypeType = exports.getDataAttributes = exports.getSteps = exports.getScenarios = exports.getMainScenarios = exports.getData = exports.getDataEntityClusters = exports.getDataEntities = exports.getDataEnumerations = exports.getUseCases = exports.isGlossaryTermApplicableTo = exports.getGlossaryTerms = exports.getUserStories = exports.getLinguisticRules = exports.getLinguisticLanguageType = exports.getLinguisticLanguages = exports.getConstraints = exports.getFRs = exports.getQRs = exports.getGoals = exports.getActiveFlows = exports.getActiveEvents = exports.getActiveTasks = exports.getStateMachines = exports.getActors = exports.getStakeholders = exports.getRisks = exports.getVulnerabilities = exports.getVisibleElements = exports.createSystemConcept = void 0;
 const ast_1 = require("../language-server/generated/ast");
 /**
- * Creates a system concept element.
- *
- * @param desiredElement      Type of element to create.
- * @param elementPropertyText The text of the element property (ID, Name or Description) to create.
- * @param ruleElementProperty The property of the element to create
- * @returns A system concept element.
- * @throws Error in case the `desiredElement` is undefined or is not supported.
- */
+* Creates a system concept element.
+*
+* @param desiredElement      Type of element to create.
+* @param elementPropertyText The text of the element property (ID, Name or Description) to create.
+* @param ruleElementProperty The property of the element to create
+* @returns A system concept element.
+* @throws Error in case the `desiredElement` is undefined or is not supported.
+*/
 function createSystemConcept(desiredElement, elementPropertyText, ruleElementProperty) {
     if (!desiredElement) {
         throw new Error('desiredElement cannot be undefined');
     }
-    switch (desiredElement) {
-        case 'GlossaryTerm':
+    switch (desiredElement.toLowerCase()) {
+        case 'glossaryterm':
             return createElement('Term', 'term_', 'Noun', elementPropertyText, ruleElementProperty);
-        case 'Vulnerability':
+        case 'vulnerability':
             return createElement('Vulnerability', 'vul_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'Risk':
+        case 'risk':
             return createElement('Risk', 'r_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'Stakeholder':
+        case 'stakeholder':
             return createElement('Stakeholder', 'stk_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'Actor':
+        case 'actor':
             return createElement('Actor', 'a_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'StateMachine':
+        case 'statemachine':
             return createStateMachine(elementPropertyText, ruleElementProperty);
-        case 'ActiveTask':
+        case 'activetask':
             return createElement('Task', 'at_', 'Undefined', elementPropertyText, ruleElementProperty);
-        case 'ActiveEvent':
+        case 'activeevent':
             return createElement('Event', 'ev_', 'Undefined', elementPropertyText, ruleElementProperty);
-        case 'ActiveFlow':
+        case 'activeflow':
             return createActiveFlow(elementPropertyText, ruleElementProperty);
-        case 'Goal':
+        case 'goal':
             return createElement('Goal', 'g_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'QR':
+        case 'qr':
             return createElement('QR', 'qr_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'FR':
+        case 'fr':
             return createElement('FR', 'fr_', 'Functional', elementPropertyText, ruleElementProperty);
-        case 'Constraint':
+        case 'constraint':
             return createElement('Constraint', 'c_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'UserStory':
+        case 'userstory':
             return createUserStory(elementPropertyText, ruleElementProperty);
-        case 'UseCase':
+        case 'usecase':
             return createUseCase(elementPropertyText, ruleElementProperty);
-        case 'DataEnumeration':
+        case 'dataenumeration':
             return createDataEnumeration(elementPropertyText, ruleElementProperty);
-        case 'DataEntity':
+        case 'dataentity':
             return createElement('DataEntity', 'de_', 'Other', elementPropertyText, ruleElementProperty);
-        case 'DataEntityCluster':
+        case 'dataentitycluster':
             return createDataEntityCluster(elementPropertyText, ruleElementProperty);
-        case 'MainScenario':
-        case 'Scenario':
-        case 'Step':
-        case 'AcceptanceCriteriaScenario':
-        case 'DataAttribute':
-        case 'System':
-        case 'TestSuite':
-        case 'AcceptanceCriteriaTest':
-        case 'DataEntityTest':
-        case 'UseCaseTest':
-        case 'StateMachineTest':
-        case 'AcceptanceCriteriaTestView':
-        case 'UseCaseTestView':
-        case 'DataEntityTestView':
-        case 'StatemachineTestView':
-        case 'Data':
-        case 'TestData':
-        case 'Other':
+        case 'actiontype':
+            return createActionType(elementPropertyText, ruleElementProperty);
+        case 'mainscenario':
+        case 'scenario':
+        case 'step':
+        case 'acceptancecriteriascenario':
+        case 'dataattribute':
+        case 'system':
+        case 'testsuite':
+        case 'acceptancecriteriatest':
+        case 'dataentitytest':
+        case 'usecasetest':
+        case 'statemachinetest':
+        case 'acceptancecriteriatestview':
+        case 'usecasetestview':
+        case 'dataentitytestview':
+        case 'statemachinetestview':
+        case 'data':
+        case 'testdata':
+        case 'other':
             throw new Error(`Element ${desiredElement} is not supported`);
         default:
             throw new Error(`Element ${desiredElement} is not supported`);
@@ -77,77 +79,77 @@ function createSystemConcept(desiredElement, elementPropertyText, ruleElementPro
 }
 exports.createSystemConcept = createSystemConcept;
 /**
- * Get all visible element ids, names or descriptions for a given {@link desiredElementName}.
- * @param system             System element.
- * @param desiredElementName Desired element name (e.g. DataEntity, ..).
- * @param desiredProperty    Desired property to retrieve.
- * @return Visible elements of a given RSL element.
- * @throws Error in case the `desiredElement` is undefined or is not supported.
- */
+* Get all visible element ids, names or descriptions for a given {@link desiredElementName}.
+* @param system             System element.
+* @param desiredElementName Desired element name (e.g. DataEntity, ..).
+* @param desiredProperty    Desired property to retrieve.
+* @return Visible elements of a given RSL element.
+* @throws Error in case the `desiredElement` is undefined or is not supported.
+*/
 function getVisibleElements(system, desiredElementName, desiredProperty) {
     if (!desiredElementName) {
         throw new Error('desiredElement cannot be undefined');
     }
-    switch (desiredElementName) {
-        case 'GlossaryTerm':
+    switch (desiredElementName.toLowerCase()) {
+        case 'glossaryterm':
             return getGlossaryTermElementsProperty(system, desiredProperty);
-        case 'Vulnerability':
+        case 'vulnerability':
             return getVulnerabilityElementsProperty(system, desiredProperty);
-        case 'Risk':
+        case 'risk':
             return getRiskElementsProperty(system, desiredProperty);
-        case 'Stakeholder':
+        case 'stakeholder':
             return getStakeholderElementsProperty(system, desiredProperty);
-        case 'Actor':
+        case 'actor':
             return getActorElementsProperty(system, desiredProperty);
-        case 'StateMachine':
+        case 'statemachine':
             return getStateMachineElementsProperty(system, desiredProperty);
-        case 'ActiveTask':
+        case 'activetask':
             return getActiveTaskElementsProperty(system, desiredProperty);
-        case 'ActiveEvent':
+        case 'activeevent':
             return getActiveEventElementsProperty(system, desiredProperty);
-        case 'ActiveFlow':
+        case 'activeflow':
             return getActiveFlowElementsProperty(system, desiredProperty);
-        case 'Goal':
+        case 'goal':
             return getGoalElementsProperty(system, desiredProperty);
-        case 'QR':
+        case 'qr':
             return getQRElementsProperty(system, desiredProperty);
-        case 'FR':
+        case 'fr':
             return getFRElementsProperty(system, desiredProperty);
-        case 'Constraint':
+        case 'constraint':
             return getConstraintElementsProperty(system, desiredProperty);
-        case 'UserStory':
+        case 'userstory':
             return getUserStoryElementsProperty(system, desiredProperty);
-        case 'UseCase':
+        case 'usecase':
             return getUseCaseElementsProperty(system, desiredProperty);
-        case 'DataEnumeration':
+        case 'dataenumeration':
             return getDataEnumerationElementsProperty(system, desiredProperty);
-        case 'DataEntity':
+        case 'dataentity':
             return getDataEntityElementsProperty(system, desiredProperty);
-        case 'DataEntityCluster':
+        case 'dataentitycluster':
             return getDataEntityClusterElementsProperty(system, desiredProperty);
-        case 'Data':
+        case 'data':
             return getDataElementsProperty(system, desiredProperty);
-        case 'MainScenario':
+        case 'mainscenario':
             return getMainScenarioElementsProperty(system, desiredProperty);
-        case 'Scenario':
+        case 'scenario':
             return getScenarioElementsProperty(system, desiredProperty);
-        case 'Step':
+        case 'step':
             return getStepElementsProperty(system, desiredProperty);
-        case 'DataAttribute':
+        case 'dataattribute':
             return getDataAttributeElementsProperty(system, desiredProperty);
-        case 'AcceptanceCriteriaScenario':
-        case 'TestData':
-        case 'System':
-        case 'TestSuite':
-        case 'AcceptanceCriteriaTest':
-        case 'DataEntityTest':
-        case 'UseCaseTest':
-        case 'StateMachineTest':
-        case 'AcceptanceCriteriaTestView':
-        case 'UseCaseTestView':
-        case 'DataEntityTestView':
-        case 'StatemachineTestView':
-        case 'Other':
+        case 'acceptancecriteriascenario':
+        case 'testdata':
+        case 'system':
+        case 'testsuite':
+        case 'acceptancecriteriatest':
+        case 'dataentitytest':
+        case 'usecasetest':
+        case 'statemachinetest':
+        case 'acceptancecriteriatestview':
+        case 'usecasetestview':
+        case 'dataentitytestview':
+        case 'statemachinetestview':
+        case 'other':
             throw new Error(`Element ${desiredElementName} is not supported`);
         default:
             throw new Error(`Element ${desiredElementName} is not supported`);
@@ -640,11 +642,11 @@ function getGlossaryTermElementsProperty(system, desiredProperty) {
     return elements;
 }
 /**
- * Gets all Vulnerabilities of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Vulnerabilities.
- */
+* Gets all Vulnerabilities of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Vulnerabilities.
+*/
 function getVulnerabilities(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -673,11 +675,11 @@ function getVulnerabilities(system) {
 }
 exports.getVulnerabilities = getVulnerabilities;
 /**
- * Gets all Risks of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Risks.
- */
+* Gets all Risks of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Risks.
+*/
 function getRisks(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -706,11 +708,11 @@ function getRisks(system) {
 }
 exports.getRisks = getRisks;
 /**
- * Gets all Stakeholders of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Stakeholders.
- */
+* Gets all Stakeholders of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Stakeholders.
+*/
 function getStakeholders(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -739,11 +741,11 @@ function getStakeholders(system) {
 }
 exports.getStakeholders = getStakeholders;
 /**
- * Gets all Actors of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Actors.
- */
+* Gets all Actors of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Actors.
+*/
 function getActors(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -772,11 +774,11 @@ function getActors(system) {
 }
 exports.getActors = getActors;
 /**
- * Gets all StateMachines of a given system.
- *
- * @param system RSL system element.
- * @return Collection of StateMachines.
- */
+* Gets all StateMachines of a given system.
+*
+* @param system RSL system element.
+* @return Collection of StateMachines.
+*/
 function getStateMachines(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -805,11 +807,11 @@ function getStateMachines(system) {
 }
 exports.getStateMachines = getStateMachines;
 /**
- * Gets all ActiveTasks of a given system.
- *
- * @param system RSL system element.
- * @return Collection of ActiveTasks.
- */
+* Gets all ActiveTasks of a given system.
+*
+* @param system RSL system element.
+* @return Collection of ActiveTasks.
+*/
 function getActiveTasks(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -838,11 +840,11 @@ function getActiveTasks(system) {
 }
 exports.getActiveTasks = getActiveTasks;
 /**
- * Gets all ActiveEvents of a given system.
- *
- * @param system RSL system element.
- * @return Collection of ActiveEvents.
- */
+* Gets all ActiveEvents of a given system.
+*
+* @param system RSL system element.
+* @return Collection of ActiveEvents.
+*/
 function getActiveEvents(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -871,11 +873,11 @@ function getActiveEvents(system) {
 }
 exports.getActiveEvents = getActiveEvents;
 /**
- * Gets all ActiveFlows of a given system.
- *
- * @param system RSL system element.
- * @return Collection of ActiveFlows.
- */
+* Gets all ActiveFlows of a given system.
+*
+* @param system RSL system element.
+* @return Collection of ActiveFlows.
+*/
 function getActiveFlows(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -904,11 +906,11 @@ function getActiveFlows(system) {
 }
 exports.getActiveFlows = getActiveFlows;
 /**
- * Gets all goals a given system.
- *
- * @param system RSL system element.
- * @return Collection of Goals.
- */
+* Gets all goals a given system.
+*
+* @param system RSL system element.
+* @return Collection of Goals.
+*/
 function getGoals(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -937,11 +939,11 @@ function getGoals(system) {
 }
 exports.getGoals = getGoals;
 /**
- * Gets all QRs of a given system.
- *
- * @param system RSL system element.
- * @return Collection of QRs.
- */
+* Gets all QRs of a given system.
+*
+* @param system RSL system element.
+* @return Collection of QRs.
+*/
 function getQRs(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -970,11 +972,11 @@ function getQRs(system) {
 }
 exports.getQRs = getQRs;
 /**
- * Gets all FRs of a given system.
- *
- * @param system RSL system element.
- * @return Collection of FRs.
- */
+* Gets all FRs of a given system.
+*
+* @param system RSL system element.
+* @return Collection of FRs.
+*/
 function getFRs(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1003,11 +1005,11 @@ function getFRs(system) {
 }
 exports.getFRs = getFRs;
 /**
- * Gets all Constraints of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Constraints.
- */
+* Gets all Constraints of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Constraints.
+*/
 function getConstraints(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1036,11 +1038,11 @@ function getConstraints(system) {
 }
 exports.getConstraints = getConstraints;
 /**
- * Gets all linguistic languages of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Linguistic Languages.
- */
+* Gets all linguistic languages of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Linguistic Languages.
+*/
 function getLinguisticLanguages(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1052,12 +1054,12 @@ function getLinguisticLanguages(system) {
 }
 exports.getLinguisticLanguages = getLinguisticLanguages;
 /**
- * Gets the linguistic language type of given system.
- * If no linguistic language is specified, the English language is returned.
- *
- * @param system RSL system element.
- * @return The linguistic language.
- */
+* Gets the linguistic language type of given system.
+* If no linguistic language is specified, the English language is returned.
+*
+* @param system RSL system element.
+* @return The linguistic language.
+*/
 function getLinguisticLanguageType(system) {
     let result = getLinguisticLanguages(system);
     if (result.length === 0) {
@@ -1070,11 +1072,11 @@ function getLinguisticLanguageType(system) {
 }
 exports.getLinguisticLanguageType = getLinguisticLanguageType;
 /**
- * Gets all linguistic rules a given system.
- *
- * @param system RSL system element.
- * @return Collection of Linguistic Rules.
- */
+* Gets all linguistic rules a given system.
+*
+* @param system RSL system element.
+* @return Collection of Linguistic Rules.
+*/
 function getLinguisticRules(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1103,11 +1105,11 @@ function getLinguisticRules(system) {
 }
 exports.getLinguisticRules = getLinguisticRules;
 /**
- * Gets all UserStories of a given system.
- *
- * @param system RSL system element.
- * @return Collection of UserStories.
- */
+* Gets all UserStories of a given system.
+*
+* @param system RSL system element.
+* @return Collection of UserStories.
+*/
 function getUserStories(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1136,11 +1138,11 @@ function getUserStories(system) {
 }
 exports.getUserStories = getUserStories;
 /**
- * Gets all Glossary Terms of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Glossary Terms.
- */
+* Gets all Glossary Terms of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Glossary Terms.
+*/
 function getGlossaryTerms(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1169,13 +1171,13 @@ function getGlossaryTerms(system) {
 }
 exports.getGlossaryTerms = getGlossaryTerms;
 /**
- * Checks if a glossary term is applicable to a rsl element.
- *
- * @param glossaryTerm Glossary term.
- * @param rslElement RSL element.
- * @return True in case a glossary of term is applicable to `rslElement`;
- *         otherwise false.
- */
+* Checks if a glossary term is applicable to a rsl element.
+*
+* @param glossaryTerm Glossary term.
+* @param rslElement RSL element.
+* @return True in case a glossary of term is applicable to `rslElement`;
+*         otherwise false.
+*/
 function isGlossaryTermApplicableTo(term, element) {
     const applicableTo = term.applicableTo;
     if (!applicableTo) {
@@ -1193,11 +1195,11 @@ function isGlossaryTermApplicableTo(term, element) {
 }
 exports.isGlossaryTermApplicableTo = isGlossaryTermApplicableTo;
 /**
- * Gets all UseCases of a given system.
- *
- * @param system RSL system element.
- * @return Collection of UseCases.
- */
+* Gets all UseCases of a given system.
+*
+* @param system RSL system element.
+* @return Collection of UseCases.
+*/
 function getUseCases(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1226,11 +1228,11 @@ function getUseCases(system) {
 }
 exports.getUseCases = getUseCases;
 /**
- * Gets all Data Enumerations of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Data Enumerations.
- */
+* Gets all Data Enumerations of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Data Enumerations.
+*/
 function getDataEnumerations(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1259,11 +1261,11 @@ function getDataEnumerations(system) {
 }
 exports.getDataEnumerations = getDataEnumerations;
 /**
- * Gets all Data Entities of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Data Entities.
- */
+* Gets all Data Entities of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Data Entities.
+*/
 function getDataEntities(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1292,11 +1294,11 @@ function getDataEntities(system) {
 }
 exports.getDataEntities = getDataEntities;
 /**
- * Gets all DataEntityClusters of a given system.
- *
- * @param system RSL system element.
- * @return Collection of DataEntityClusters.
- */
+* Gets all DataEntityClusters of a given system.
+*
+* @param system RSL system element.
+* @return Collection of DataEntityClusters.
+*/
 function getDataEntityClusters(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1325,11 +1327,11 @@ function getDataEntityClusters(system) {
 }
 exports.getDataEntityClusters = getDataEntityClusters;
 /**
- * Gets all Data elements of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Data.
- */
+* Gets all Data elements of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Data.
+*/
 function getData(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1358,11 +1360,11 @@ function getData(system) {
 }
 exports.getData = getData;
 /**
- * Gets all MainScenarios of a given system.
- *
- * @param system RSL system element.
- * @return Collection of MainScenarios.
- */
+* Gets all MainScenarios of a given system.
+*
+* @param system RSL system element.
+* @return Collection of MainScenarios.
+*/
 function getMainScenarios(system) {
     let elements = [];
     for (let element of getUseCases(system)) {
@@ -1374,11 +1376,11 @@ function getMainScenarios(system) {
 }
 exports.getMainScenarios = getMainScenarios;
 /**
- * Gets all Scenarios of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Scenarios.
- */
+* Gets all Scenarios of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Scenarios.
+*/
 function getScenarios(system) {
     var _a, _b;
     let elements = [];
@@ -1391,11 +1393,11 @@ function getScenarios(system) {
 }
 exports.getScenarios = getScenarios;
 /**
- * Gets all Steps of a given system.
- *
- * @param system RSL system element.
- * @return Collection of Steps.
- */
+* Gets all Steps of a given system.
+*
+* @param system RSL system element.
+* @return Collection of Steps.
+*/
 function getSteps(system) {
     var _a, _b, _c;
     let elements = [];
@@ -1411,11 +1413,11 @@ function getSteps(system) {
 }
 exports.getSteps = getSteps;
 /**
- * Gets all DataAttributes of a given system.
- *
- * @param system RSL system element.
- * @return Collection of DataAttributes.
- */
+* Gets all DataAttributes of a given system.
+*
+* @param system RSL system element.
+* @return Collection of DataAttributes.
+*/
 function getDataAttributes(system) {
     let elements = [];
     for (let element of system.systemConcepts) {
@@ -1444,9 +1446,9 @@ function getDataAttributes(system) {
 }
 exports.getDataAttributes = getDataAttributes;
 /**
- * Gets the string representation of the type of the stereotype.
- * @param type The type.
- */
+* Gets the string representation of the type of the stereotype.
+* @param type The type.
+*/
 function getStereotypeType(type) {
     var _a;
     if (type.$type === 'StereotypeTypeOriginal') {
@@ -1565,6 +1567,21 @@ function createDataEntityCluster(elementProperty, ruleProperty) {
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType}`;
         case 'description':
             return `${element} ${defaultElementId} "${elementProperty}" : ${elementType} [ main dataEntityId description "${elementProperty}" ] `;
+        default:
+            throw new Error(`Property ${ruleProperty} is not supported`);
+    }
+}
+function createActionType(elementProperty, ruleProperty) {
+    const elementPropertyId = elementProperty.replaceAll('\\s+', '');
+    const defaultElementId = `a${elementPropertyId}`;
+    const element = 'ActionType';
+    switch (ruleProperty) {
+        case 'id':
+            return `${element} ${elementPropertyId}`;
+        case 'name':
+            return `${element} ${defaultElementId} "${elementProperty}"`;
+        case 'description':
+            return `${element} ${defaultElementId} "${elementProperty}" [ description "${elementProperty}" ] `;
         default:
             throw new Error(`Property ${ruleProperty} is not supported`);
     }

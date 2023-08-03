@@ -205,6 +205,7 @@
         "ja-compromise": "^0.0.1",
         "langium": "~1.2.0",
         "langium-sprotty": "^1.0.0",
+        "lodash": "^4.17.21",
         "pizzip": "^3.1.4",
         "pt-compromise": "^0.0.3",
         "sprotty-elk": "^0.13.0",
@@ -214,6 +215,7 @@
         "vscode-uri": "~3.0.7"
     },
     "devDependencies": {
+        "@types/lodash": "^4.14.196",
         "@types/node": "~16.18.11",
         "@types/vscode": "1.50.0",
         "@typescript-eslint/eslint-plugin": "~5.51.0",

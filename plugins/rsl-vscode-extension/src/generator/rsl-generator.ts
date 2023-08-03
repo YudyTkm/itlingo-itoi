@@ -91,7 +91,17 @@ export abstract class RslGenerator {
      * @throws Error In case the selected RSL file has errors.
      */
     public async validate() {
-        await this.services.shared.workspace.DocumentBuilder.build([this.document], { validationChecks: 'all' });
+        await this.services.shared.workspace.WorkspaceManager.initializeWorkspace([
+            {
+                name: this.workspace.name,
+                uri: this.workspace.uri.fsPath
+            }
+        ]);
+
+        const validator = this.services.shared.ServiceRegistry.getServices(this.document.uri).validation.DocumentValidator;
+        const diagnostics = await validator.validateDocument(this.document);
+        this.document.diagnostics = diagnostics;
+
         if (this.document.diagnostics && this.document.diagnostics.length > 0) {
             throw new Error(`The file ${getFileName(this.fileUri.path)} has some errors. Please fix them before generating the new file`);
         }
