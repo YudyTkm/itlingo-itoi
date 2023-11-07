@@ -56,6 +56,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
     }
 
     private readonly:boolean = true;
+    private tokens:{iv: string, t: string};
 
     protected async switchWorkspace(path: string): Promise<void> {
         this.messageService.info(path);
@@ -136,16 +137,22 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
          return path1.substring(path1.length-77) === path2.substring(path2.length - 77);
      }
 
-    //  initialize() {
-    //     setInterval(
-    //       () =>
+      initialize() {
+         setInterval(
+           () => {
+            axios.get('/ping').catch((err:any) =>{
+                    if(window.confirm("You lost connection to the server, would you like to reconnect?")){
+                        window.location.replace('/reconnect?iv=' + this.tokens.iv + '&t=' + this.tokens.t);
+                    }
+            });
+           },
     //         this.sharedStringServer
     //           .getGreeterName()
     //           .then(result => console.log("GreeterServer.name=" + result))
     //           .catch(error => console.log("Failed to get greeter name", error)),
-    //       2000
-    //     );
-    //   }
+           2000
+         );
+       }
     configure(app: FrontendApplication): void{
         
     }
@@ -174,6 +181,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                     );
                     //console.log("SetREADONLY");
                     this.readonly = response.data.readonly;
+                    this.tokens = response.data.tokens;
                     console.log(this.readonly);
                     this.setReadOnly();
                     this.itoiServer.setUsername(response.data.username);

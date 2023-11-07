@@ -23,6 +23,7 @@ export const hostname = "itlingocloud.herokuapp.com";
 const workspaces: Map<string, string[]> = new Map<string, string[]>();
 
 type Editor = {
+    workspace: string;
     foldername:string;
     write: boolean;
     time:number;
@@ -32,6 +33,10 @@ type Editor = {
 declare module "express-session" {
     interface SessionData {
       workspace: Editor;
+      tokens: {
+        iv: String,
+        t: String
+      }
     }
   }
 
@@ -153,14 +158,10 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         }
 
         function deleteFileToDB( event: nsfw.DeletedFileEvent) {
-            console.log("Delete File");
-            console.log(event.directory);
-            console.log(event.file);
             let params = fetchParamsFromEvent(event);
             const fullfilepath = event.directory + '/' + event.file;
             const removeNameLength = staticFolderLength + params[0].length + 1;
             const onlyFile = fullfilepath.substring(removeNameLength);
-            console.log("woot: " + onlyFile + " " + fullfilepath);
             let deleteQuery;
             deleteQuery = "CALL public.sp_deleteFile($1::varchar, $2::varchar);"
             pgPool.query(deleteQuery,[onlyFile + '%', params[0]]);
@@ -187,6 +188,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         function decrypt(iv: string, t: string): string[] {
             iv = iv.replace(/\-/g, '+').replace(/_/g, '/');
             t = t.replace(/\-/g, '+').replace(/_/g, '/');
+
             const initialVector = Buffer.from(iv, 'base64');
             const token = Buffer.from(t, 'base64').toString('hex');
             const key = Buffer.from(COM_KEY,'utf8');
@@ -202,7 +204,7 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         createWatcher(hostfs + 'tmp/')
         // registerCollab(app);
         app.get('/getWorkspace', (req, res) => {
-            if(!req.session.workspace){
+            if(!req.session.workspace || !req.session.tokens){
                 res.statusCode = 401;
                 res.end();
                 return
@@ -218,6 +220,10 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             res.json({
                 foldername: req.session.workspace.foldername,  
                 readonly: !req.session.workspace.write,
+                tokens: {
+                    iv: req.session.tokens.iv,
+                    t: req.session.tokens.t
+                },
                 username: username
             });
             res.end();
@@ -229,9 +235,13 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
                 res.redirect(itlingoCloudURL);
                 res.end();
             } else {
+                
                 let iv = req.query.iv as string;
                 let token = req.query.t as string;
-
+                req.session.tokens = {
+                    iv: iv,
+                    t: token
+                };
                 let params = decrypt(iv, token);
                 console.log("after decrypt");
                 console.log(params);
@@ -244,12 +254,30 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
         });
 
         app.get('/ping', (req, res) => {
-            if(req.session.workspace) req.session.workspace.time =  Date.now();
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/plain');
-            res.end();
+            if(req.session.workspace) {
+                req.session.workspace.time =  Date.now();
+                if(!workspaces.has(req.session.workspace.workspace)){
+                    res.statusCode = 500;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.end();
+                } else {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'text/plain');
+                    res.end();
+                };
+            } else {
+                res.statusCode = 500;
+                res.setHeader('Content-Type', 'text/plain');
+                res.end();
+            }
+            
         });
 
+        app.get('/reconnect', (req, res) => {
+                res.statusCode = 301;
+                res.redirect('/createTempWorkspace?iv=' + req.query.iv + '&t=' + req.query.t);
+                res.end();
+        });
 
 
         app.get('/setupRSL', (req, res) => {
@@ -453,6 +481,7 @@ function createWorkspace(req:Express.Request, params:string[]){
         console.log("got saved workspace");
         console.log(params[5]);
         req.session.workspace = {
+            workspace: params[0],
             foldername: savedParams[5],
             write: params[3]=="true",
             time: Date.now(),
@@ -463,6 +492,7 @@ function createWorkspace(req:Express.Request, params:string[]){
     let wuuid = uuid.v4();
     var randomFoldername = hostfs + 'tmp/' + wuuid + '/'+ params[0];
     req.session.workspace = {
+        workspace: params[0],
         foldername: randomFoldername,
         write: params[3]=="true",
         time: Date.now(),
