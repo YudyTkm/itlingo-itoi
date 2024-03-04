@@ -56,7 +56,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
     }
 
     private readonly:boolean = true;
-    private tokens:{iv: string, t: string};
+    //private tokens:{iv: string, t: string};
 
     protected async switchWorkspace(path: string): Promise<void> {
         this.messageService.info(path);
@@ -138,20 +138,20 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
      }
 
       initialize() {
-         setInterval(
-           () => {
-            axios.get('/ping').catch((err:any) =>{
-                    if(window.confirm("You lost connection to the server, would you like to reconnect?")){
-                        window.location.replace('/reconnect?iv=' + this.tokens.iv + '&t=' + this.tokens.t);
-                    }
-            });
-           },
-    //         this.sharedStringServer
-    //           .getGreeterName()
-    //           .then(result => console.log("GreeterServer.name=" + result))
-    //           .catch(error => console.log("Failed to get greeter name", error)),
-           2000
-         );
+    //      setInterval(
+    //        () => {
+    //         axios.get('/ping').catch((err:any) =>{
+    //                 if(window.confirm("You lost connection to the server, would you like to reconnect?")){
+    //                     window.location.replace('/reconnect?iv=' + this.tokens.iv + '&t=' + this.tokens.t);
+    //                 }
+    //         });
+    //        },
+    // //         this.sharedStringServer
+    // //           .getGreeterName()
+    // //           .then(result => console.log("GreeterServer.name=" + result))
+    // //           .catch(error => console.log("Failed to get greeter name", error)),
+    //        2000
+    //      );
        }
     configure(app: FrontendApplication): void{
         
@@ -185,11 +185,11 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                     console.log(this.readonly);
                     this.setReadOnly();
                     this.itoiServer.setUsername(response.data.username);
-                    setInterval(
-                        () => {
-                            this.itoiServer.userPing();
-                        }
-                    ,10*1000);
+                    // setInterval(
+                    //     () => {
+                    //         this.itoiServer.userPing();
+                    //     }
+                    // ,10*1000);
                     this.monacoWorkspace.onDidOpenTextDocument(async (e)=> {
                         let usersList = await this.itoiServer.getUsersWithFileOpen(e.uri);
                         if(e.uri.substring(0,4) === 'file' && usersList.length>0){
