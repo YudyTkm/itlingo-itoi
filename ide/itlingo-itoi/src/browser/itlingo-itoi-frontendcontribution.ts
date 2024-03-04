@@ -181,7 +181,7 @@ export class TheiaSendBdFileUpdates extends AbstractViewContribution<GettingStar
                     );
                     //console.log("SetREADONLY");
                     this.readonly = response.data.readonly;
-                    this.tokens = response.data.tokens;
+                    //this.tokens = response.data.tokens;
                     console.log(this.readonly);
                     this.setReadOnly();
                     this.itoiServer.setUsername(response.data.username);
