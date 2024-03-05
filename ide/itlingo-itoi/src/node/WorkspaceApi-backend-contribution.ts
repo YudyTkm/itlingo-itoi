@@ -253,25 +253,25 @@ export class SwitchWSBackendContribution implements BackendApplicationContributi
             }
         });
 
-        app.get('/ping', (req, res) => {
-            if(req.session.workspace) {
-                req.session.workspace.time =  Date.now();
-                if(!workspaces.has(req.session.workspace.workspace)){
-                    res.statusCode = 500;
-                    res.setHeader('Content-Type', 'text/plain');
-                    res.end();
-                } else {
-                    res.statusCode = 200;
-                    res.setHeader('Content-Type', 'text/plain');
-                    res.end();
-                };
-            } else {
-                res.statusCode = 500;
-                res.setHeader('Content-Type', 'text/plain');
-                res.end();
-            }
+        // app.get('/ping', (req, res) => {
+        //     if(req.session.workspace) {
+        //         req.session.workspace.time =  Date.now();
+        //         if(!workspaces.has(req.session.workspace.workspace)){
+        //             res.statusCode = 500;
+        //             res.setHeader('Content-Type', 'text/plain');
+        //             res.end();
+        //         } else {
+        //             res.statusCode = 200;
+        //             res.setHeader('Content-Type', 'text/plain');
+        //             res.end();
+        //         };
+        //     } else {
+        //         res.statusCode = 500;
+        //         res.setHeader('Content-Type', 'text/plain');
+        //         res.end();
+        //     }
             
-        });
+        // });
 
         app.get('/reconnect', (req, res) => {
                 res.statusCode = 301;
