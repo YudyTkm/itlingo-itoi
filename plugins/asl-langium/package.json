@@ -1,8 +1,8 @@
 {
     "name": "asl-langium",
-    "displayName": "asl-langium",
-    "description": "Please enter a brief description here",
-    "version": "0.0.1",
+    "displayName": "Asl",
+    "description": "Language support for the Asl language",
+    "version": "0.1.2",
     "repository": {
         "url": "https://github.com/genlike/asl-langium.git"
     },
@@ -32,11 +32,11 @@
                 "scopeName": "source.asl",
                 "path": "./syntaxes/asl.tmLanguage.json"
             }
-        ], 
+        ],
         "submenus": [
             {
-              "id": "asl.submenu",
-              "label": "Convert ASL file to"
+                "id": "asl.submenu",
+                "label": "Convert ASL file to"
             }
         ],
         "commands": [
@@ -71,6 +71,10 @@
                 "title": "Genio"
             },
             {
+                "command": "powerapps.export",
+                "title": "PowerApps"
+            },
+            {
                 "command": "asl.export",
                 "title": "Asl"
             },
@@ -101,7 +105,7 @@
                     "command": "asl.diagram.export",
                     "when": "asl-diagram-focused"
                 }
-            ],        
+            ],
             "explorer/context": [
                 {
                     "command": "asl.diagram.open",
@@ -124,9 +128,12 @@
                     "command": "genio.export"
                 },
                 {
+                    "command": "powerapps.export"
+                },
+                {
                     "command": "asl.export"
                 }
-              ]
+            ]
         },
         "keybindings": [
             {
@@ -176,27 +183,29 @@
         "langium:watch": "langium generate --watch"
     },
     "dependencies": {
-        "chevrotain": "~10.4.2",
         "chalk": "~4.1.2",
+        "chevrotain": "~10.4.2",
         "commander": "~10.0.0",
+        "concat-map": "^0.0.1",
+        "docxtemplater": "^3.37.12",
         "langium": "^1.1.0",
         "langium-sprotty": "^1.0.0",
+        "package.json": "^2.0.1",
         "sprotty-elk": "^0.13.0",
         "sprotty-vscode": "^0.5.0",
         "vscode-languageclient": "^8.0.2",
         "vscode-languageserver": "~8.0.2",
-        "vscode-uri": "~3.0.7",
-        "concat-map": "^0.0.1"
+        "vscode-uri": "~3.0.7"
     },
     "devDependencies": {
         "@types/node": "~16.18.11",
         "@types/vscode": "1.50.0",
-        "source-map-loader": "^3.0.0",
-        "sprotty-vscode": "^0.5.0",
         "@typescript-eslint/eslint-plugin": "~5.51.0",
         "@typescript-eslint/parser": "~5.51.0",
         "eslint": "~8.33.0",
         "langium-cli": "~1.1.0",
+        "source-map-loader": "^3.0.0",
+        "sprotty-vscode": "^0.5.0",
         "typescript": "~4.9.5",
         "webpack": "^5.64.2",
         "webpack-cli": "^4.9.1"
