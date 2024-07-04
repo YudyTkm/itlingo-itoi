@@ -89,8 +89,6 @@ export class ASLCustomCommands implements vscode.Disposable {
         const document = services.shared.workspace.LangiumDocuments.getOrCreateDocument(uri);
         const model = document.parseResult.value as Model;
 
-        console.log(model);
-
         //TODO Change to predefined path for templates
         powerapps.generatePowerapps('D:\\Yudy\\Faculdade\\GitHub\\docXTemplater\\Utl\\Templates', model);
 

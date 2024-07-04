@@ -4,7 +4,7 @@ import { Model } from '../language-server/generated/ast';
 // import { AslLanguageMetaData } from '../language-server/generated/module';
 import { createAslServices } from '../language-server/asl-module';
 import { extractAstNode } from './cli-util';
-import { generateJavaScript } from './generator';
+import { generateJavaScript } from '../generator/generator';
 import { NodeFileSystem } from 'langium/node';
 
 export const generateAction = async (fileName: string, opts: GenerateOptions): Promise<void> => {

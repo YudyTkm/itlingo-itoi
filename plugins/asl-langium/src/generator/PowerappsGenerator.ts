@@ -1,21 +1,25 @@
 import TxtTemplater from 'docxtemplater/js/text.js';
 import fs from 'fs';
 import path from 'path';
-import { Model } from '../language-server/generated/ast';
+import { DataAttributeTypeOriginal, Model } from '../language-server/generated/ast';
 
 export class PowerappsGenerator {
 
   public generatePowerapps(templatePath: string, data: Model) {
 
-    console.log("Generating Powerapps project");
-
     const struct = this.createDataStructure(data);
+    console.log("finished creating data structure");
+
     const files = this.getTemplates(templatePath);
 
     this.createFolderStructure(files, struct);
+    console.log("done");
+
   }
 
   private createDataStructure(data: Model) {
+
+    console.log(data);
 
     const pac = data.packages[0];
     const system = pac.system;
@@ -34,18 +38,56 @@ export class PowerappsGenerator {
 
         const entity: Record<string, any> = {
           entityName: elem.nameAlias,
+          entityImage: false,
           attributes: [],
         };
 
         elem.attributes.forEach(attr => {
 
-          //TODO Type is an object and not a string
-          const attrType = attr.type;
+          const attrType: DataAttributeTypeOriginal = attr.type as DataAttributeTypeOriginal;
+          const attrConstraint = attr.constraint;
 
           const attribute = {
-            attrName: attr.nameAlias,
-            attrType: attrType,
+            attrName: attr.name,
+            attrNameAlias: attr.nameAlias ?? attr.name,
+            attrDescription: attr.helpMessage ?? "",
+            attrType: "nvarchar",
+            attrMaxLength: attrType.size,
+            attrLength: +attrType.size * 2,
+            attrRequiredLevel: "none",
+            nvarchar: false,
+            image: false,
+            bit: false,
+            decimal: false
           };
+
+          if (attrType.type === "Image") {
+            entity.entityImage = true;
+            attribute.image = true;
+            attribute.attrType = "image";
+          }
+
+          else if (attrType.type === "Decimal") {
+            attribute.decimal = true;
+            attribute.attrType = "decimal";
+          }
+
+          else if (attrType.type === "Boolean") {
+            attribute.bit = true;
+            attribute.attrType = "bit";
+          }
+
+          else if (attrConstraint?.isPrimaryKey === 'PrimaryKey') {
+            attribute.attrType = "primarykey";
+            attribute.attrRequiredLevel = "systemrequired";
+          }
+
+          else {
+            attribute.nvarchar = true;
+          }
+
+          if (attrConstraint?.isNotNull === 'NotNull')
+            attribute.attrRequiredLevel = "required";
 
           entity.attributes.push(attribute);
         });
@@ -54,11 +96,9 @@ export class PowerappsGenerator {
       }
 
       else if (elem.$type === "UIContainer") {
-
-        
+        //TODO
 
       }
-
     });
 
     return struct;
@@ -90,11 +130,16 @@ export class PowerappsGenerator {
 
       fs.mkdirSync(dirpath, { recursive: true });
 
+      console.log("writing to file: " + newFile);
+
       if (nameWithoutExtension.endsWith("Template"))
         this.TxtTemplaterHandler(file, data, path.extname(file));
 
       else
         fs.copyFileSync(file, newFile);
+
+      console.log("wrote to file: " + newFile);
+
     });
   }
 
@@ -106,7 +151,8 @@ export class PowerappsGenerator {
     var content = fs.readFileSync(file).toString();
 
     const doc = new TxtTemplater(content, {
-      delimiters: { start: '{{', end: '}}' }
+      // paragraphLoop: true,
+      delimiters: { start: '{(', end: ')}' },
     });
 
     // Remove the "Template" from the file name

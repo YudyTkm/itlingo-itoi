@@ -18887,6 +18887,10 @@ export const AslGrammar = (): Grammar => loadedAslGrammar ?? (loadedAslGrammar =
       "$type": "TerminalRule",
       "hidden": true,
       "name": "SL_COMMENT",
+      "type": {
+        "$type": "ReturnType",
+        "name": "string"
+      },
       "definition": {
         "$type": "RegexToken",
         "regex": "\\\\/\\\\/[^\\\\n\\\\r]*"

@@ -206,6 +206,7 @@
         "langium": "~1.2.0",
         "langium-sprotty": "^1.0.0",
         "lodash": "^4.17.21",
+        "package.json": "^2.0.1",
         "pizzip": "^3.1.4",
         "pt-compromise": "^0.0.3",
         "sprotty-elk": "^0.13.0",
