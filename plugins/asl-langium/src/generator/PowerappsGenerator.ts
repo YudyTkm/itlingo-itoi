@@ -37,6 +37,7 @@ export class PowerappsGenerator {
       if (elem.$type === "DataEntity") {
 
         const entity: Record<string, any> = {
+          prefix: pac.name,
           entityName: elem.nameAlias,
           entityImage: false,
           attributes: [],
@@ -66,28 +67,25 @@ export class PowerappsGenerator {
             attribute.image = true;
             attribute.attrType = "image";
           }
-
           else if (attrType.type === "Decimal") {
             attribute.decimal = true;
             attribute.attrType = "decimal";
           }
-
           else if (attrType.type === "Boolean") {
             attribute.bit = true;
             attribute.attrType = "bit";
           }
-
-          else if (attrConstraint?.isPrimaryKey === 'PrimaryKey') {
-            attribute.attrType = "primarykey";
-            attribute.attrRequiredLevel = "systemrequired";
-          }
-
           else {
             attribute.nvarchar = true;
           }
-
           if (attrConstraint?.isNotNull === 'NotNull')
             attribute.attrRequiredLevel = "required";
+
+          if (attrConstraint?.isPrimaryKey === 'PrimaryKey') {
+            attribute.attrType = "primarykey";
+            attribute.attrRequiredLevel = "systemrequired";
+            attribute.nvarchar = false;
+          }
 
           entity.attributes.push(attribute);
         });
@@ -121,52 +119,96 @@ export class PowerappsGenerator {
 
   private createFolderStructure(files: string[], data: any) {
 
+    let entitiesTemplate: string[] = [];
+    let dataSourcesTemplate: string = "";
     files.forEach((file) => {
+
+      if (file.includes("EntitiesTemplate")) {
+        entitiesTemplate.push(file);
+        return;
+      }
+      if (file.includes("DataSourceTemplate")) {
+        dataSourcesTemplate = file;
+        return;
+      }
+
       const nameWithoutExtension = path.basename(file).replace(path.extname(file), "");
 
-      const newFile = file.replace('\\Utl\\Templates\\', '\\Output\\');
+      const newFile = file.replace('\\Utl\\Templates\\', '\\Output\\').replace("Template.", ".");
 
       const dirpath = newFile.substring(0, newFile.lastIndexOf("\\"));
-
       fs.mkdirSync(dirpath, { recursive: true });
 
-      console.log("writing to file: " + newFile);
-
       if (nameWithoutExtension.endsWith("Template"))
-        this.TxtTemplaterHandler(file, data, path.extname(file));
-
+        this.TxtTemplaterHandler(file, newFile, data);
       else
         fs.copyFileSync(file, newFile);
+    });
 
-      console.log("wrote to file: " + newFile);
+    data.entities.forEach((entity: any) => {
 
+      entitiesTemplate.forEach((template) => {
+
+        // Write entities files for each entity
+        let newFile = template.replace('\\Utl\\Templates\\Entities\\EntitiesTemplate\\', `\\Output\\Entities\\${data.prefix}_${entity.entityName}\\`).replace("Template.", ".");;
+        let dirpath = newFile.substring(0, newFile.lastIndexOf("\\"));
+        fs.mkdirSync(dirpath, { recursive: true });
+
+        this.TxtTemplaterHandler(template, newFile, entity);
+      });
+
+      // Write data sources files for each entity
+      let newFile = dataSourcesTemplate.replace('\\Utl\\Templates\\', `\\Output\\`).replace("DataSourceTemplate.txt", `${entity.entityName}.json`);
+      let dirpath = newFile.substring(0, newFile.lastIndexOf("\\"));
+      fs.mkdirSync(dirpath, { recursive: true });
+
+      this.TxtTemplaterHandler(dataSourcesTemplate, newFile, entity);
     });
   }
 
   /**
    * Handles the generation of a txt file using `docxtemplater`.
   */
-  private TxtTemplaterHandler(file: string, data: any, ext: string) {
+  private TxtTemplaterHandler(template: string, out: string, data: any) {
 
-    var content = fs.readFileSync(file).toString();
+    var content = fs.readFileSync(template).toString();
 
     const doc = new TxtTemplater(content, {
-      // paragraphLoop: true,
+      paragraphLoop: true,
       delimiters: { start: '{(', end: ')}' },
+      parser: parser
     });
-
-    // Remove the "Template" from the file name
-    let fileName = path.basename(file);
-    fileName = fileName.replace("Template", "");
-
-    file = file.replace('\\Utl\\Templates\\', '\\Output\\');
-
-    const dirpath = file.substring(0, file.lastIndexOf("\\"));
-
-    file = dirpath + "\\" + fileName;
 
     const result = doc.render(data);
 
-    fs.writeFileSync(file, result);
+    fs.writeFileSync(out, result);
   }
+}
+
+/**
+ * Function to parse the tags in the template file.
+ * used for custom tags in the template file.
+ */
+function parser(tag: string) {
+  return {
+    get(scope: { [x: string]: any; }, context: { scopePathItem: string | any[]; scopePathLength: string | any[]; }) {
+      if (tag === "$index") {
+        const indexes = context.scopePathItem;
+        return indexes[indexes.length - 1];
+      }
+      if (tag === "$isLast") {
+        const totalLength =
+          context.scopePathLength[context.scopePathLength.length - 1];
+        const index =
+          context.scopePathItem[context.scopePathItem.length - 1];
+        return index === totalLength - 1;
+      }
+      if (tag === "$isFirst") {
+        const index =
+          context.scopePathItem[context.scopePathItem.length - 1];
+        return index === 0;
+      }
+      return scope[tag];
+    },
+  };
 }

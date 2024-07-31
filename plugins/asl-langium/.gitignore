@@ -6,3 +6,4 @@ pack
 src-gen/
 *.tgz
 package-lock.json
+out/
