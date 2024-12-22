@@ -1,7 +1,7 @@
 import TxtTemplater from 'docxtemplater/js/text.js';
 import fs from 'fs';
 import path from 'path';
-import { DataAttributeTypeOriginal, Model } from '../language-server/generated/ast';
+import { DataAttributeTypeOriginal, Model, UIComponent } from '../language-server/generated/ast';
 
 export class PowerappsGenerator {
 
@@ -45,7 +45,7 @@ export class PowerappsGenerator {
 
         elem.attributes.forEach(attr => {
 
-          const attrType: DataAttributeTypeOriginal = attr.type as DataAttributeTypeOriginal;
+          const attrType = attr.type as DataAttributeTypeOriginal;
           const attrConstraint = attr.constraint;
 
           const attribute = {
@@ -94,8 +94,67 @@ export class PowerappsGenerator {
       }
 
       else if (elem.$type === "UIContainer") {
-        //TODO
 
+        const container: Record<string, any> = {
+          prefix: pac.name,
+          containerName: elem.name,
+          containerType: elem.type.type,
+          containerComponents: [],
+        };
+
+        elem.uiElements.forEach(uiElement => {
+
+          const uIComponent = uiElement as UIComponent;
+
+          const component = {
+            componentName: uIComponent.name,
+            componentType: uIComponent.type.type,
+            componentSubType: uIComponent.subType?.type,
+            componentParts: [] as any[],
+            isList: false,
+            isForm: false,
+            isTopBar: false,
+            isBtn: false,
+          };
+
+          if (uIComponent.type.type === "List")
+            component.isList = true;
+          
+          else if (uIComponent.type.type === "Form")
+            component.isForm = true;
+
+          else if (uIComponent.type.type === "Dialog" && uIComponent.subType?.type === "Dialog_Message")
+            component.isTopBar = true;
+
+          else if (uIComponent.type.type === "Details" && uIComponent.subType?.type === "Other")
+            component.isBtn = true;
+
+          uIComponent.uiComponentParts.forEach(part => { getComponentParts(part, "part") });
+
+          uIComponent.uiElementEvents.forEach(part => { getComponentParts(part, "event") });
+
+          function getComponentParts(part: any, type: string) {
+            const componentPart = {
+              partName: part.name,
+              partType: part.type.type,
+              partSubType: part.subType?.type,
+              partValue: part.defaultValue,
+              isEvent: false,
+              isHidden: part.isHidden,
+              isReadOnly: part.isReadOnly,
+              valueType: part.valueType?.type,
+            };
+
+            if(type === "event")
+              componentPart.isEvent = true;
+
+            component.componentParts.push(componentPart);
+          }
+
+          container.containerComponents.push(component);
+        });
+
+        struct.containers.push(container);
       }
     });
 
@@ -121,6 +180,8 @@ export class PowerappsGenerator {
 
     let entitiesTemplate: string[] = [];
     let dataSourcesTemplate: string = "";
+    let screensTemplate: string = "";
+
     files.forEach((file) => {
 
       if (file.includes("EntitiesTemplate")) {
@@ -129,6 +190,10 @@ export class PowerappsGenerator {
       }
       if (file.includes("DataSourceTemplate")) {
         dataSourcesTemplate = file;
+        return;
+      }
+      if (file.includes("ScreenTemplate")) {
+        screensTemplate = file;
         return;
       }
 
@@ -163,6 +228,18 @@ export class PowerappsGenerator {
       fs.mkdirSync(dirpath, { recursive: true });
 
       this.TxtTemplaterHandler(dataSourcesTemplate, newFile, entity);
+    });
+
+    data.containers.forEach((container: any) => {
+
+      console.log(container);
+
+      // Write screens files for each container
+      let newFile = screensTemplate.replace('\\Utl\\Templates\\', `\\Output\\`).replace("ScreenTemplate.fx.yaml", `${container.containerName}.fx.yaml`);
+      let dirpath = newFile.substring(0, newFile.lastIndexOf("\\"));
+      fs.mkdirSync(dirpath, { recursive: true });
+
+      this.TxtTemplaterHandler(screensTemplate, newFile, container);
     });
   }
 

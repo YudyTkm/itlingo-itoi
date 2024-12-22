@@ -5,6 +5,8 @@ all="All"
 outputDir=$3
 APP_HOME="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
+echo "Starting generator.sh"
+
 rm $APP_HOME/generator.properties
 rm -R $APP_HOME/../lib/src-gen
 
@@ -14,7 +16,16 @@ fi
 
 cd $APP_HOME
 echo "$APP_HOME"
-echo "java -cp $APP_HOME/../lib/org.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar org.itlingo.asl.generator.Main $2"
-java -cp $APP_HOME/../lib/org.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar org.itlingo.asl.generator.Main $2
-mv $outputDir/src-gen $outputDir/src-gen-$(date +%s)
-mv $APP_HOME/src-gen $outputDir
+
+if [ "$typeofbuild" == "PowerApps" ]; then
+    echo "PowerApps Build"
+fi
+
+#This code is used for both Asl and Genio builds
+if [ "$typeofbuild" != "PowerApps" ]; then
+    echo "java -cp $APP_HOME/../lib/org.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar org.itlingo.asl.generator.Main $2"
+    java -cp $APP_HOME/../lib/org.itlingo.asl.ide-1.0.0-SNAPSHOT-ls.jar org.itlingo.asl.generator.Main $2
+    mv $outputDir/src-gen $outputDir/src-gen-$(date +%s)
+    mv $APP_HOME/src-gen $outputDir
+fi
+

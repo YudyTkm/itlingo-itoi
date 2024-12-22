@@ -1,0 +1,158 @@
+<ImportExportXml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Entities>{(#entities)}
+    <Entity>
+      <Name LocalizedName="{(entityName)}" OriginalName="{(entityName)}">{(prefix)}_{(entityName)}</Name>
+      <EntityInfo>
+        <entity Name="{(prefix)}_{(entityName)}">
+          <attributes>{(#attributes)}
+            <attribute PhysicalName="{(prefix)}_{(attrName)}">
+              <Type>{(attrType)}</Type>
+              <Name>{(prefix)}_{(attrName)}</Name>
+              <LogicalName>{(prefix)}_{(attrName)}</LogicalName>
+              <RequiredLevel>{(attrRequiredLevel)}</RequiredLevel>
+              <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+              <ImeMode>auto</ImeMode>
+              <ValidForUpdateApi>1</ValidForUpdateApi>
+              <ValidForReadApi>1</ValidForReadApi>
+              <ValidForCreateApi>1</ValidForCreateApi>
+              <IsCustomField>1</IsCustomField>
+              <IsAuditEnabled>1</IsAuditEnabled>
+              <IsSecured>0</IsSecured>
+              <IntroducedVersion>1.0</IntroducedVersion>
+              <IsCustomizable>1</IsCustomizable>
+              <IsRenameable>1</IsRenameable>
+              <CanModifySearchSettings>1</CanModifySearchSettings>
+              <CanModifyRequirementLevelSettings>1</CanModifyRequirementLevelSettings>
+              <CanModifyAdditionalSettings>1</CanModifyAdditionalSettings>
+              <SourceType>0</SourceType>
+              <IsGlobalFilterEnabled>0</IsGlobalFilterEnabled>
+              <IsSortableEnabled>0</IsSortableEnabled>
+              <CanModifyGlobalFilterSettings>1</CanModifyGlobalFilterSettings>
+              <CanModifyIsSortableSettings>1</CanModifyIsSortableSettings>
+              <IsDataSourceSecret>0</IsDataSourceSecret>
+              <AutoNumberFormat></AutoNumberFormat>
+              <IsSearchable>0</IsSearchable>
+              <IsFilterable>0</IsFilterable>
+              <IsRetrievable>0</IsRetrievable>
+              <IsLocalizable>0</IsLocalizable>{(#nvarchar)}
+              <Format>text</Format>
+              <MaxLength>{(attrMaxLength)}</MaxLength>
+              <Length>{(attrLength)}</Length>{(/nvarchar)}{(#image)}
+              <Format>jpeg</Format>
+              <MaxLength>9437328</MaxLength>
+              <MaxValue>10240</MaxValue>{(/image)}{(#decimal)}
+              <MinValue>-100000000000</MinValue>
+              <MaxValue>100000000000</MaxValue>
+              <Accuracy>2</Accuracy>{(/decimal)}{(#bit)}
+              <AppDefaultValue>0</AppDefaultValue>
+              <optionset Name="{(prefix)}_{(entityName)}_{(prefix)}_{(attrName)}">
+                <OptionSetType>bit</OptionSetType>
+                <IntroducedVersion>1.0</IntroducedVersion>
+                <IsCustomizable>1</IsCustomizable>
+                <ExternalTypeName></ExternalTypeName>
+                <displaynames>
+                  <displayname description="{(attrName)}" languagecode="1033" />
+                </displaynames>
+                <Descriptions>
+                  <Description description="" languagecode="1033" />
+                </Descriptions>
+                <options>
+                  <option value="1" ExternalValue="">
+                    <labels>
+                      <label description="Yes" languagecode="1033" />
+                    </labels>
+                  </option>
+                  <option value="0" ExternalValue="">
+                    <labels>
+                      <label description="No" languagecode="1033" />
+                    </labels>
+                  </option>
+                </options>
+              </optionset>{(/bit)}
+              <displaynames>
+                <displayname description="{(attrNameAlias)}" languagecode="1033" />
+              </displaynames>
+              <Descriptions>
+                <Description description="{(attrDescription)}" languagecode="1033" />
+              </Descriptions>
+            </attribute>{(/attributes)}
+          </attributes>
+        </entity>
+      </EntityInfo>
+      <RibbonDiffXml>
+        <CustomActions />
+        <Templates>
+          <RibbonTemplates Id="Mscrm.Templates"></RibbonTemplates>
+        </Templates>
+        <CommandDefinitions />
+        <RuleDefinitions>
+          <TabDisplayRules />
+          <DisplayRules />
+          <EnableRules />
+        </RuleDefinitions>
+        <LocLabels />
+      </RibbonDiffXml>
+    </Entity>{(/entities)}
+  </Entities>
+  <Roles></Roles>
+  <Workflows></Workflows>
+  <FieldSecurityProfiles></FieldSecurityProfiles>
+  <Templates />
+  <EntityImageConfigs>{(#entities)}{(#entityImage)}
+    <EntityImageConfig>
+      <parententitylogicalname>{(prefix)}_{(entityName)}</parententitylogicalname>
+      {(#attributes)}{(#image)}<primaryimageattribute>{(prefix)}_{(attrName)}</primaryimageattribute>{(/image)}{(/attributes)}
+    </EntityImageConfig>{(/entityImage)}{(/entities)}
+  </EntityImageConfigs>
+  <AttributeImageConfigs>{(#entities)}{(#attributes)}{(#image)}
+    <AttributeImageConfig>
+      <attributelogicalname>{(prefix)}_{(attrName)}</attributelogicalname>
+      <parententitylogicalname>{(prefix)}_{(entityName)}</parententitylogicalname>
+      <canstorefullimage>1</canstorefullimage>
+    </AttributeImageConfig>{(/image)}{(/attributes)}{(/entities)}
+  </AttributeImageConfigs>
+  <EntityMaps />
+  <EntityRelationships />
+  <OrganizationSettings />
+  <optionsets />
+  <CustomControls />
+  <EntityDataProviders />
+  <CanvasApps>
+    <CanvasApp>
+      <Name>cr6e6_customerslist_6c11c</Name>
+      <AppVersion>2024-01-01T23:59:59Z</AppVersion>
+      <Status>Ready</Status>
+      <CreatedByClientVersion>3.23123.15.0</CreatedByClientVersion>
+      <MinClientVersion>3.23123.15.0</MinClientVersion>
+      <Tags>{"primaryDeviceWidth":"1696","primaryDeviceHeight":"737","supportsPortrait":"true","supportsLandscape":"true","primaryFormFactor":"Tablet","showStatusBar":"false","publisherVersion":"3.23123.15","minimumRequiredApiVersion":"2.2.0","hasComponent":"false","hasUnlockedComponent":"false","isUnifiedRootApp":"false","offlineLargeFilesSupport":"false"}</Tags>
+      <IsCdsUpgraded>0</IsCdsUpgraded>
+      <GalleryItemId xsi:nil="true"></GalleryItemId>
+      <BackgroundColor>RGBA(0,176,240,1)</BackgroundColor>
+      <DisplayName>{(appName)}</DisplayName>
+      <Description xsi:nil="true"></Description>
+      <CommitMessage xsi:nil="true"></CommitMessage>
+      <Publisher xsi:nil="true"></Publisher>
+      <AuthorizationReferences>[]</AuthorizationReferences>
+      <ConnectionReferences>{}</ConnectionReferences>
+      <DatabaseReferences>{"default.cds":{"databaseDetails":{"referenceType":"NotSpecified","environmentName":"default.cds","overrideValues":{"status":"NotSpecified","environmentVariableName":""}},"dataSources":{{(#entities)}"{(entityName)}":{"entitySetName":"{(prefix)}_{(entityName)}","logicalName":"{(prefix)}_{(entityName)}"}{(^$isLast)},{(/)}{(/entities)}}}}</DatabaseReferences>
+      <AppComponents>[]</AppComponents>
+      <AppComponentDependencies>[]</AppComponentDependencies>
+      <CanConsumeAppPass>1</CanConsumeAppPass>
+      <CanvasAppType>0</CanvasAppType>
+      <BypassConsent>0</BypassConsent>
+      <AdminControlBypassConsent>0</AdminControlBypassConsent>
+      <EmbeddedApp xsi:nil="true"></EmbeddedApp>
+      <IntroducedVersion>1.0</IntroducedVersion>
+      <CdsDependencies>{"cdsdependencies":[{(#entities)}{"logicalname":"{(prefix)}_{(entityName)}","componenttype":1}{(^$isLast)},{(/)}{(/entities)}]}</CdsDependencies>
+      <IsCustomizable>1</IsCustomizable>
+      <BackgroundImageUri>/CanvasApps/cr6e6_customerslist_6c11c_BackgroundImageUri</BackgroundImageUri>
+      <DocumentUri>/CanvasApps/cr6e6_customerslist_6c11c_DocumentUri.msapp</DocumentUri>
+      <AdditionalUris>
+        <AdditionalUri>/CanvasApps/cr6e6_customerslist_6c11c_AdditionalUris0_identity.json</AdditionalUri>
+      </AdditionalUris>
+    </CanvasApp>
+  </CanvasApps>
+  <Languages>
+    <Language>1033</Language>
+  </Languages>
+</ImportExportXml>
